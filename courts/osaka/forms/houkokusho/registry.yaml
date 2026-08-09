@@ -2,6 +2,7 @@
 form: houkokusho
 name: 報告書（自然人用）
 doc_type: docx
+procs: [douhai]
 current: "v4.1"
 versions:
   v4.0:

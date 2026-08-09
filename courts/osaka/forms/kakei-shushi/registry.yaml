@@ -2,6 +2,7 @@
 form: kakei-shushi
 name: 家計収支表（B1111）
 doc_type: xlsx
+procs: [douhai]
 current: "v202508"
 versions:
   v202508:

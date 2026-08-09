@@ -3,6 +3,7 @@
 meta:
   case_id: sample-otsuyama
   court: osaka
+  proc_type: 同時廃止
   applicant:
     name: 甲野太郎
     kana: こうの　たろう

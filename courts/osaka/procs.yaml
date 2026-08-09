@@ -1,0 +1,30 @@
+# 手続種別ごとの書式セット定義（大阪地裁）
+# - generate スキルは事件の meta.proc_type からここで書式セットと生成順を解決する
+# - register-form スキルは新書式の登録時に該当セットの forms へ追記する
+# - via: builder = hasan-kit のビルダーサブコマンド / skill:<名前> = values組み立てが必要なdocx
+# - when: 条件付き生成（generate スキルが case.yaml から判断する）
+# - 管財書式を登録したら、その書式の書類間突合ルールを crosscheck に追加すること（方針メモ）
+procs:
+  douhai:
+    label: 同時廃止
+    debtor: 自然人
+    forms:
+      - { form: saikensha-ichiran,       via: "builder:saikensha" }
+      - { form: saikensha-ichiran-kouso, via: "builder:saikensha --kouso", when: "公租公課の債権者あり" }
+      - { form: shisan-mokuroku,         via: "builder:shisan" }
+      - { form: kakei-shushi,            via: "builder:kakei" }
+      - { form: moushitatesho-douhai,    via: "skill:moushitatesho" }
+      - { form: houkokusho,              via: "skill:houkokusho" }
+      - { form: jigyou-houkokusho,       via: "skill:jigyou-houkokusho", when: "個人事業者（過去含む）" }
+    keep_only:  # 生成対象外（保管・手動記入のみ）
+      - checklist-douhai
+      - hyojun-shiryo-ichiran
+      - joshinsho-checklist
+  kanzai-shizenjin:
+    label: 管財（自然人）
+    debtor: 自然人
+    forms: []   # 書式未登録。裁判所配布ファイルを受領後、register-form で登録・追記する
+  kanzai-hojin:
+    label: 管財（法人）
+    debtor: 法人
+    forms: []   # 書式未登録。同上。登録時に case.yaml の corporation セクションも本格拡張する

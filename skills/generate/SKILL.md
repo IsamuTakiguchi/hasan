@@ -15,6 +15,15 @@ description: >-
 
 - `cases/<事件ID>/case.yaml` が存在すること（なければ先に intake）。
   `cases/` は**現在の作業フォルダ**側（プラグインのインストール先には置かない）。
+- **手続種別で書式セットを解決する**: `meta.proc_type`（同時廃止／管財（自然人）／
+  管財（法人））を読み、`$(hasan-kit courts)/osaka/procs.yaml` の該当セットの
+  forms（生成順・via・when 条件）に従って生成する。下の「実行順序」は
+  **同時廃止セット**の展開形。
+  - proc_type 未設定 → intake に戻って利用者に確認（勝手に既定しない）
+  - 該当セットの forms が空（**管財書式が未登録**）→ 生成せず、裁判所配布の
+    管財書式一式の提供と register-form での登録を案内して終了する
+  - when 条件の判断: 「公租公課の債権者あり」= creditors に kind=公租公課 が存在／
+    「個人事業者（過去含む）」= business.exists が true 又は申立書参考事項1が事業者
 - **環境準備**: `hasan-kit` が PATH に無い環境（Cowork 等）では、プラグインの
   インストールディレクトリを探して絶対パスで使う
   （例: `ls ~/.claude/plugins/*/*/bin/hasan-kit` や `find ~/.claude -name hasan-kit`）。
@@ -23,9 +32,10 @@ description: >-
 - 通帳があるのに `bank_analysis` が空なら、先に nyushukkin-bunseki を促す
   （免責関係の記載が変わり得るため）。
 
-## 実行順序
+## 実行順序（同時廃止セット）
 
 数値の親（債権者・資産・家計の生データ）→ 子（それを引用する申立書・報告書）の順で作る。
+（管財セットが登録されたら procs.yaml の順序に従う。原則は同じ「親→子」）
 
 1. **生成前ゲート**: `hasan-kit validate-case cases/<事件ID>/case.yaml`
    - エラーなら中断して利用者に報告。警告（出所なし等）は控えて最後にまとめる。

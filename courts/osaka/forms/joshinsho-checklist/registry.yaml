@@ -2,6 +2,7 @@
 form: joshinsho-checklist
 name: 破産同時廃止申立てチェックリストに関する上申書（B1113）
 doc_type: docx
+procs: [douhai]
 current: "v4.1"
 versions:
   v4.1:

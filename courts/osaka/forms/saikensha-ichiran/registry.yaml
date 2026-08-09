@@ -2,6 +2,7 @@
 form: saikensha-ichiran
 name: 債権者一覧表（B1105）
 doc_type: xlsx
+procs: [douhai]
 current: "v202508"
 versions:
   v202508:

@@ -2,6 +2,7 @@
 form: shisan-mokuroku
 name: 財産目録（B1109）
 doc_type: xlsx
+procs: [douhai]
 current: "v202508"
 versions:
   v202508:

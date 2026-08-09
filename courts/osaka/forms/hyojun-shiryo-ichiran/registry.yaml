@@ -2,6 +2,7 @@
 form: hyojun-shiryo-ichiran
 name: 標準資料一覧表（B1103）
 doc_type: xlsx
+procs: [douhai]
 current: "v202508"
 generation: none   # 生成対象外（テンプレート保管のみ）。提出書類モデル整備後に対応
 versions:

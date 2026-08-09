@@ -88,6 +88,20 @@ def main():
             if junin and d and d < junin:
                 errors.append(f"bank_analysis[{i}]: 受任通知後弁済フラグだが日付 {b.get('date')} が受任通知日より前")
 
+    # 4.5 手続種別
+    meta = case.get("meta", {}) or {}
+    proc = meta.get("proc_type")
+    if not proc:
+        warnings.append("meta.proc_type（同時廃止/管財（自然人）/管財（法人））が未設定 → intake で最初に確認すること")
+    elif proc == "管財（法人）":
+        if not case.get("corporation"):
+            warnings.append("管財（法人）事件だが corporation（債務者法人情報）が空")
+        for sec in ("household", "family"):
+            if case.get(sec):
+                warnings.append(f"管財（法人）事件で {sec}（自然人用セクション）が記入されている → 種別の取り違えでないか確認")
+    elif case.get("corporation"):
+        warnings.append(f"{proc} 事件で corporation（法人セクション）が記入されている → 種別の取り違えでないか確認")
+
     # 5. 出所検査（主要セクション）
     sources = case.get("sources", {}) or {}
     def has_source(prefix):

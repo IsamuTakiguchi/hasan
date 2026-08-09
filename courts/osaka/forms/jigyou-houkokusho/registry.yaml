@@ -2,6 +2,7 @@
 form: jigyou-houkokusho
 name: 事業に関する報告書（B1112）
 doc_type: docx
+procs: [douhai]
 current: "v4.1"
 versions:
   v4.1:

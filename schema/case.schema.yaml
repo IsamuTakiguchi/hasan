@@ -20,6 +20,12 @@ properties:
     properties:
       case_id: { type: string, description: "cases/ のフォルダ名と一致させる" }
       court: { type: string, description: "courts/ の裁判所ID（例 osaka）" }
+      proc_type:
+        type: string
+        enum: [同時廃止, 管財（自然人）, 管財（法人）]
+        description: >-
+          手続種別。事件作成時に最初に選択する（intake が確認する）。
+          courts/<裁判所>/procs.yaml の書式セット（生成対象・生成順）がこれで決まる
       applicant:
         type: object
         required: [name]
@@ -247,6 +253,30 @@ properties:
             name: { type: string }
             value: { type: [integer, "null"] }
             note: { type: string }
+
+  corporation:
+    type: object
+    description: >-
+      管財（法人）事件用の債務者法人情報の骨格。法人用書式の登録時に項目を本格拡張する。
+      法人事件では applicant は代表者ではなく、債務者＝この法人（申立代理人は法人の代理人）
+    additionalProperties: true
+    properties:
+      name: { type: string, description: "商号" }
+      address: { type: string, description: "本店所在地" }
+      representative: { type: string, description: "代表者の資格・氏名" }
+      established: { type: string, description: "設立年月" }
+      business_description: { type: string, description: "事業内容" }
+      employees: { type: [integer, "null"], description: "従業員数（直近）" }
+      capital: { type: [integer, "null"], description: "資本金（円）" }
+      fiscal:
+        type: array
+        description: "直近数期の決算概要"
+        items:
+          type: object
+          properties:
+            term: { type: string, description: "期（例 第12期 R6.3期）" }
+            sales: { type: [integer, "null"] }
+            profit: { type: [integer, "null"] }
 
   business:
     type: object

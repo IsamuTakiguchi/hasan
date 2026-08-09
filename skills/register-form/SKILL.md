@@ -27,12 +27,25 @@ description: >-
 
 ## A. 初回登録（この書式を初めて取り込む）
 
-1. **配置**: 利用者から受け取ったファイルを
+1. **手続種別セットの確認**: この書式がどのセットに属すかを利用者に確認する —
+   **douhai（同時廃止）／kanzai-shizenjin（管財・自然人）／kanzai-hojin（管財・法人）／
+   共用（複数セット）**。判断材料: 書式の表題・版表記（同時廃止一式は ver.4.1 世代）・
+   利用者の説明。共用の典型例: 報告書（自然人用）が同時廃止と管財（自然人）で
+   同一書式の場合。
+2. **配置**: 利用者から受け取ったファイルを
    `courts/<裁判所ID>/forms/<書式ID>/v<版>/template.docx（.xlsx）` に置く。
-   - 書式IDはローマ字ケバブ（例 saikensha-ichiran）。版は書式に記載の版数
-     （なければ受領日 vYYYYMM）。
-   - `registry.yaml` を作成し `current: "v<版>"` と受領情報を書く
+   - 書式IDはローマ字ケバブ（例 saikensha-ichiran）。**管財版は `-kanzai`、
+     法人用は `-hojin` サフィックス**（例 moushitatesho-kanzai, houkokusho-hojin。
+     既存書式と同一内容の共用なら新IDを作らず registry の procs に追記するだけ）。
+     版は書式に記載の版数（なければ受領日 vYYYYMM）。
+   - `registry.yaml` を作成し `current: "v<版>"`・受領情報・**`procs: [<セット>]`** を書く
      （既存書式の registry を見本に）。
+   - **`courts/<裁判所ID>/procs.yaml` の該当セットの forms に追記**する
+     （生成順の位置・via（builder か skill か）・when 条件を利用者に確認。
+     生成対象外の保管書式は keep_only へ）。
+   - 管財（法人）の書式で case.yaml に無い情報（法人の債権者分類・労働債権・
+     担保権等）が必要になったら、schema/case.schema.yaml の corporation ほかを
+     拡張し、サンプル事例と intake スキルにも反映する。
 2. **機械ダンプ**:
    - docx: `hasan-kit inspect-docx <template> -o <版dir>/anchors.txt --full`
      フラグの意味: T=表内 E=空 C=チェック U=下線 **S=sectPr（行複製・削除禁止）**

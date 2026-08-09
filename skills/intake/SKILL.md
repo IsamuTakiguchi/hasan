@@ -24,18 +24,28 @@ description: >-
 
 ## 手順
 
-1. **事件フォルダの確認**: `cases/<事件ID>/` に `input/ work/ output/` が無ければ作る
+1. **手続種別の確認（最初に必ず行う）**: 新規事件では
+   **同時廃止／管財（自然人）／管財（法人）** のどれかを利用者に選択してもらい
+   （対話環境では AskUserQuestion）、`meta.proc_type` に記録する。
+   以後の聴取シート・一式生成の書式セットはこの種別で決まる
+   （`$(hasan-kit courts)/osaka/procs.yaml`）。
+   - **管財（法人）**の場合: 債務者＝法人。applicant ではなく `corporation`
+     （商号・本店・代表者・設立・事業内容・従業員・決算）に記入し、
+     自然人用セクション（household・family 等）は使わない。
+     ※ 管財書式が未登録の間はその旨を伝え、書式ファイルの提供と register-form での
+     登録を案内する（intake 自体は進めてよい）
+2. **事件フォルダの確認**: `cases/<事件ID>/` に `input/ work/ output/` が無ければ作る
    （`cases/README.md` の規約参照）。事件IDは `<年>-<連番>-<識別名>`。
-2. **資料の棚卸し**: input/ を走査し、資料の種類を分類してから読む。
+3. **資料の棚卸し**: input/ を走査し、資料の種類を分類してから読む。
    - PDF → pdf スキル（スキャンなら OCR）。通帳PDFは nyushukkin-bunseki に回す
    - Word（調査票・法人用報告書・面談メモ）→ docx スキル
    - Excel（債権者リスト等）→ xlsx スキル
    - 音声 → 書き起こしテキストがあればそれを読む（無ければ利用者に書き起こしを依頼）
-3. **case.yaml の作成・更新**: `schema/case.schema.yaml` に従って記入する。
+4. **case.yaml の作成・更新**: `schema/case.schema.yaml` に従って記入する。
    記入例は `schema/examples/case.sample.yaml`（架空事例）。
-4. **検証**: `hasan-kit validate-case cases/<事件ID>/case.yaml` を通す。
-5. **questions.md の出力**（後述の書式）。
-6. 利用者へ報告: 読み取った資料一覧・埋まった区分・確認事項の件数。
+5. **検証**: `hasan-kit validate-case cases/<事件ID>/case.yaml` を通す。
+6. **questions.md の出力**（後述の書式）。
+7. 利用者へ報告: 読み取った資料一覧・埋まった区分・確認事項の件数。
 
 ## 記入の鉄則
 

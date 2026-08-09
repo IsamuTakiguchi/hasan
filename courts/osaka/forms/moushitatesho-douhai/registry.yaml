@@ -2,6 +2,7 @@
 form: moushitatesho-douhai
 name: 破産手続開始申立書（同時廃止用）（B1102）
 doc_type: docx
+procs: [douhai]
 current: "v4.1"
 versions:
   v4.1:

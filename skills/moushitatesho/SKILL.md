@@ -10,6 +10,9 @@ description: >-
 
 # 破産手続開始申立書（同時廃止用）作成スキル
 
+**適用範囲**: この書式（B1102）は**同時廃止**用（meta.proc_type=同時廃止）。管財事件の
+申立書は管財書式の登録後に procs.yaml の該当書式を使う。
+
 書式: `$(hasan-kit courts)/osaka/forms/moushitatesho-douhai/`（registry.yaml の current が現行版）。
 構造・記入欄は同ディレクトリの structure.md / fillmap.yaml 参照。
 

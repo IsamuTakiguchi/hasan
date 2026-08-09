@@ -2,6 +2,7 @@
 form: checklist-douhai
 name: 破産同時廃止申立てチェックリスト（B1114）
 doc_type: docx
+procs: [douhai]
 current: "v4.1"
 generation: none   # 生成対象外（テンプレート保管のみ）。提出書類モデル整備後に対応
 versions:

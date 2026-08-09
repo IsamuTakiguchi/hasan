@@ -10,6 +10,8 @@ description: >-
 
 # 事業に関する報告書（B1112）作成スキル
 
+**適用範囲**: 同時廃止セットの書式。管財セットでの要否は管財書式の受領時に判断。
+
 書式: `$(hasan-kit courts)/osaka/forms/jigyou-houkokusho/`（registry.yaml の current が現行版）。
 
 ## 対象の判断（重要）

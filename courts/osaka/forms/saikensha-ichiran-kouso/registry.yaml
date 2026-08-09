@@ -2,6 +2,7 @@
 form: saikensha-ichiran-kouso
 name: 債権者一覧表（公租公課用）（B1106）
 doc_type: xlsx
+procs: [douhai]
 current: "v202508"
 versions:
   v202508:
