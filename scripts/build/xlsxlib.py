@@ -11,7 +11,17 @@ fillmap（xlsx用）の kind:
               近傍ラベルを検証（不一致は警告＝書式改訂の兆候）
   table_rows  anchor: {sheet}, first_data_row, columns: {列レター: キー}, 値は辞書のリスト。
               max_rows を超えたら行挿入（直前行の書式をコピー）
+  checkbox    セル値内の「□ラベル」→「☑ラベル」置換（空白ゆらぎ許容）。
+              options: {値: リテラル}（anchor のセル内）または
+              option_anchors: {値: {sheet, cell, literal}}
+  row_blocks  複数行1組の繰返しブロック（1債権者=3行等）。
+              anchor: {sheet}, first_row, block_rows, count,
+              cells: [{r: 行オフセット0起点, c: 列レター, key: 値キー, checkbox: true(任意)}]
+              値は辞書のリスト。count 超過分は書ききれず警告（呼び出し側で2枚目対応）
+
+共通の防御: 既存セルが数式（"=" 始まり）の場合は上書きせず警告する。
 """
+import re as _re
 from pathlib import Path
 
 import yaml
@@ -57,6 +67,14 @@ class XlsxFiller:
         self.warnings.append(f"シート「{name}」が無い（先頭シートで代替）")
         return self.wb.worksheets[0]
 
+    def _write(self, ws, addr, value, fid):
+        cur = ws[addr].value
+        if isinstance(cur, str) and cur.startswith("="):
+            self.warnings.append(f"{fid}: {addr} は数式セルのため書き込まない（{cur[:30]}）")
+            return False
+        ws[addr] = value
+        return True
+
     def set_cell(self, field, value):
         ws = self._ws(field["anchor"]["sheet"])
         for addr, expect in (field.get("label_check") or {}).items():
@@ -64,8 +82,68 @@ class XlsxFiller:
             if actual != expect:
                 self.warnings.append(
                     f"{field['id']}: ラベル検証不一致 {addr}=「{actual}」期待「{expect}」（書式改訂の疑い）")
-        ws[field["anchor"]["cell"]] = value
-        self.filled += 1
+        if self._write(ws, field["anchor"]["cell"], value, field["id"]):
+            self.filled += 1
+
+    @staticmethod
+    def _flex_check(text, literal):
+        """セル値文字列内の「□ラベル」を空白ゆらぎ許容で「☑ラベル」化。失敗は None。"""
+        chars = [ch for ch in literal if not ch.isspace() and ch != "　"]
+        pattern = "[\\s　]*".join(_re.escape(ch) for ch in chars)
+        m = _re.search(pattern, text or "")
+        if not m:
+            return None
+        seg = m.group(0)
+        return (text[: m.start()] + seg.replace("□", "☑", 1) + text[m.end():])
+
+    def checkbox(self, field, value):
+        values = value if isinstance(value, list) else [value]
+        for v in values:
+            v = str(v)
+            if "option_anchors" in field:
+                spec = field["option_anchors"].get(v)
+                if spec is None:
+                    self.warnings.append(f"{field['id']}: 未知の選択肢「{v}」")
+                    continue
+                sheet, cell, literal = spec["sheet"], spec["cell"], spec["literal"]
+            else:
+                literal = (field.get("options") or {}).get(v)
+                if literal is None:
+                    self.warnings.append(f"{field['id']}: 未知の選択肢「{v}」")
+                    continue
+                sheet, cell = field["anchor"]["sheet"], field["anchor"]["cell"]
+            ws = self._ws(sheet)
+            new = self._flex_check(ws[cell].value, literal)
+            if new is None:
+                self.warnings.append(f"{field['id']}: {cell} にリテラル「{literal}」が見つからない")
+            else:
+                ws[cell] = new
+                self.filled += 1
+
+    def row_blocks(self, field, rows):
+        ws = self._ws(field["anchor"]["sheet"])
+        first = field["first_row"]
+        block = field["block_rows"]
+        count = field["count"]
+        if len(rows) > count:
+            self.warnings.append(
+                f"{field['id']}: {len(rows)}件中{count}件のみ記入（書式の枠数超過。2枚目の作成が必要）")
+        for i, row in enumerate(rows[:count]):
+            base = first + i * block
+            for cell_spec in field["cells"]:
+                v = row.get(cell_spec["key"])
+                if v is None or v == "":
+                    continue
+                addr = f"{cell_spec['c']}{base + cell_spec.get('r', 0)}"
+                if cell_spec.get("checkbox"):
+                    new = self._flex_check(ws[addr].value, str(v))
+                    if new is None:
+                        self.warnings.append(f"{field['id']}: {addr} に「{v}」のチェック対象が見つからない")
+                    else:
+                        ws[addr] = new
+                else:
+                    self._write(ws, addr, v, field["id"])
+        self.filled += min(len(rows), count)
 
     def table_rows(self, field, rows):
         ws = self._ws(field["anchor"]["sheet"])
@@ -89,7 +167,7 @@ class XlsxFiller:
             for col, key in cols.items():
                 v = row.get(key)
                 if v is not None:
-                    ws[f"{col}{first + i}"] = v
+                    self._write(ws, f"{col}{first + i}", v, field["id"])
         self.filled += len(rows)
 
     def apply(self, fillmap, values):
@@ -102,6 +180,10 @@ class XlsxFiller:
                 self.set_cell(field, v)
             elif field["kind"] == "table_rows":
                 self.table_rows(field, v)
+            elif field["kind"] == "checkbox":
+                self.checkbox(field, v)
+            elif field["kind"] == "row_blocks":
+                self.row_blocks(field, v)
             else:
                 self.warnings.append(f"{field['id']}: 未知の kind {field['kind']}")
 
