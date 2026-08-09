@@ -1,0 +1,9 @@
+# この書式の現行版。
+form: joshinsho-checklist
+name: 破産同時廃止申立てチェックリストに関する上申書（B1113）
+doc_type: docx
+current: "v4.1"
+versions:
+  v4.1:
+    received: "2026-08-09（利用者アップロード B1113）"
+    note: ver.4.1。チェックリスト確認の上申書（15段落）

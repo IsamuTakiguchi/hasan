@@ -132,6 +132,11 @@ class ParaIndex:
                 q = blanks[0]
                 note = "path,空欄先頭" if len(blanks) > 1 else "path,空欄"
                 return q, rebound, f"paraId {pid} -> {q.para_id} ({note})"
+        # 最終手段: 文言もパスも無い空欄アンカーは idx 位置の空欄段落（位置のみの照合）
+        if not ctx and not path and old_idx is not None and 0 <= old_idx < len(self.paras):
+            q = self.paras[old_idx]
+            if q.text == "":
+                return q, rebound, f"paraId {pid} -> {q.para_id} (idx位置,空欄)"
 
         if p is not None:
             # paraId 一致を最後の拠り所として使う（文言不一致の警告付き）

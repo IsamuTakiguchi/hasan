@@ -1,0 +1,26 @@
+form: joshinsho-checklist
+court: osaka
+version: "4.1"
+doc_type: docx
+notes:
+  - w14:paraId 無しの旧型式docx。本文（チェックリスト確認の宣明）は印字済みで記入不要。
+fields:
+  - id: joshin_date
+    kind: set_text
+    anchor: { paraId: "", idx: 0, path: "", context: 令和　年　月　日 }
+    binds: meta.filing_date
+  - id: atesaki
+    kind: checkbox
+    option_anchors:
+      第６民事部: { paraId: "", idx: 6, path: "", context: □第６民事部, literal: □第６民事部 }
+      支部: { paraId: "", idx: 8, path: "", context: □　支部, literal: □　支部 }
+    binds: meta.court_branch
+  - id: dairinin
+    kind: underline_fill
+    anchor: { paraId: "", idx: 10, path: "", context: 申立代理人　印 }
+    binds: meta.attorneys[0].name
+    notes: 「弁護士　乙　川　一　郎」形式（下線3runの最初に入る。format.slot 0）
+  - id: hosoku
+    kind: underline_fill
+    anchor: { paraId: "", idx: 11, path: "", context: "" }
+    notes: 自由記載（チェックできない項目の補足等。弁護士の指示があるときのみ）
