@@ -1,0 +1,33 @@
+# スモークフィル用の架空値（個人事業者の例。乙山ストア事例とは別の想定）。
+# 実事件では case.yaml の business 区分から hasan-jigyou-houkokusho の規則で組み立てる。
+fields:
+  houkoku_date: 令和７年９月１日
+  atesaki: 支部
+  dairinin: 弁護士　乙　川　一　郎
+  jigyo_umu: 有
+  yagou: 丁字屋クリーニング
+  home_shop: 自宅兼店舗
+  jigyosho_address: 大阪府堺市堺区甲町１丁２番３号（自宅兼店舗）
+  rental_umu: 無
+  jigyo_naiyou: クリーニングの取次・仕上げ加工
+  jigyo_kikan: 平成２８年４月～令和７年１月
+  jigyo_keizoku: 無
+  nendo1_year: R4
+  nendo1_sales: 6,200,000円
+  nendo1_expenses: 5,400,000円
+  nendo1_employees: 0人
+  nendo2_year: R5
+  nendo2_sales: 5,100,000円
+  nendo2_expenses: 4,900,000円
+  nendo2_employees: 0人
+  nendo3_year: R6
+  nendo3_sales: 3,800,000円
+  nendo3_expenses: 4,100,000円
+  nendo3_employees: 0人
+  bizasset_umu: 有
+  bizasset_kinds: [事業用設備・機械]
+  bizasset_value: "150,000"
+  emp_umu: 無
+  tax_umu: 有
+  tax_total: "320,000"
+  urikake_umu: 無

@@ -1,0 +1,9 @@
+# この書式の現行版。生成スキルは必ずここを経由して版を解決する。
+form: jigyou-houkokusho
+name: 事業に関する報告書（B1112）
+doc_type: docx
+current: "v4.1"
+versions:
+  v4.1:
+    received: "2026-08-09（利用者アップロード B1112）"
+    note: 大阪地裁共通様式（同時廃止一式 ver.4.1 世代）。個人事業者用。w14:paraId 無し

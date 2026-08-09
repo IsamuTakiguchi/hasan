@@ -1,0 +1,235 @@
+form: jigyou-houkokusho
+court: osaka
+version: "4.1"
+doc_type: docx
+notes:
+  - w14:paraId 無しの旧型式docx。アンカーは context＋path＋idx で解決。
+  - 個人事業者（過去に個人事業を営んでいた場合を含む）の事件で作成する。
+    法人代表者のみ（個人事業なし）の場合はこの書式は不要（法人の破綻は報告書第２に記載）。
+  - binds は case.yaml の business 区分。
+fields:
+  - id: houkoku_date
+    kind: set_text
+    anchor: { paraId: "", idx: 0, path: "", context: 令和　年　月　日 }
+    binds: meta.filing_date
+  - id: atesaki
+    kind: checkbox
+    option_anchors:
+      第６民事部: { paraId: "", idx: 3, path: "", context: □第６民事部, literal: □第６民事部 }
+      支部: { paraId: "", idx: 5, path: "", context: □　支部, literal: □　支部 }
+    binds: meta.court_branch
+  - id: dairinin
+    kind: underline_fill
+    anchor: { paraId: "", idx: 7, path: "", context: 申立代理人　印 }
+    binds: meta.attorneys[0].name
+    notes: 報告書と同じ「弁護士　乙　川　一　郎」形式
+  - id: jigyo_umu
+    kind: checkbox
+    anchor: { paraId: "", idx: 8, path: "１　事業名称【□有　□無】", context: １　事業名称【□有　□無】 }
+    options: { 有: □有, 無: □無 }
+    binds: business.exists
+  - id: yagou
+    kind: underline_fill
+    anchor: { paraId: "", idx: 9, path: "１　事業名称【□有　□無】", context: その店名・屋号 }
+    binds: business.name
+  - id: home_shop
+    kind: checkbox
+    anchor: { paraId: "", idx: 10, path: "１　事業名称【□有　□無】>２　事業所所在地（□自宅兼店舗である。）", context: ２　事業所所在地（□自宅兼店舗である。） }
+    options: { 自宅兼店舗: □自宅兼店舗である。 }
+    binds: business.home_shop
+  - id: jigyosho_address
+    kind: underline_fill
+    anchor: { paraId: "", idx: 11, path: "１　事業名称【□有　□無】>２　事業所所在地（□自宅兼店舗である。）", context: "" }
+    binds: business.address
+  - id: rental_umu
+    kind: checkbox
+    anchor: { paraId: "", idx: 12, path: "１　事業名称【□有　□無】>３　事業用賃借物件（営業所，店舗，倉庫）", context: ３　事業用賃借物件（営業所，店舗，倉庫）の有無【□有　□無】 }
+    options: { 有: □有, 無: □無 }
+    binds: business.rental.exists
+  - id: rental_arrears
+    kind: checkbox
+    anchor: { paraId: "", idx: 13, path: "１　事業名称【□有　□無】>３　事業用賃借物件（営業所，店舗，倉庫）", context: その物件での賃料の滞納の有無【□有　□無】 }
+    options: { 有: □有, 無: □無 }
+    binds: business.rental.arrears
+  - id: rental_arrears_detail
+    kind: underline_slots
+    anchor: { paraId: "", idx: 14, path: "１　事業名称【□有　□無】>３　事業用賃借物件（営業所，店舗，倉庫）", context: その滞納賃料　か月分　合計　円 }
+    slots: ["か月数 例 ３", "合計額 例 300,000"]
+    binds: business.rental.arrears_months / arrears_total
+  - id: rental_vacated
+    kind: checkbox
+    anchor: { paraId: "", idx: 15, path: "１　事業名称【□有　□無】>３　事業用賃借物件（営業所，店舗，倉庫）", context: その明渡しの有無【□有　□無】 }
+    options: { 有: □有, 無: □無 }
+    binds: business.rental.vacated
+  - id: jigyo_naiyou
+    kind: underline_fill
+    anchor: { paraId: "", idx: 17, path: "１　事業名称【□有　□無】>４　具体的な事業の内容", context: "" }
+    binds: business.description
+  - id: jigyo_kikan
+    kind: set_text
+    anchor: { paraId: "", idx: 19, path: "１　事業名称【□有　□無】>５　事業期間", context: 昭和・平成・令和　年　月～平成・令和　年　月 }
+    binds: business.period
+    notes: 「平成２２年６月～令和７年１月」形式で全文置換（使わない元号は書かない）
+  - id: jigyo_keizoku
+    kind: checkbox
+    anchor: { paraId: "", idx: 20, path: "１　事業名称【□有　□無】>５　事業期間", context: 現時点での事業の継続の有無【□有　□無】 }
+    options: { 有: □有, 無: □無 }
+    binds: business.continuing
+  - id: nendo1_year
+    kind: insert_cell_text
+    anchor: { paraId: "", idx: 26, path: "１　事業名称【□有　□無】>６　過去３年間の年度別の営業状況>table[0]>row[1]>cell[0]", context: "" }
+    binds: business.annual[0].year
+  - id: nendo1_sales
+    kind: set_text
+    anchor: { paraId: "", idx: 27, path: "１　事業名称【□有　□無】>６　過去３年間の年度別の営業状況>table[0]>row[1]>cell[1]", context: 円 }
+    binds: business.annual[0].sales
+    notes: 「36,000,000円」形式（「円」ごと置換）
+  - id: nendo1_expenses
+    kind: set_text
+    anchor: { paraId: "", idx: 28, path: "１　事業名称【□有　□無】>６　過去３年間の年度別の営業状況>table[0]>row[1]>cell[2]", context: 円 }
+    binds: business.annual[0].expenses
+  - id: nendo1_employees
+    kind: set_text
+    anchor: { paraId: "", idx: 29, path: "１　事業名称【□有　□無】>６　過去３年間の年度別の営業状況>table[0]>row[1]>cell[3]", context: 人 }
+    binds: business.annual[0].employees
+    notes: 「3人」形式（「人」ごと置換）
+  - id: nendo2_year
+    kind: insert_cell_text
+    anchor: { paraId: "", idx: 30, path: "１　事業名称【□有　□無】>６　過去３年間の年度別の営業状況>table[0]>row[2]>cell[0]", context: "" }
+    binds: business.annual[1].year
+  - id: nendo2_sales
+    kind: set_text
+    anchor: { paraId: "", idx: 31, path: "１　事業名称【□有　□無】>６　過去３年間の年度別の営業状況>table[0]>row[2]>cell[1]", context: 円 }
+    binds: business.annual[1].sales
+  - id: nendo2_expenses
+    kind: set_text
+    anchor: { paraId: "", idx: 32, path: "１　事業名称【□有　□無】>６　過去３年間の年度別の営業状況>table[0]>row[2]>cell[2]", context: 円 }
+    binds: business.annual[1].expenses
+  - id: nendo2_employees
+    kind: set_text
+    anchor: { paraId: "", idx: 33, path: "１　事業名称【□有　□無】>６　過去３年間の年度別の営業状況>table[0]>row[2]>cell[3]", context: 人 }
+    binds: business.annual[1].employees
+  - id: nendo3_year
+    kind: insert_cell_text
+    anchor: { paraId: "", idx: 34, path: "１　事業名称【□有　□無】>６　過去３年間の年度別の営業状況>table[0]>row[3]>cell[0]", context: "" }
+    binds: business.annual[2].year
+  - id: nendo3_sales
+    kind: set_text
+    anchor: { paraId: "", idx: 35, path: "１　事業名称【□有　□無】>６　過去３年間の年度別の営業状況>table[0]>row[3]>cell[1]", context: 円 }
+    binds: business.annual[2].sales
+  - id: nendo3_expenses
+    kind: set_text
+    anchor: { paraId: "", idx: 36, path: "１　事業名称【□有　□無】>６　過去３年間の年度別の営業状況>table[0]>row[3]>cell[2]", context: 円 }
+    binds: business.annual[2].expenses
+  - id: nendo3_employees
+    kind: set_text
+    anchor: { paraId: "", idx: 37, path: "１　事業名称【□有　□無】>６　過去３年間の年度別の営業状況>table[0]>row[3]>cell[3]", context: 人 }
+    binds: business.annual[2].employees
+  - id: bizasset_umu
+    kind: checkbox
+    anchor: { paraId: "", idx: 38, path: "１　事業名称【□有　□無】>７　事業用資産（□事業用設備・機械，□什", context: ７　事業用資産（□事業用設備・機械，□什器備品，□車両，□在庫，□その他）の有無【□有　□無】 }
+    options: { 有: □有, 無: □無 }
+    binds: business.biz_assets.exists
+  - id: bizasset_kinds
+    kind: checkbox
+    anchor: { paraId: "", idx: 38, path: "１　事業名称【□有　□無】>７　事業用資産（□事業用設備・機械，□什", context: ７　事業用資産（□事業用設備・機械，□什器備品，□車両，□在庫，□その他）の有無【□有　□無】 }
+    options: { 事業用設備・機械: □事業用設備・機械, 什器備品: □什器備品, 車両: □車両, 在庫: □在庫, その他: □その他 }
+    binds: business.biz_assets.kinds
+  - id: bizasset_value
+    kind: underline_fill
+    anchor: { paraId: "", idx: 39, path: "１　事業名称【□有　□無】>７　事業用資産（□事業用設備・機械，□什", context: その評価額合計円 }
+    binds: business.biz_assets.total_value
+    notes: 数値のみ（例 500,000）
+  - id: emp_umu
+    kind: checkbox
+    anchor: { paraId: "", idx: 40, path: "１　事業名称【□有　□無】>８　廃業時（営業を継続している場合には現", context: ８　廃業時（営業を継続している場合には現在）の従業員の有無【□有　□無】 }
+    options: { 有: □有, 無: □無 }
+    binds: business.employees.exists
+  - id: unpaid_umu
+    kind: checkbox
+    anchor: { paraId: "", idx: 41, path: "１　事業名称【□有　□無】>８　廃業時（営業を継続している場合には現", context: その従業員に対する未払賃金の有無【□有　□無】 }
+    options: { 有: □有, 無: □無 }
+    binds: business.employees.unpaid_wages
+  - id: unpaid_detail
+    kind: underline_fill
+    anchor: { paraId: "", idx: 43, path: "１　事業名称【□有　□無】>８　廃業時（営業を継続している場合には現", context: "" }
+    binds: business.employees.unpaid_detail
+  - id: tax_umu
+    kind: checkbox
+    anchor: { paraId: "", idx: 44, path: "１　事業名称【□有　□無】>９　公租公課（税金や社会保険料）の滞納の", context: ９　公租公課（税金や社会保険料）の滞納の有無【□有　□無】 }
+    options: { 有: □有, 無: □無 }
+    binds: business.tax_arrears.exists
+    notes: 債権者一覧表（公租公課用 B1106）と整合させる
+  - id: tax_total
+    kind: underline_fill
+    anchor: { paraId: "", idx: 45, path: "１　事業名称【□有　□無】>９　公租公課（税金や社会保険料）の滞納の", context: その滞納額合計円 }
+    binds: creditors(公租公課の残高合計)
+    notes: 数値のみ（例 320,000）。B1106 の合計と一致必須
+  - id: urikake_umu
+    kind: checkbox
+    anchor: { paraId: "", idx: 47, path: "１　事業名称【□有　□無】>10　売掛金等（事業により生じ，現在まで", context: 【□有　□無】 }
+    options: { 有: □有, 無: □無 }
+    binds: business.receivables.exists
+  - id: urikake1_name
+    kind: insert_cell_text
+    anchor: { paraId: "", idx: 53, path: "１　事業名称【□有　□無】>10　売掛金等（事業により生じ，現在まで>table[1]>row[1]>cell[0]", context: "" }
+    binds: business.receivables.items[0].name
+  - id: urikake1_amount
+    kind: insert_cell_text
+    anchor: { paraId: "", idx: 54, path: "１　事業名称【□有　□無】>10　売掛金等（事業により生じ，現在まで>table[1]>row[1]>cell[1]", context: "" }
+    binds: business.receivables.items[0].amount
+  - id: urikake1_date
+    kind: set_text
+    anchor: { paraId: "", idx: 55, path: "１　事業名称【□有　□無】>10　売掛金等（事業により生じ，現在まで>table[1]>row[1]>cell[2]", context: 年　月 }
+    binds: business.receivables.items[0].date
+  - id: urikake1_kaishu
+    kind: checkbox
+    anchor: { paraId: "", idx: 56, path: "１　事業名称【□有　□無】>10　売掛金等（事業により生じ，現在まで>table[1]>row[1]>cell[3]", context: □有　□無 }
+    options: { 有: □有, 無: □無 }
+    binds: business.receivables.items[0].recoverable
+  - id: urikake1_riyu
+    kind: insert_cell_text
+    anchor: { paraId: "", idx: 57, path: "１　事業名称【□有　□無】>10　売掛金等（事業により生じ，現在まで>table[1]>row[1]>cell[4]", context: "" }
+    binds: business.receivables.items[0].reason
+  - id: urikake2_name
+    kind: insert_cell_text
+    anchor: { paraId: "", idx: 58, path: "１　事業名称【□有　□無】>10　売掛金等（事業により生じ，現在まで>table[1]>row[2]>cell[0]", context: "" }
+    binds: business.receivables.items[1].name
+  - id: urikake2_amount
+    kind: insert_cell_text
+    anchor: { paraId: "", idx: 59, path: "１　事業名称【□有　□無】>10　売掛金等（事業により生じ，現在まで>table[1]>row[2]>cell[1]", context: "" }
+    binds: business.receivables.items[1].amount
+  - id: urikake2_date
+    kind: set_text
+    anchor: { paraId: "", idx: 60, path: "１　事業名称【□有　□無】>10　売掛金等（事業により生じ，現在まで>table[1]>row[2]>cell[2]", context: 年　月 }
+    binds: business.receivables.items[1].date
+  - id: urikake2_kaishu
+    kind: checkbox
+    anchor: { paraId: "", idx: 61, path: "１　事業名称【□有　□無】>10　売掛金等（事業により生じ，現在まで>table[1]>row[2]>cell[3]", context: □有　□無 }
+    options: { 有: □有, 無: □無 }
+    binds: business.receivables.items[1].recoverable
+  - id: urikake2_riyu
+    kind: insert_cell_text
+    anchor: { paraId: "", idx: 62, path: "１　事業名称【□有　□無】>10　売掛金等（事業により生じ，現在まで>table[1]>row[2]>cell[4]", context: "" }
+    binds: business.receivables.items[1].reason
+  - id: urikake3_name
+    kind: insert_cell_text
+    anchor: { paraId: "", idx: 63, path: "１　事業名称【□有　□無】>10　売掛金等（事業により生じ，現在まで>table[1]>row[3]>cell[0]", context: "" }
+    binds: business.receivables.items[2].name
+  - id: urikake3_amount
+    kind: insert_cell_text
+    anchor: { paraId: "", idx: 64, path: "１　事業名称【□有　□無】>10　売掛金等（事業により生じ，現在まで>table[1]>row[3]>cell[1]", context: "" }
+    binds: business.receivables.items[2].amount
+  - id: urikake3_date
+    kind: set_text
+    anchor: { paraId: "", idx: 65, path: "１　事業名称【□有　□無】>10　売掛金等（事業により生じ，現在まで>table[1]>row[3]>cell[2]", context: 年　月 }
+    binds: business.receivables.items[2].date
+  - id: urikake3_kaishu
+    kind: checkbox
+    anchor: { paraId: "", idx: 66, path: "１　事業名称【□有　□無】>10　売掛金等（事業により生じ，現在まで>table[1]>row[3]>cell[3]", context: □有　□無 }
+    options: { 有: □有, 無: □無 }
+    binds: business.receivables.items[2].recoverable
+  - id: urikake3_riyu
+    kind: insert_cell_text
+    anchor: { paraId: "", idx: 67, path: "１　事業名称【□有　□無】>10　売掛金等（事業により生じ，現在まで>table[1]>row[3]>cell[4]", context: "" }
+    binds: business.receivables.items[2].reason

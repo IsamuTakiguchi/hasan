@@ -243,6 +243,76 @@ properties:
             value: { type: [integer, "null"] }
             note: { type: string }
 
+  business:
+    type: object
+    description: "個人事業に関する報告（事業に関する報告書 B1112 に対応）。個人事業者（過去含む）の事件で intake が埋める"
+    additionalProperties: true
+    properties:
+      exists: { type: [boolean, "null"], description: "事業名称（屋号）の有無" }
+      name: { type: string, description: "店名・屋号" }
+      address: { type: string, description: "事業所所在地" }
+      home_shop: { type: boolean, description: "自宅兼店舗か" }
+      rental:
+        type: object
+        description: "事業用賃借物件（営業所・店舗・倉庫）"
+        properties:
+          exists: { type: [boolean, "null"] }
+          arrears: { type: [boolean, "null"], description: "賃料滞納の有無" }
+          arrears_months: { type: [integer, "null"] }
+          arrears_total: { type: [integer, "null"] }
+          vacated: { type: [boolean, "null"], description: "明渡し済みか" }
+      description: { type: string, description: "具体的な事業の内容" }
+      period:
+        type: object
+        properties:
+          start: { type: string, description: "例 H22.6" }
+          end: { type: string, description: "廃業年月。継続中は省略" }
+      continuing: { type: [boolean, "null"], description: "現時点での事業継続の有無" }
+      annual:
+        type: array
+        description: "過去3年間の年度別営業状況"
+        items:
+          type: object
+          properties:
+            year: { type: string, description: "年度 例 R6" }
+            sales: { type: [integer, "null"] }
+            expenses: { type: [integer, "null"] }
+            employees: { type: [integer, "null"] }
+      biz_assets:
+        type: object
+        description: "事業用資産（設備・什器・車両・在庫等）"
+        properties:
+          exists: { type: [boolean, "null"] }
+          kinds: { type: array, items: { type: string, enum: [事業用設備・機械, 什器備品, 車両, 在庫, その他] } }
+          total_value: { type: [integer, "null"] }
+      employees:
+        type: object
+        description: "廃業時（継続中は現在）の従業員"
+        properties:
+          exists: { type: [boolean, "null"] }
+          unpaid_wages: { type: [boolean, "null"] }
+          unpaid_detail: { type: string, description: "未払賃金の合計額・未払期間" }
+      tax_arrears:
+        type: object
+        properties:
+          exists: { type: [boolean, "null"] }
+          total: { type: [integer, "null"] }
+      receivables:
+        type: object
+        description: "売掛金等（未回収債権）"
+        properties:
+          exists: { type: [boolean, "null"] }
+          items:
+            type: array
+            items:
+              type: object
+              properties:
+                name: { type: string }
+                amount: { type: [integer, "null"] }
+                date: { type: string }
+                recoverable: { type: [boolean, "null"] }
+                reason: { type: string }
+
   household:
     type: array
     description: "家計収支（月次）。家計収支表の対象月（通常申立前2か月）分。古い月から順に"

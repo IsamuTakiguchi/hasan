@@ -64,6 +64,7 @@ description: >-
 | assets | 通帳・保険証券・解約返戻金証明書・車検証・査定書・不動産登記 |
 | household | 家計簿メモ・領収書・給与明細・通帳 |
 | timeline / menseki | 面談メモ・法人用報告書・聴取書 |
+| business | 確定申告書・帳簿・面談メモ（**個人事業者の事件では必須**。屋号・事業期間・過去3年の売上/経費/従業員・事業用資産・売掛金・公租公課滞納） |
 | bank_analysis | 通帳（hasan-nyushukkin-bunseki が記入する。手で埋めない） |
 
 `meta.shiharai_funo`（支払不能時期）は面談メモ・最終弁済日から弁護士が判断する事項
