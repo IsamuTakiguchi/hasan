@@ -104,15 +104,80 @@ def build_generic(case, out):
     return {"months": month_stats(months)}
 
 
+def zenkaku(n):
+    return str(n).translate(str.maketrans("0123456789", "０１２３４５６７８９"))
+
+
+def month_period(m):
+    """'R7.6' → '６月１日～６月３０日'（月末日は暦から計算）。形式外はそのまま返す。"""
+    import calendar
+    import re
+    mt = re.match(r"^([MTSHR])(\d+)\.(\d+)$", m or "")
+    if not mt:
+        return m or ""
+    base = {"M": 1867, "T": 1911, "S": 1925, "H": 1988, "R": 2018}[mt.group(1)]
+    year, mon = base + int(mt.group(2)), int(mt.group(3))
+    last = calendar.monthrange(year, mon)[1]
+    return f"{zenkaku(mon)}月１日～{zenkaku(mon)}月{zenkaku(last)}日"
+
+
+def title_year(m):
+    import re
+    mt = re.match(r"^R(\d+)\.", m or "")
+    return f"　　　　　　　　　家計収支表(令和{zenkaku(int(mt.group(1)))}年）" if mt else ""
+
+
 def build_from_template(case, vdir, out):
+    """B1111: 費目固定行（fillmap item_rows）へ2か月分を記入。数式セルは触らない。"""
     fillmap = yaml.safe_load((vdir / "fillmap.yaml").read_text(encoding="utf-8"))
-    months = case.get("household", []) or []
-    values = {"fields": {
-        "applicant_name": case.get("meta", {}).get("applicant", {}).get("name", ""),
-        "months": months,
-    }}
+    months = (case.get("household", []) or [])[:2]
+    if not months:
+        print("household が空のため家計収支表を生成できない")
+        sys.exit(4)
+    if len(case.get("household", [])) > 2:
+        print(f"注記: household が {len(case['household'])} か月分ある。書式は2か月分のため先頭2か月を使用")
+
+    item_rows = fillmap["item_rows"]
+    sheet = "家計収支表"
     filler = xlsxlib.XlsxFiller(vdir / "template.xlsx")
+
+    values = {"fields": {
+        "title_year": title_year(months[0].get("month", "")),
+        "period_m1": month_period(months[0].get("month", "")),
+        "period_m2": month_period(months[1].get("month", "")) if len(months) > 1 else "",
+        "carryover_m1": months[0].get("carryover"),
+    }}
     filler.apply(fillmap, values)
+
+    # 正規名に無い費目は「その他」行へ。行の割当は全月で共通にする（列ズレ防止）
+    for kind, rows_map, sonota_keys in (
+        ("income", item_rows["income"], ["その他"]),
+        ("expense", item_rows["expense"], ["その他1", "その他2"]),
+    ):
+        unmapped = []
+        for h in months:
+            for key in (h.get(kind) or {}):
+                if key not in rows_map or key in sonota_keys:
+                    if key not in unmapped:
+                        unmapped.append(key)
+        slot_of = {}
+        for key in unmapped:
+            if sonota_keys:
+                slot = sonota_keys.pop(0)
+                slot_of[key] = rows_map[slot]
+                filler.write(sheet, f"B{slot_of[key]}", f"その他　（{key}）", f"kakei:{key}")
+                print(f"注記: 費目「{key}」は正規名に無いため「その他」行（行{slot_of[key]}）に記入した")
+            else:
+                filler.warnings.append(f"費目「{key}」が書式に対応せず「その他」行も満杯。questions.md で扱いを確認")
+        for col, h in zip(("C", "D"), months):
+            for key, amount in (h.get(kind) or {}).items():
+                if amount is None:
+                    continue
+                if key in rows_map and key not in slot_of:
+                    filler.write(sheet, f"{col}{rows_map[key]}", amount, f"kakei:{key}")
+                elif key in slot_of:
+                    filler.write(sheet, f"{col}{slot_of[key]}", amount, f"kakei:{key}")
+
     filler.save(out)
     for w in filler.warnings:
         print(f"警告: {w}")

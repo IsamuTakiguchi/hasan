@@ -75,6 +75,11 @@ class XlsxFiller:
         ws[addr] = value
         return True
 
+    def write(self, sheet, addr, value, fid="builder"):
+        """builder から直接セルへ書く（数式防御込み）。fillmap の kind を介さない補助口。"""
+        if self._write(self._ws(sheet), addr, value, fid):
+            self.filled += 1
+
     def set_cell(self, field, value):
         ws = self._ws(field["anchor"]["sheet"])
         for addr, expect in (field.get("label_check") or {}).items():

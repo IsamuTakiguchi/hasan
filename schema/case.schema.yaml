@@ -192,19 +192,29 @@ properties:
 
   household:
     type: array
-    description: "家計収支（月次）。家計収支表の対象月（通常直近2か月）分"
+    description: "家計収支（月次）。家計収支表の対象月（通常申立前2か月）分。古い月から順に"
     items:
       type: object
       required: [month]
       properties:
         month: { type: string, description: "対象月（例 R8.6）" }
+        carryover: { type: [integer, "null"], description: "前月からの繰越（円）。資料があるときのみ" }
         income:
           type: object
-          description: "収入内訳（円）。キーは書式の費目名（給与, 配偶者の給与, 年金, 援助 等）"
+          description: >-
+            収入内訳（円）。キーは家計収支表書式（B1111）の正規費目名:
+            給与（申立人分）/給与（配偶者分）/給与（その他）/自営収入（申立人分）/
+            自営収入（その他）/年金（申立人分）/年金（その他）/雇用保険/生活保護/
+            児童手当/援助/借入れ/その他。対応しない費目はその他行に回る
           additionalProperties: { type: [integer, "null"] }
         expense:
           type: object
-          description: "支出内訳（円）。キーは書式の費目名（家賃, 食費, 水道光熱費, 通信費 等）"
+          description: >-
+            支出内訳（円）。キーは家計収支表書式（B1111）の正規費目名:
+            住居費/駐車場代/食費/嗜好品代/外食費/電気代/ガス代/水道代/携帯電話料金/
+            その他通信費/日用品代/新聞代/国民健康保険料/保険料/ガソリン代/交通費/
+            医療費/被服費/教育費/交際費/娯楽費/債務返済実額（申立人分）/
+            債務返済実額（同居者分）。対応しない費目はその他行に回る
           additionalProperties: { type: [integer, "null"] }
         note: { type: string }
 
