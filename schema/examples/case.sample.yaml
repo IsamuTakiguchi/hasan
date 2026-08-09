@@ -100,6 +100,11 @@ assets:
     - { name: 軽自動車（子丑号・H29年式）, first_registration: H29, value: 150000, loan_balance: 0 }
   real_estate: []
   retirement_expectation: 0
+  tsumitate: []
+  shikikin:
+    - { property: 自宅（賃借）, start: R7.2, deposit: 130000, refund: null, arrears: 0 }
+  loans_receivable: []
+  upcoming: []
   overpayment: []
   other: []
 
@@ -179,6 +184,7 @@ sources:
   "assets.deposits[1]": 通帳（壬水信用金庫）
   "assets.insurance[0]": 解約返戻金証明書
   "assets.vehicles[0]": 車検証・査定書
+  "assets.shikikin[0]": 賃貸借契約書
   "household[0]": 家計簿メモ・領収書（R7.6）
   "household[1]": 家計簿メモ・領収書（R7.7）
   "timeline": 面談メモp2-3・法人用報告書

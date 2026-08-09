@@ -173,6 +173,46 @@ properties:
             value: { type: [integer, "null"] }
             mortgage: { type: [integer, "null"], description: "被担保債権残（円）" }
       retirement_expectation: { type: [integer, "null"], description: "退職金見込額（円）" }
+      tsumitate:
+        type: array
+        description: "積立金等（社内積立て・財形貯蓄等）"
+        items:
+          type: object
+          properties:
+            kind: { type: string }
+            start: { type: string, description: "開始時期 例 H30.4" }
+            total: { type: [integer, "null"], description: "積立総額（円）" }
+      shikikin:
+        type: array
+        description: "賃借保証金・敷金（申立人名義の賃借物件の差入保証金）"
+        items:
+          type: object
+          properties:
+            property: { type: string, description: "賃借物件（自宅・駐車場等）" }
+            start: { type: string, description: "契約の始期" }
+            deposit: { type: [integer, "null"], description: "差入金額（円）" }
+            refund: { type: [integer, "null"], description: "返戻見込（円）" }
+            arrears: { type: [integer, "null"], description: "滞納額（円）" }
+      loans_receivable:
+        type: array
+        description: "貸付金・求償金等（申立人が有する債権）"
+        items:
+          type: object
+          properties:
+            debtor: { type: string }
+            amount: { type: [integer, "null"] }
+            date: { type: string, description: "貸付時期" }
+            recoverable: { type: [boolean, "null"], description: "回収見込み" }
+            reason: { type: string, description: "回収できない理由" }
+      upcoming:
+        type: array
+        description: "近日中に取得見込みの財産（交通事故の損害賠償金・財産分与等）"
+        items:
+          type: object
+          properties:
+            kind: { type: string }
+            counterparty: { type: string }
+            amount: { type: [integer, "null"] }
       overpayment:
         type: array
         description: "過払金等の債権"

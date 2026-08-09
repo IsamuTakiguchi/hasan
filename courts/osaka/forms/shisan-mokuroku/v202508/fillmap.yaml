@@ -1,0 +1,297 @@
+form: shisan-mokuroku
+court: osaka
+version: "202508"
+doc_type: xlsx
+notes:
+  - 5シート・15区分。各区分の【□有　□無】は該当データの有無が case.yaml で確認できるときのみチェック。
+  - >-
+    数式セル（１ページF22=普通預金合計、５ページのF列・8行目合計）は書込禁止
+    （エンジンが防御）。
+  - 金額セルはラベル置換型（例 C5「金額（　円）」→「金額（35,000円）」）と数値セル型が混在。
+    ラベル置換型は builder が文字列を組み立てる。
+fields:
+  # ============ １ページ: 1 現金 / 2 預貯金 ============
+  - id: cash_umu
+    kind: checkbox
+    anchor: { sheet: １ページ, cell: H4 }
+    options: { 有: "□有", 無: "□無" }
+    binds: assets.cash(5万円以上か)
+  - id: cash_amount
+    kind: set_cell
+    anchor: { sheet: １ページ, cell: C5 }
+    binds: assets.cash
+    notes: 「金額（35,000円）」形式で全文置換（5万円以上で「有」のときのみ）
+  - id: cash_keeper_dairinin
+    kind: checkbox
+    anchor: { sheet: １ページ, cell: F5 }
+    options: { 申立代理人保管: "□申立代理人において保管" }
+  - id: yochokin_umu
+    kind: checkbox
+    anchor: { sheet: １ページ, cell: H9 }
+    options: { 有: "□有", 無: "□無" }
+    binds: assets.deposits
+  - id: deposits_futsu
+    kind: row_blocks
+    anchor: { sheet: １ページ }
+    first_row: 12
+    block_rows: 1
+    count: 10
+    cells:
+      - { r: 0, c: C, key: bank, notes: "金融機関名(支店名)。B列は行番号（触らない）" }
+      - { r: 0, c: D, key: account_no }
+      - { r: 0, c: F, key: balance }
+      - { r: 0, c: G, key: as_of, notes: "記帳日 例 ７月３１日（「月　日」置換）" }
+    binds: assets.deposits(普通)
+  - id: deposits_teiki
+    kind: row_blocks
+    anchor: { sheet: １ページ }
+    first_row: 26
+    block_rows: 1
+    count: 5
+    cells:
+      - { r: 0, c: C, key: bank, notes: "B列は行番号（触らない）" }
+      - { r: 0, c: D, key: account_no }
+      - { r: 0, c: F, key: balance }
+      - { r: 0, c: G, key: as_of }
+      - { r: 0, c: H, key: kind, notes: "預金種別（定期等）" }
+    binds: assets.deposits(定期等)
+  # ============ ２ページ: 3 保険 ============
+  - id: hoken_umu
+    kind: checkbox
+    anchor: { sheet: 2ページ, cell: F1 }
+    options: { 有: "□有", 無: "□無" }
+    binds: assets.insurance
+  - id: hoken_honnin
+    kind: row_blocks
+    anchor: { sheet: 2ページ }
+    first_row: 6
+    block_rows: 3
+    count: 5
+    cells:
+      - { r: 0, c: C, key: company }
+      - { r: 0, c: D, key: contract_date, notes: "「　年　月　日」置換" }
+      - { r: 0, c: E, key: kaiyaku, checkbox: true, notes: "□解約済み/□失効/□未解約" }
+      - { r: 1, c: C, key: policy_no }
+      - { r: 1, c: D, key: contractor }
+      - { r: 1, c: E, key: surrender_value }
+      - { r: 2, c: C, key: kind_check, checkbox: true, notes: "□生命保険（その他は空欄の□の右に手動）" }
+      - { r: 2, c: D, key: monthly_premium }
+      - { r: 2, c: E, key: use_check, checkbox: true, notes: "□生活費/□返済/□申立費用/□その他（解約済のとき）" }
+    binds: assets.insurance
+  - id: hoken_surrender_total
+    kind: set_cell
+    anchor: { sheet: 2ページ, cell: E21 }
+    label_check: { C21: "解約返戻金(未解約分)合計" }
+    binds: assets.insurance(未解約分の合計)
+  # 家族名義分（(2) rows27-38）は case.yaml に owner 区分が無いため未定義（必要時に追加）
+  # ============ ３ページ: 4 積立金 / 5 敷金 / 6 貸付金 / 7 退職金 / 8 不動産 ============
+  - id: tsumitate_umu
+    kind: checkbox
+    anchor: { sheet: 3ページ, cell: F1 }
+    options: { 有: "□有", 無: "□無" }
+    binds: assets.tsumitate
+  - id: tsumitate_rows
+    kind: row_blocks
+    anchor: { sheet: 3ページ }
+    first_row: 3
+    block_rows: 1
+    count: 2
+    cells:
+      - { r: 0, c: B, key: kind }
+      - { r: 0, c: D, key: start, notes: "「　年　月」置換" }
+      - { r: 0, c: E, key: total }
+    binds: assets.tsumitate
+  - id: shikikin_umu
+    kind: checkbox
+    anchor: { sheet: 3ページ, cell: F7 }
+    options: { 有: "□有", 無: "□無" }
+    binds: assets.shikikin
+  - id: shikikin_rows
+    kind: row_blocks
+    anchor: { sheet: 3ページ }
+    first_row: 9
+    block_rows: 1
+    count: 2
+    cells:
+      - { r: 0, c: B, key: property }
+      - { r: 0, c: C, key: start }
+      - { r: 0, c: D, key: deposit }
+      - { r: 0, c: E, key: refund }
+      - { r: 0, c: F, key: arrears }
+    binds: assets.shikikin
+  - id: kashitsuke_umu
+    kind: checkbox
+    anchor: { sheet: 3ページ, cell: F12 }
+    options: { 有: "□有", 無: "□無" }
+    binds: assets.loans_receivable
+  - id: kashitsuke_rows
+    kind: row_blocks
+    anchor: { sheet: 3ページ }
+    first_row: 14
+    block_rows: 1
+    count: 2
+    cells:
+      - { r: 0, c: B, key: debtor }
+      - { r: 0, c: C, key: amount }
+      - { r: 0, c: D, key: date }
+      - { r: 0, c: E, key: recoverable, checkbox: true, notes: "□有/□無" }
+      - { r: 0, c: F, key: reason }
+    binds: assets.loans_receivable
+  - id: taishokukin_umu
+    kind: checkbox
+    anchor: { sheet: 3ページ, cell: F17 }
+    options: { 有: "□有", 無: "□無" }
+    binds: assets.retirement_expectation
+    notes: 勤続5年以上の場合の欄。0円確定なら「無」
+  - id: taishokukin_company
+    kind: set_cell
+    anchor: { sheet: 3ページ, cell: B19 }
+    binds: career(現職の会社名)
+  - id: taishokukin_amount
+    kind: set_cell
+    anchor: { sheet: 3ページ, cell: D19 }
+    binds: assets.retirement_expectation
+  - id: taishokukin_juryo_mijuryo
+    kind: checkbox
+    anchor: { sheet: 3ページ, cell: E20 }
+    options: { 受領未了: "□受領未了" }
+  - id: fudosan_umu
+    kind: checkbox
+    anchor: { sheet: 3ページ, cell: F22 }
+    options: { 有: "□有", 無: "□無" }
+    binds: assets.real_estate
+  - id: fudosan_blocks
+    kind: row_blocks
+    anchor: { sheet: 3ページ }
+    first_row: 24
+    block_rows: 2
+    count: 3
+    cells:
+      - { r: 0, c: B, key: kind_check, checkbox: true, notes: "□土地/□建物" }
+      - { r: 1, c: B, key: mansion_check, checkbox: true, notes: "□マンション" }
+      - { r: 0, c: C, key: address }
+      - { r: 0, c: E, key: owner_check, checkbox: true, notes: "□申立人" }
+      - { r: 0, c: F, key: mochibun_check, checkbox: true, notes: "□全部" }
+    binds: assets.real_estate
+  # ============ ４ページ: 9 自動車 / 10 動産 / 11 その他 / 12 処分 / 13 偏頗 / 14 見込 ============
+  - id: jidosha_umu
+    kind: checkbox
+    anchor: { sheet: 4ページ, cell: G1 }
+    options: { 有: "□有", 無: "□無" }
+    binds: assets.vehicles
+  - id: jidosha_blocks
+    kind: row_blocks
+    anchor: { sheet: 4ページ }
+    first_row: 3
+    block_rows: 2
+    count: 2
+    cells:
+      - { r: 0, c: B, key: name }
+      - { r: 0, c: C, key: year, notes: "年式" }
+      - { r: 0, c: D, key: acquired, notes: "「　年　月」置換" }
+      - { r: 1, c: D, key: price_man, notes: "「　万円」置換 例 30万円" }
+      - { r: 0, c: F, key: value }
+      - { r: 0, c: G, key: ryuho_ari, checkbox: true, notes: "□有(□返還予定)" }
+      - { r: 1, c: G, key: ryuho_nashi, checkbox: true, notes: "□無" }
+    binds: assets.vehicles
+  - id: dousan_umu
+    kind: checkbox
+    anchor: { sheet: 4ページ, cell: G9 }
+    options: { 有: "□有", 無: "□無" }
+    binds: assets.other(10万円以上の動産)
+  - id: dousan_rows
+    kind: row_blocks
+    anchor: { sheet: 4ページ }
+    first_row: 11
+    block_rows: 1
+    count: 3
+    cells:
+      - { r: 0, c: B, key: name }
+      - { r: 0, c: E, key: acquired }
+      - { r: 0, c: F, key: value }
+      - { r: 0, c: G, key: ryuho, checkbox: true, notes: "□有/□無" }
+    binds: assets.other
+  - id: sonota_zaisan_umu
+    kind: checkbox
+    anchor: { sheet: 4ページ, cell: G16 }
+    options: { 有: "□有", 無: "□無" }
+    binds: assets.other(動産以外)
+  - id: sonota_zaisan_rows
+    kind: row_blocks
+    anchor: { sheet: 4ページ }
+    first_row: 18
+    block_rows: 1
+    count: 3
+    cells:
+      - { r: 0, c: B, key: name }
+      - { r: 0, c: F, key: acquired }
+      - { r: 0, c: G, key: value }
+    binds: assets.other
+  - id: shobun_umu
+    kind: checkbox
+    anchor: { sheet: 4ページ, cell: G23 }
+    options: { 有: "□有", 無: "□無" }
+    binds: menseki.asset_disposal
+    notes: 申立前2年以内・20万円以上の処分財産（保険は3に記載）
+  - id: shobun_rows
+    kind: row_blocks
+    anchor: { sheet: 4ページ }
+    first_row: 25
+    block_rows: 1
+    count: 5
+    cells:
+      - { r: 0, c: B, key: item }
+      - { r: 0, c: C, key: date }
+      - { r: 0, c: E, key: price }
+      - { r: 0, c: F, key: use }
+      - { r: 0, c: G, key: counterparty }
+    binds: menseki.asset_disposal
+  - id: henpa_umu
+    kind: checkbox
+    anchor: { sheet: 4ページ, cell: G32 }
+    options: { 有: "□有", 無: "□無" }
+    binds: menseki.henpa.exists
+    notes: 報告書第３の３と必ず一致させる
+  - id: henpa_rows
+    kind: row_blocks
+    anchor: { sheet: 4ページ }
+    first_row: 34
+    block_rows: 1
+    count: 2
+    cells:
+      - { r: 0, c: B, key: date }
+      - { r: 0, c: C, key: counterparty }
+      - { r: 0, c: G, key: amount }
+    binds: bank_analysis(受任通知後弁済・偏頗弁済で確認済みのもの)
+  - id: kinjitsu_umu
+    kind: checkbox
+    anchor: { sheet: 4ページ, cell: G38 }
+    options: { 有: "□有", 無: "□無" }
+    binds: assets.upcoming
+  - id: kinjitsu_rows
+    kind: row_blocks
+    anchor: { sheet: 4ページ }
+    first_row: 40
+    block_rows: 1
+    count: 1
+    cells:
+      - { r: 0, c: B, key: kind }
+      - { r: 0, c: C, key: counterparty }
+      - { r: 0, c: G, key: amount }
+    binds: assets.upcoming
+  # ============ ５ページ: 15 過払金 ============
+  - id: kabarai_umu
+    kind: checkbox
+    anchor: { sheet: 5ページ, cell: G1 }
+    options: { 有: "□有", 無: "□無" }
+    binds: assets.overpayment
+  - id: kabarai_rows
+    kind: row_blocks
+    anchor: { sheet: 5ページ }
+    first_row: 3
+    block_rows: 1
+    count: 5
+    cells:
+      - { r: 0, c: B, key: against }
+      - { r: 0, c: C, key: amount, notes: "額面額。F列（控除後残額）と8行目合計は数式" }
+    binds: assets.overpayment
