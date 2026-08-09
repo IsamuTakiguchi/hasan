@@ -13,15 +13,18 @@ description: >-
 
 1. `python3 scripts/casekit/validate_case.py cases/<事件ID>/case.yaml` を通す。
    債権者の残高不明・出所なしの警告が出たら、生成は続行しつつ最後に報告する。
-2. 生成:
+2. 生成（裁判所書式 B1105 登録済み。fillmap 駆動で記入される）:
    ```
    python3 scripts/build/build_saikensha_ichiran.py \
      --case cases/<事件ID>/case.yaml \
      --output cases/<事件ID>/output/債権者一覧表_<姓>.xlsx
    ```
-   - **裁判所書式が未登録なら exit 3 で案内が出る**。利用者に裁判所配布の Excel 書式の
-     提供を依頼し（hasan-register-form で登録）、それまでの間は利用者の了解を得て
-     `--generic`（事務所内ドラフト様式）で出力する。
+   - **公租公課の債権者がいる場合は必ず続けて公租公課用（B1106）も生成する**:
+     `... --kouso --output cases/<事件ID>/output/債権者一覧表（公租公課用）_<姓>.xlsx`
+   - 17件以上は書式の枠数超過（警告が出る）。2枚目はテンプレートのコピーに手動転記
+     し、利用者に報告する。
+   - 他庁書式など未登録の書式が必要なら hasan-register-form で登録
+     （暫定は `--generic` の事務所内ドラフト）。
 3. `python3 scripts/verify/crosscheck_outputs.py --case ... --dir cases/<事件ID>/output`
    で負債総額・債権者数の突合が OK になることを確認する。
 4. `scripts/verify/render_preview.py` でPDF・画像化し目視（列のはみ出し・文字切れ）。

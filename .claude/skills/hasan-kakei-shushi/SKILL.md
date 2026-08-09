@@ -19,8 +19,9 @@ description: >-
      --case cases/<事件ID>/case.yaml \
      --output cases/<事件ID>/output/家計収支表_<姓>.xlsx
    ```
-   裁判所書式が未登録なら exit 3 で案内が出る。利用者に書式提供を依頼し
-   （hasan-register-form で登録）、それまでは了解を得て `--generic` で出力する。
+   裁判所書式（B1111 家計収支表）登録済み。費目は fillmap の正規名で case.yaml に
+   記録されている前提（intake の規約）。正規名に無い費目は「その他」行に回り、
+   実行ログに出る。書式内の数式（繰越・合計）は保持される。
 3. crosscheck_outputs.py で月次集計の突合、render_preview.py で目視。
 
 ## 記載ルール

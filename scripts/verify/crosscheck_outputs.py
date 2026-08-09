@@ -102,6 +102,18 @@ def main():
                       f"家計収支表 {mm['month']}: 収入・支出一致",
                       f"表 {mm['income']:,}/{mm['expense']:,} ≠ case {exp}")
 
+    # 申立書（docx）: 申立ての理由の債権者数・債務総額が case と一致するか
+    for docx in sorted(outdir.glob("*申立書*.docx")):
+        text = docx_text(docx).translate(str.maketrans("０１２３４５６７８９，", "0123456789,"))
+        m = re.search(r"債権者(\d+)人に対し[,，]金([\d,]+)円", text)
+        if m:
+            check(int(m.group(1)) == n_cred, f"{docx.name}: 債権者数一致",
+                  f"申立書 {m.group(1)} ≠ case {n_cred}")
+            check(int(m.group(2).replace(",", "")) == total_debt, f"{docx.name}: 債務総額一致",
+                  f"申立書 {m.group(2)} ≠ case {total_debt:,}")
+        else:
+            check(False, f"{docx.name}: 申立ての理由の数値", "債権者数・金額が読み取れない（未記入の可能性）")
+
     # 報告書（docx）の記載確認
     for docx in sorted(outdir.glob("報告書*.docx")):
         text = docx_text(docx)

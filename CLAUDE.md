@@ -16,6 +16,23 @@
 5. 検証       scripts/verify/      PDF化・ページ画像目視 + 書類間数値突合
 ```
 
+## 登録済み書式（courts/osaka/ — 大阪地裁 本庁・堺支部・岸和田支部共通様式）
+
+| 書式ID | 書式（原番号） | 形式 | 生成 |
+|---|---|---|---|
+| moushitatesho-douhai | 破産手続開始申立書・同時廃止用（B1102） | docx | hasan-moushitatesho |
+| houkokusho | 報告書・自然人用 ver.4.1（B1110） | docx | hasan-houkokusho |
+| jigyou-houkokusho | 事業に関する報告書（B1112） | docx | hasan-jigyou-houkokusho（個人事業者のみ） |
+| saikensha-ichiran | 債権者一覧表（B1105） | xlsx | build_saikensha_ichiran.py |
+| saikensha-ichiran-kouso | 債権者一覧表・公租公課用（B1106） | xlsx | 同 --kouso |
+| shisan-mokuroku | 財産目録（B1109） | xlsx | build_shisan_mokuroku.py |
+| kakei-shushi | 家計収支表（B1111） | xlsx | build_kakei_shushi.py |
+| joshinsho-checklist | チェックリストに関する上申書（B1113） | docx | fill_docx.py（弁護士指示時のみ） |
+| checklist-douhai | 同時廃止チェックリスト（B1114） | docx | 生成対象外（保管のみ） |
+| hyojun-shiryo-ichiran | 標準資料一覧表（B1103） | xlsx | 生成対象外（保管のみ） |
+
+宛先支部は事件ごとに case.yaml の `meta.court_branch`（第６民事部/堺支部/岸和田支部）で指定。
+
 ## ディレクトリ規約
 
 - `courts/<裁判所ID>/forms/<書式ID>/` — 裁判所書式（版別）。`registry.yaml` の `current:` が現行版。
@@ -42,7 +59,8 @@
 
 - docx 記入は「配布docxを unzip → docxスキルの merge_runs.py → word/document.xml を直接編集 →
   zip 再パック → validate.py --original → soffice.py でPDF」。新規生成はしない（レイアウト完全保持）。
-- 段落の一意特定は fillmap の多層アンカー（w14:paraId → 文言 → 構造パス）で行う。
+- 段落の一意特定は fillmap の多層アンカー（w14:paraId → 文言 → 構造パス → 文書内位置idx）で
+  行う。B1102等の旧型式docxは paraId が無く、文言以下の層だけで解決する。
 - xlsx 記入は openpyxl（scripts/build/）。数式・結合セル・印刷設定を壊さないこと。
 - この環境に pdftoppm は無い。PDF→画像は PyMuPDF（`python3 -m scripts.verify.render_preview`）を使う。
 - 日付は裁判所書式の実態に合わせ「R4後半ころ」等の曖昧文字列も許容。短縮元号（H22.6）等の

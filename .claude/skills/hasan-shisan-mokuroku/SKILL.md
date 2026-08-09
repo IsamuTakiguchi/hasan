@@ -18,8 +18,9 @@ description: >-
      --case cases/<事件ID>/case.yaml \
      --output cases/<事件ID>/output/資産目録_<姓>.xlsx
    ```
-   裁判所書式が未登録なら exit 3 で案内が出る。利用者に書式提供を依頼し
-   （hasan-register-form で登録）、それまでは了解を得て `--generic` で出力する。
+   裁判所書式（B1109 財産目録・5シート15区分）登録済み。fillmap 駆動で記入される。
+   各区分の【有無】は case.yaml で確認できる項目のみチェックされ、未確認項目は
+   実行ログに出る → questions.md へ。他庁書式は hasan-register-form で登録。
 3. crosscheck_outputs.py で資産総額の突合、render_preview.py で目視。
 
 ## 記載ルール

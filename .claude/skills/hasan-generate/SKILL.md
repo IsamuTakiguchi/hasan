@@ -19,25 +19,31 @@ description: >-
 
 ## 実行順序
 
-数値の親（債権者・資産・家計の生データ）→ 子（それを引用する報告書）の順で作る。
+数値の親（債権者・資産・家計の生データ）→ 子（それを引用する申立書・報告書）の順で作る。
 
 1. **生成前ゲート**: `python3 scripts/casekit/validate_case.py cases/<事件ID>/case.yaml`
    - エラーなら中断して利用者に報告。警告（出所なし等）は控えて最後にまとめる。
    - 表示される負債総額・資産総額・月次収支を控える（後の突合の基準）。
-2. **債権者一覧表**: hasan-saikensha-ichiran の手順で
-   `build_saikensha_ichiran.py` を実行。
-3. **資産目録**: hasan-shisan-mokuroku の手順で `build_shisan_mokuroku.py` を実行。
-4. **家計収支表**: hasan-kakei-shushi の手順で `build_kakei_shushi.py` を実行。
-5. **報告書**: hasan-houkokusho の手順で values.yaml を組み立てて `fill_docx.py` を実行。
-   第２・第３の記載が 1〜4 の数値・bank_analysis と矛盾しないよう組み立てる。
-6. **書類間整合**:
+2. **債権者一覧表**: `build_saikensha_ichiran.py`（一般用）。公租公課の債権者がいる
+   場合は続けて `--kouso` で公租公課用（B1106）も生成。
+3. **資産目録**: `build_shisan_mokuroku.py`。
+4. **家計収支表**: `build_kakei_shushi.py`。
+5. **申立書**: hasan-moushitatesho の手順で values を組み立てて `fill_docx.py`。
+   申立ての理由の債権者数・総額・除外後額は 2 の数値と一致させる。
+6. **報告書**: hasan-houkokusho の手順で values を組み立てて `fill_docx.py`。
+   第２・第３の記載が 2〜4 の数値・bank_analysis と矛盾しないよう組み立てる。
+7. **事業に関する報告書**: 個人事業者（申立書参考事項1が事業者）の場合のみ、
+   hasan-jigyou-houkokusho の手順で生成。
+8. **書類間整合**:
    `python3 scripts/verify/crosscheck_outputs.py --case ... --dir cases/<事件ID>/output`
    が全 OK になること。NG が出たら原因（case.yaml と生成物のどちらが古いか）を
    特定して作り直す。生成物を手で直して辻褄を合わせてはならない。
-7. **目視検証**: `python3 scripts/verify/render_preview.py cases/<事件ID>/output/*.docx
+9. **目視検証**: `python3 scripts/verify/render_preview.py cases/<事件ID>/output/*.docx
    cases/<事件ID>/output/*.xlsx` で全書類をPDF・画像化し、各スキルのチェックリストで
    目視する。
-8. 途中で失敗した書式があっても残りは続行し、最後にまとめて報告する。
+10. 途中で失敗した書式があっても残りは続行し、最後にまとめて報告する。
+   （チェックリストに関する上申書 B1113 は、チェックできない項目があると弁護士が
+   判断したときのみ指示を受けて作成する）
 
 ## 出力命名
 
