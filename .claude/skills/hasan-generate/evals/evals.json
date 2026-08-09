@@ -1,0 +1,11 @@
+{
+  "skill_name": "hasan-generate",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "schema/examples/case.sample.yaml の架空事例で破産申立書類一式を作成してください（Excel系は事務所内ドラフト様式でよい）。出力は scratchpad に置いてください。",
+      "expected_output": "validate_case.py 合格 → 債権者一覧表・資産目録・家計収支表（--generic）→ 報告書（fill_docx.py）の順に生成し、crosscheck_outputs.py が全 OK（負債総額 22,170,000 円・資産 497,200 円・月次収支一致・報告書の氏名/受任通知日）。全書類の PDF 目視まで実施し、空欄項目・確認事項・generic 様式である旨をまとめて報告する。",
+      "files": []
+    }
+  ]
+}

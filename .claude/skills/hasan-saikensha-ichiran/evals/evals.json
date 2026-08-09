@@ -1,0 +1,17 @@
+{
+  "skill_name": "hasan-saikensha-ichiran",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "schema/examples/case.sample.yaml の架空事例で債権者一覧表を作成してください。裁判所書式は未登録のままでよいので、事務所内ドラフト様式で scratchpad に出力してください。",
+      "expected_output": "build_saikensha_ichiran.py --generic で生成された xlsx。債権者4名、公租公課（辛島市）が末尾、負債総額 22,170,000 円、合計行は =SUM 数式。crosscheck_outputs.py の突合が OK。裁判所書式の登録案内も行う。",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "債権者一覧表を裁判所書式で作ってください（書式は未登録の状態）。",
+      "expected_output": "builder が exit 3 で出す案内に従い、裁判所配布の Excel 書式の提供と hasan-register-form での登録を依頼する。利用者の了解があれば --generic で暫定出力する。",
+      "files": []
+    }
+  ]
+}
