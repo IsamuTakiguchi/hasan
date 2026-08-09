@@ -40,6 +40,12 @@ properties:
           required: [name]
       junin_tsuchi_date: { type: string, description: "受任通知発送日" }
       filing_date: { type: string, description: "申立（予定）日。未定なら省略" }
+      shiharai_funo:
+        type: object
+        description: "支払不能になった時期（報告書第２の３）"
+        properties:
+          date: { type: string, description: "例 R7.1" }
+          yakujo_monthly: { type: [integer, "null"], description: "当時の月々の約定返済額（円）。不明は null" }
 
   career:
     type: array

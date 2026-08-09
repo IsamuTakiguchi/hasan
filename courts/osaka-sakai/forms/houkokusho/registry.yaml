@@ -1,0 +1,9 @@
+# この書式の現行版。生成スキルは必ずここを経由して版を解決する。
+form: houkokusho
+name: 報告書（自然人用）
+doc_type: docx
+current: "v4.0"
+versions:
+  v4.0:
+    received: "2026-07-13以前（hasan-houkokushoスキル同梱版）"
+    note: 大阪地裁堺支部 様式ver4.0

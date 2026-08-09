@@ -13,6 +13,9 @@ meta:
       office: 丙山法律事務所
   junin_tsuchi_date: R7.3.10
   filing_date: R7.9.1
+  shiharai_funo:
+    date: R7.1
+    yakujo_monthly: null
 
 career:
   - period: { start: H22.6, end: R7.2 }
