@@ -2,8 +2,11 @@
 form: houkokusho
 name: 報告書（自然人用）
 doc_type: docx
-current: "v4.0"
+current: "v4.1"
 versions:
   v4.0:
     received: "2026-07-13以前（hasan-houkokushoスキル同梱版）"
     note: 大阪地裁堺支部 様式ver4.0
+  v4.1:
+    received: "2026-08-09（利用者アップロード B1110）"
+    note: 大阪地裁共通様式 ver.4.1（宛先が□第６民事部/□支部の選択式に。②ア・イ「申立て前」→「申立前」）

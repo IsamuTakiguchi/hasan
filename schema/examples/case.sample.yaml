@@ -2,7 +2,7 @@
 # 既存スキルの記入例（乙山ストア事例）を拡張したもの。
 meta:
   case_id: sample-otsuyama
-  court: osaka-sakai
+  court: osaka
   applicant:
     name: 甲野太郎
     kana: コウノタロウ

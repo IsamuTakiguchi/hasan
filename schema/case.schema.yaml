@@ -19,7 +19,7 @@ properties:
     additionalProperties: true
     properties:
       case_id: { type: string, description: "cases/ のフォルダ名と一致させる" }
-      court: { type: string, description: "courts/ の裁判所ID（例 osaka-sakai）" }
+      court: { type: string, description: "courts/ の裁判所ID（例 osaka）" }
       applicant:
         type: object
         required: [name]

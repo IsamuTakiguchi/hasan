@@ -7,7 +7,7 @@
 
 使い方:
   python3 scripts/build/build_shisan_mokuroku.py --case cases/<id>/case.yaml \
-      --output cases/<id>/output/資産目録_<姓>.xlsx [--court osaka-sakai] [--generic]
+      --output cases/<id>/output/資産目録_<姓>.xlsx [--court osaka] [--generic]
 """
 import argparse
 import json
@@ -113,7 +113,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--case", required=True)
     ap.add_argument("--output", required=True)
-    ap.add_argument("--court", default="osaka-sakai")
+    ap.add_argument("--court", default="osaka")
     ap.add_argument("--generic", action="store_true")
     args = ap.parse_args()
 

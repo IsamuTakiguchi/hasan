@@ -16,14 +16,14 @@ description: >-
 大阪地裁（堺支部）様式の「報告書」（自然人用）を対象とする。
 書式は①冒頭の署名欄、②第１（経歴等＝職歴表・婚姻歴・家族・相続・住居）、
 ③第２（破産申立てに至った事情）、④第３（免責不許可事由）で構成される。
-書式の構造・記入欄の定義は `courts/osaka-sakai/forms/houkokusho/<版>/` の
+書式の構造・記入欄の定義は `courts/osaka/forms/houkokusho/<版>/` の
 `structure.md` と `fillmap.yaml` を参照。
 
 ## 前提と基本方針
 
 - **入力は事件モデル** `cases/<事件ID>/case.yaml`（なければ hasan-intake で作成する）。
   生成器が原資料を直接読むことは禁止（CLAUDE.md 鉄則4）。
-- **テンプレートと版**: `courts/osaka-sakai/forms/houkokusho/registry.yaml` の
+- **テンプレートと版**: `courts/osaka/forms/houkokusho/registry.yaml` の
   `current:` が現行版。利用者が事件フォルダ内の報告書（.docx）を指定したときは、
   それが登録済みテンプレートと同版か確認して使う（違う書式なら hasan-register-form
   での登録を案内する）。
@@ -38,13 +38,13 @@ description: >-
 
 1. `python3 scripts/casekit/validate_case.py cases/<事件ID>/case.yaml` を通す。
 2. case.yaml を読み、下記の体裁ルールに従って `cases/<事件ID>/work/houkokusho_values.yaml`
-   を作成する。書式は `courts/osaka-sakai/forms/houkokusho/v4.0/examples/values.sample.yaml`
+   を作成する。書式は `courts/osaka/forms/houkokusho/v4.0/examples/values.sample.yaml`
    （架空事例の完全な見本）に倣う。field_id は fillmap.yaml に定義されたものだけを使う。
 3. 記入を実行する:
    ```
    python3 scripts/build/fill_docx.py \
-     --template courts/osaka-sakai/forms/houkokusho/<版>/template.docx \
-     --fillmap  courts/osaka-sakai/forms/houkokusho/<版>/fillmap.yaml \
+     --template courts/osaka/forms/houkokusho/<版>/template.docx \
+     --fillmap  courts/osaka/forms/houkokusho/<版>/fillmap.yaml \
      --values   cases/<事件ID>/work/houkokusho_values.yaml \
      --output   cases/<事件ID>/output/報告書_<姓>_記入済み.docx
    ```
@@ -128,7 +128,7 @@ description: >-
 
 ## 記入例（架空事例）
 
-完全な見本は `courts/osaka-sakai/forms/houkokusho/v4.0/examples/values.sample.yaml` を
+完全な見本は `courts/osaka/forms/houkokusho/v4.0/examples/values.sample.yaml` を
 参照（乙山ストア事例）。要点の抜粋:
 
 - 職歴表1組目（現職）: `shokureki1_start: R7.2～`、`shokureki1_shubetsu: 勤め`、

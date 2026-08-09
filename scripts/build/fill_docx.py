@@ -10,8 +10,8 @@ values.yaml の値を書き込む。テンプレートのレイアウトは一�
 
 使い方:
   python3 scripts/build/fill_docx.py \
-      --template courts/osaka-sakai/forms/houkokusho/v4.0/template.docx \
-      --fillmap  courts/osaka-sakai/forms/houkokusho/v4.0/fillmap.yaml \
+      --template courts/osaka/forms/houkokusho/v4.0/template.docx \
+      --fillmap  courts/osaka/forms/houkokusho/v4.0/fillmap.yaml \
       --values   cases/<id>/work/houkokusho_values.yaml \
       --output   cases/<id>/output/報告書_記入済み.docx
 
@@ -156,17 +156,42 @@ class Filler:
             p = self.resolve(field["id"], anchor)
             if p is None:
                 continue
-            replaced = False
-            for t in p.elem.iter(f"{W}t"):
-                if t.text and literal in t.text:
-                    t.text = t.text.replace(literal, literal.replace("□", "☑", 1), 1)
-                    replaced = True
-                    break
-            if replaced:
+            if self._check_literal(p.elem, literal):
                 ok_any = True
             else:
-                self.warn(field["id"], f"リテラル「{literal}」が段落内に見つからない（run分割の可能性）")
+                self.warn(field["id"], f"リテラル「{literal}」が段落内に見つからない")
         return ok_any
+
+    @staticmethod
+    def _check_literal(p_elem, literal):
+        """段落内の「□ラベル」を「☑ラベル」にする。空白のゆらぎと run 分割を許容する。
+
+        段落の連結テキスト上で（空白を無視して）リテラルの位置を探し、その □ が
+        段落内で何個目の □/☑ かを数えて、該当する w:t の □ だけを ☑ に置換する。
+        """
+        import re as _re
+        ts = [t for t in p_elem.iter(f"{W}t")]
+        full = "".join(t.text or "" for t in ts)
+        pattern = "[\\s　]*".join(_re.escape(ch) for ch in literal if not ch.isspace() and ch != "　")
+        m = _re.search(pattern, full)
+        if not m or not literal.startswith("□"):
+            if m:  # □で始まらないリテラルは想定外
+                return False
+            return False
+        nth = full[: m.start()].count("□")  # 手前にある□の数 = 対象□の序数
+        seen = 0
+        for t in ts:
+            if not t.text:
+                continue
+            boxes = t.text.count("□")
+            if seen + boxes > nth:
+                i = -1
+                for _ in range(nth - seen + 1):
+                    i = t.text.index("□", i + 1)
+                t.text = t.text[:i] + "☑" + t.text[i + 1:]
+                return True
+            seen += boxes
+        return False
 
     def fill_underline_fill(self, field, value):
         p = self.resolve(field["id"], field["anchor"])

@@ -34,7 +34,7 @@ description: >-
      4層を必ず埋める（版更新時の自動再束縛の材料）。kind は
      `scripts/build/fill_docx.py` のdocstring参照（set_text / insert_cell_text /
      checkbox / underline_fill / underline_slots / underline_longtext / timeline_rows）。
-   - 既存の `courts/osaka-sakai/forms/houkokusho/v4.0/fillmap.yaml` が完全な見本。
+   - 既存の `courts/osaka/forms/houkokusho/v4.0/fillmap.yaml` が完全な見本。
      規模が大きい書式は houkokusho の登録で使ったように、anchors.txt から fillmap を
      機械生成する使い捨てスクリプトを書くとよい。
    - xlsx の anchor は `{sheet, cell}` + `label_check`（近傍ラベル検証）。

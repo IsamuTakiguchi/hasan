@@ -1,9 +1,9 @@
 # schema/examples/case.sample.yaml（架空事例）から hasan-houkokusho の転記ルールで
 # 組み立てた fill 値の見本。スモークフィル（登録時検証・回帰テスト）に使う。
 #   python3 scripts/build/fill_docx.py \
-#     --template courts/osaka-sakai/forms/houkokusho/v4.0/template.docx \
-#     --fillmap  courts/osaka-sakai/forms/houkokusho/v4.0/fillmap.yaml \
-#     --values   courts/osaka-sakai/forms/houkokusho/v4.0/examples/values.sample.yaml \
+#     --template courts/osaka/forms/houkokusho/v4.0/template.docx \
+#     --fillmap  courts/osaka/forms/houkokusho/v4.0/fillmap.yaml \
+#     --values   courts/osaka/forms/houkokusho/v4.0/examples/values.sample.yaml \
 #     --output   <出力先>.docx
 fields:
   hokoku_date: 令和７年９月１日

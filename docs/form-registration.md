@@ -34,7 +34,7 @@ Claude がやること（概要）:
 ## ディレクトリの読み方
 
 ```
-courts/osaka-sakai/forms/houkokusho/
+courts/osaka/forms/houkokusho/
 ├── registry.yaml        # current: "v4.0" ← 生成に使われる版
 ├── v4.0/
 │   ├── template.docx    # 裁判所配布の白紙原本（編集禁止）
