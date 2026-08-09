@@ -1,0 +1,14 @@
+{
+  "name": "hasan-marketplace",
+  "owner": {
+    "name": "Isamu Takiguchi"
+  },
+  "description": "登大路総合法律事務所 内部プラグイン（非公開の裁判所書式を含むため private 限定）",
+  "plugins": [
+    {
+      "name": "hasan",
+      "description": "破産申立資料AI自動作成システム（同時廃止一式・大阪地裁共通様式対応）",
+      "source": "./"
+    }
+  ]
+}

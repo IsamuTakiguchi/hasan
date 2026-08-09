@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+# hasan プラグインのコマンドディスパッチャ。
+# プラグインの bin/ は Claude Code により PATH に追加されるため、スキルは
+# インストール場所を知らなくても `hasan-kit <subcommand>` で各スクリプトを呼べる。
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")/.." && pwd)"
+PY=python3
+
+usage() {
+  cat <<'EOF'
+使い方: hasan-kit <subcommand> [args...]
+
+  root                          プラグインルートのパスを表示
+  courts                        courts/（書式ディレクトリ）のパスを表示
+  schema                        schema/ のパスを表示
+  validate-case <case.yaml>     事件モデルの検証（生成前ゲート）
+  fill-docx --template .. --fillmap .. --values .. --output ..
+                                docx書式のfillmap駆動記入
+  saikensha --case .. --output .. [--kouso|--generic]
+                                債権者一覧表（--kouso で公租公課用）
+  shisan    --case .. --output .. [--generic]   財産目録
+  kakei     --case .. --output .. [--generic]   家計収支表
+  bank-analyze --csv .. --case .. [-o ..]       通帳明細の異常検知
+  inspect-docx <docx> [-o ..] [--full]          docxアンカーダンプ（書式登録用）
+  inspect-xlsx <xlsx> [-o ..]                   xlsxセルマップダンプ（書式登録用）
+  check-anchors <fillmap> <template>            fillmapアンカー検査
+  diff-fillmap --old-fillmap .. --new-template .. [--write ..] [--report ..]
+                                書式改訂の照合・自動再束縛
+  preview <files...> [-d dir]                   PDF・ページ画像化（目視検証）
+  crosscheck --case .. --dir ..                 書類間の数値整合検査
+EOF
+}
+
+cmd="${1:-}"
+[ $# -gt 0 ] && shift || true
+case "$cmd" in
+  root)          echo "$ROOT" ;;
+  courts)        echo "$ROOT/courts" ;;
+  schema)        echo "$ROOT/schema" ;;
+  validate-case) exec "$PY" "$ROOT/scripts/casekit/validate_case.py" "$@" ;;
+  fill-docx)     exec "$PY" "$ROOT/scripts/build/fill_docx.py" "$@" ;;
+  saikensha)     exec "$PY" "$ROOT/scripts/build/build_saikensha_ichiran.py" "$@" ;;
+  shisan)        exec "$PY" "$ROOT/scripts/build/build_shisan_mokuroku.py" "$@" ;;
+  kakei)         exec "$PY" "$ROOT/scripts/build/build_kakei_shushi.py" "$@" ;;
+  bank-analyze)  exec "$PY" "$ROOT/scripts/casekit/bank_analyze.py" "$@" ;;
+  inspect-docx)  exec "$PY" "$ROOT/scripts/formkit/inspect_docx.py" "$@" ;;
+  inspect-xlsx)  exec "$PY" "$ROOT/scripts/formkit/inspect_xlsx.py" "$@" ;;
+  check-anchors) exec "$PY" "$ROOT/scripts/formkit/check_anchors.py" "$@" ;;
+  diff-fillmap)  exec "$PY" "$ROOT/scripts/formkit/diff_fillmap.py" "$@" ;;
+  preview)       exec "$PY" "$ROOT/scripts/verify/render_preview.py" "$@" ;;
+  crosscheck)    exec "$PY" "$ROOT/scripts/verify/crosscheck_outputs.py" "$@" ;;
+  ""|-h|--help|help) usage ;;
+  *) echo "hasan-kit: 未知のサブコマンド '$cmd'" >&2; usage >&2; exit 64 ;;
+esac
