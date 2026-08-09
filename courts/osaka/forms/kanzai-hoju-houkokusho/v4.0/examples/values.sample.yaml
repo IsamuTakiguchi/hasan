@@ -1,0 +1,58 @@
+# kanzai-hoju-houkokusho（0204）記入値の見本 — 乙山ストア架空事例を管財（自然人）に
+# 置いた場合。元個人事業者（申立て前6か月以内に廃業）の例。
+fields:
+  saimusha: 債務者　甲野太郎
+  hokoku_date: 令和７年９月１日
+  dairinin: 　乙　川　一　郎
+  kanzai_kibou: 一般管財（非招集型）
+  isan_bunkatsu_umu: 無
+  sosho_umu: 無
+  tosan_chokuzen_umu: 有
+  tosan_ichiran_check: のとおり
+  kouso_tainou_umu: 有
+  kouso_ichiran_check: のとおり
+  hikazei_check_tenpu: 添付した
+  kyoju_shoyu: 自己所有でない
+  jusho_check: 住民票のとおり
+  jusho_yubin_kyoku: 堺
+  juminhyo_ido: 異動していない
+  kyosho_ido: 異動していない
+  jiyuzaisan_shurui: 目録2〜7のみ
+  jiyuzaisan_gaku: 99万円以下
+  jigyo_meisho_umu: 有
+  yagou: 乙山ストア
+  jigyo_naiyo: 食料品小売業（コンビニエンスストアのフランチャイズ加盟店）
+  jigyo_bukken_umu: 有
+  bukken1_jusho: 大阪府堺市西区浜寺公園町２－３４
+  bukken1_kyoku: 堺
+  bukken1_shoyu: 賃借
+  bukken1_chinshaku: ["１５０，０００", "６００，０００"]
+  bukken1_akewatashi: 完了
+  jugyoin_umu: 有
+  jugyoin_su: ３
+  kaiko_check: 解雇した
+  kaiko_tsuchi_date: ["７", "２", "２８"]
+  rishokuhyo: 交付済み
+  koyohoken: 提出済み
+  shakaihoken: 提出済み
+  gensen: 交付済み
+  juminzei: 提出済み
+  roso_umu: 無
+  heiten: 該当
+  heiten_date: ["７", "２", "２８"]
+  torimodoshi_umu: 有
+  torimodoshi_lease: のとおり
+  urikake_kaishu: 未回収あり
+  urikake_kensu: ２
+  urikake_kingaku: ３５０，０００
+  urikake_kanosei: 有
+  kashitsuke_kaishu: 全て回収
+  kikai_umu: 有
+  kikai_hyokagaku: １２０，０００
+  kikai_kanka: 可能
+  denki: 解約済み
+  gas: 解約済み
+  suido: 解約済み
+  kotei_denwa: 解約済み
+  keitai_denwa: 解約済み
+  funshoku_umu: 無

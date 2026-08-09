@@ -1,0 +1,54 @@
+form: somei-shiryo-mokuroku
+court: osaka
+version: '4.0'
+doc_type: docx
+notes:
+- w14:paraId 無し。context＋idx で解決。
+- ◇=常に添付必須（チェックで◆）・○=該当する場合に必須（チェックで●）。
+- 「（　通）」の通数欄は下線が無く機械記入不可 → 提出時に手書き（完了報告で案内）。
+fields:
+- id: inin
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 6
+    path: １　◇委任状
+    context: １　◇委任状
+  options:
+    添付: ◇委任状
+- id: juminhyo
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 7
+    path: １　◇委任状>２　◇住民票（省略がなく世帯全員のもの，
+    context: ２　◇住民票（省略がなく世帯全員のもの，個人番号（マイナンバー）の記載がないもの）又は在留カード（外国籍で住民票が作成さ
+  options:
+    添付: ◇住民票（省略がなく世帯全員のもの，個人番号（マイナンバー）の記載がないもの）又は在留カード（外国籍で住民票が作成さ
+- id: hojin_tokibo
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 8
+    path: １　◇委任状>３　○法人代表者の場合，登記事項証明書（
+    context: ３　○法人代表者の場合，登記事項証明書（法人）
+  options:
+    添付: ○法人代表者の場合，登記事項証明書（法人）
+- id: fudosan_tokibo
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 9
+    path: １　◇委任状>４　○不動産を所有している場合，登記事項
+    context: ４　○不動産を所有している場合，登記事項証明書（不動産）（　通）及び評価証明書（　通）
+  options:
+    添付: ○不動産を所有している場合，登記事項証明書（不動産）（　通）及び評価証明書（　通）
+- id: hikitsugi
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 10
+    path: １　◇委任状>５　◇管財人引継資料一覧表（自然人用）
+    context: ５　◇管財人引継資料一覧表（自然人用）
+  options:
+    添付: ◇管財人引継資料一覧表（自然人用）

@@ -235,7 +235,8 @@ def main():
 
     case = yaml.safe_load(open(args.case, encoding="utf-8"))
     form = "saikensha-ichiran-kouso" if args.kouso else "saikensha-ichiran"
-    vdir = None if args.generic else xlsxlib.resolve_form(args.court, form)
+    vdir = None if args.generic else xlsxlib.resolve_form(
+        args.court, form, proc=xlsxlib.proc_of_case(case))
     if args.kouso:
         if vdir is None:
             print(xlsxlib.registration_guidance(args.court, form, "債権者一覧表（公租公課用）"))

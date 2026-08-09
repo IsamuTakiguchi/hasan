@@ -1,0 +1,12 @@
+# この書式の現行版。生成スキルは必ずここを経由して版を解決する。
+form: kanzai-hoju-houkokusho
+name: 管財補充報告書（0204）
+doc_type: docx
+procs: [kanzai-shizenjin]
+current: "v4.0"
+versions:
+  v4.0:
+    received: "2026-08-09（利用者アップロード 0204・管財（自然人）一式 ver.4.0）"
+    note: >-
+      管財（自然人）事件固有の補充報告書。25項目のチェック・下線記入式。
+      15〜25 は個人事業者（現在または申立て前6か月以内）のみ記入。

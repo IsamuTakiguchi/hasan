@@ -1,0 +1,16 @@
+# この書式の現行版。生成スキルは必ずここを経由して版を解決する。
+form: saikensha-ichiran-kanzai
+name: 債権者一覧表・管財8シート（0209-0216自然人／0107-0114法人）
+doc_type: xlsx
+procs: [kanzai-shizenjin, kanzai-hojin]
+current: "v4.0"
+current_by_proc:
+  kanzai-shizenjin: "v4.0"
+  kanzai-hojin: "v4.0-hojin"
+versions:
+  v4.0:
+    received: "2026-08-09（利用者アップロード 0209-0216・管財（自然人）一式 ver.4.0）"
+    note: 総括＋借入金・手形小切手・買掛金・リース・労働債権・その他・滞納公租公課の8シート。builder がヘッダ文言で列を解決し kind でシート振り分け
+  v4.0-hojin:
+    received: "2026-08-09（利用者アップロード・法人一式 ver.4.0）"
+    note: 法人用（0107-0114）。自然人版と実質同一（シート名の番号と微細な空白のみ相違）

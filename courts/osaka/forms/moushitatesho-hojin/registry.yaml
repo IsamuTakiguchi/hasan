@@ -1,0 +1,12 @@
+# この書式の現行版。生成スキルは必ずここを経由して版を解決する。
+form: moushitatesho-hojin
+name: 破産申立書（法人用）（0103）
+doc_type: docx
+procs: [kanzai-hojin]
+current: "v4.0"
+versions:
+  v4.0:
+    received: "2026-08-09（利用者アップロード 0103・法人一式 ver.4.0）"
+    note: >-
+      大阪地裁「法人用破産申立書 ver.4.0」一式の申立書本体。w14:paraId 無し。
+      0203（自然人・管財）と同系の構造（商号・代表者・本店・趣旨・理由・参考事項）。

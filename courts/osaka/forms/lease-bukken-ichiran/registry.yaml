@@ -1,0 +1,10 @@
+# この書式の現行版。生成スキルは必ずここを経由して版を解決する。
+form: lease-bukken-ichiran
+name: リース物件一覧表（0235＝0132 自然人・法人共通）
+doc_type: xlsx
+procs: [kanzai-shizenjin, kanzai-hojin]
+current: "v4.0"
+versions:
+  v4.0:
+    received: "2026-08-09（利用者アップロード 0235・管財（自然人）一式 ver.4.0）"
+    note: リース債権の物件一覧（債権者名・物件・所在地・契約書等/返還済チェック）。法人0132とセル単位で完全同一のため共用

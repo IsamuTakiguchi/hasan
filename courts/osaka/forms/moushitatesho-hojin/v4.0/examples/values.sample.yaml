@@ -1,0 +1,19 @@
+# moushitatesho-hojin（0103）記入値の見本 — 架空の法人事例（株式会社乙山ストア）
+fields:
+  filing_date: 令和７年９月１日
+  atesaki_shibu: 支部
+  dairinin: 　乙　川　一　郎　　印
+  soutatsu_basho: 〒５９０－００００　大阪府堺市堺区丙町４丁５番６号　丙山法律事務所
+  tel_fax: ＴＥＬ（０７２）０００－００００　　ＦＡＸ（０７２）０００－０００１
+  shogo: 株式会社乙山ストア
+  daihyosha: 代表取締役　甲野太郎
+  honten: 本店所在地　(〒５９０－００００)☑登記事項証明書（法人）記載のとおり
+  shushi_saimusha: 株式会社乙山ストア
+  ippan_saiken: [４，５６０万, ８]
+  yusen_saiken: [３２１万, ４]
+  kaishu_mikomi: ６８５万４，３００
+  hikitsugi_genkin: １，０００，０００
+  daihyosha_hasan: 有
+  daihyosha_jiken: [大阪, "", ７, １２３４, 第６]
+  daihyosha_shinko: 同時申立
+  denshi_nofu_code: ８７６５４３２１

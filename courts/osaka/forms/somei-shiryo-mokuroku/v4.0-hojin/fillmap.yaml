@@ -1,0 +1,82 @@
+form: somei-shiryo-mokuroku
+court: osaka
+version: 4.0-hojin
+doc_type: docx
+notes:
+- 疎明資料目録（法人用）（0135）。◇=必須（→◆）・○=該当時（→●）。
+- 項目3は「○取締役会議事録　又は○取締役全員の…」の2択 — 前者の○をチェック（後者を選ぶ場合は手書き案内）。
+- 通数欄（　通）は下線なし＝手書き。
+- 準自己破産の場合は 14〜15 行の○（該当＋予納金財団組入上申書）。
+fields:
+- id: inin
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 7
+    path: １　◇委任状
+    context: １　◇委任状
+  options:
+    添付: ◇委任状
+- id: tokibo_hojin
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 8
+    path: １　◇委任状>２　◇登記事項証明書（法人）
+    context: ２　◇登記事項証明書（法人）
+  options:
+    添付: ◇登記事項証明書（法人）
+- id: torishimariyaku_gijiroku
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 9
+    path: １　◇委任状>３　○取締役会議事録　又は○取締役全員の
+    context: ３　○取締役会議事録　又は○取締役全員の意見一致を証する書面
+  options:
+    添付: ○取締役会議事録　又は○取締役全員の意見一致を証する書面
+- id: kessansho
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 10
+    path: １　◇委任状>４　◇決算書（付属明細書を含むものを，直
+    context: ４　◇決算書（付属明細書を含むものを，直近年度から順に過去２年分）
+  options:
+    添付: ◇決算書（付属明細書を含むものを，直近年度から順に過去２年分）
+- id: fudosan_tokibo
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 11
+    path: １　◇委任状>５　○不動産を所有している場合，登記事項
+    context: ５　○不動産を所有している場合，登記事項証明書（不動産）（　通）及び評価証明書（　通）
+  options:
+    添付: ○不動産を所有している場合，登記事項証明書（不動産）（　通）及び評価証明書（　通）
+- id: hikitsugi
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 12
+    path: １　◇委任状>６　◇管財人引継資料一覧表（法人用）
+    context: ６　◇管財人引継資料一覧表（法人用）
+  options:
+    添付: ◇管財人引継資料一覧表（法人用）
+- id: junjiko
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 14
+    path: １　◇委任状>６　◇管財人引継資料一覧表（法人用）
+    context: ○　準自己破産申立てである
+  options:
+    添付: ○　準自己破産申立てである
+- id: junjiko_joshinsho
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 15
+    path: １　◇委任状>６　◇管財人引継資料一覧表（法人用）
+    context: →○予納金財団組入に関する上申書
+  options:
+    添付: ○予納金財団組入に関する上申書

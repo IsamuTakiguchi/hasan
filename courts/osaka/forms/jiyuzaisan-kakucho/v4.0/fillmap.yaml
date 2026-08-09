@@ -1,0 +1,49 @@
+form: jiyuzaisan-kakucho
+court: osaka
+version: "4.0"
+doc_type: docx
+notes:
+  - 自由財産拡張申立書（0240）。w14:paraId 無し。ヘッダの○プレースホルダを
+    set_text の全文置換で埋めるだけで完結する。
+  - 申立ての趣旨（財産目録の■欄参照）・理由（管財補充報告書第13項参照）は印字済み。
+    財産目録の自由財産拡張申立欄（■）と管財補充報告書第13項の記載が前提になる。
+  - 事件番号は申立てと同時提出なら未付番 → 値を渡さず「令和○年(フ)第○○○○号」の
+    まま残すか、set_text で「令和　年(フ)第　　号」に置換して手書きに委ねる。
+fields:
+  - id: jiken_bango
+    kind: set_text
+    anchor: { paraId: "", idx: 0, path: "", context: 令和○年(フ)第○○○○号 }
+    binds: meta.case_number
+    notes: 「令和７年(フ)第１２３４号」。未付番なら「令和　年(フ)第　　　　号」を渡す
+  - id: moushitatenin
+    kind: set_text
+    anchor: { paraId: "", idx: 1, path: "", context: 申立人　○○○○ }
+    binds: meta.applicant.name
+    notes: 「申立人　甲野太郎」形式で全文置換
+  - id: filing_date
+    kind: set_text
+    anchor: { paraId: "", idx: 5, path: "", context: 令和○年○○月○○日 }
+    binds: meta.filing_date
+    notes: 「令和７年９月１日」
+  - id: atesaki
+    kind: set_text
+    anchor: { paraId: "", idx: 7, path: "", context: 大阪地方裁判所　第６民事部○○係　御中 }
+    binds: meta.court_branch + 係
+    notes: 「大阪地方裁判所　第６民事部○○係　御中」の○○係を実際の係に。
+      係が未定なら「大阪地方裁判所　第６民事部　　係　御中」。
+      堺支部・岸和田支部の事件は「大阪地方裁判所堺支部　御中」等に全文置換
+  - id: dairinin
+    kind: set_text
+    anchor: { paraId: "", idx: 9, path: "", context: 申立代理人弁護士　○　○　○　○ }
+    binds: meta.attorneys[0].name
+    notes: 「申立代理人弁護士　乙　川　一　郎」形式で全文置換
+  - id: tel
+    kind: set_text
+    anchor: { paraId: "", idx: 10, path: "", context: TEL　○○-○○○○-○○○○ }
+    binds: meta.attorneys[0].phone
+    notes: 「TEL　072-000-0000」形式で全文置換
+  - id: fax
+    kind: set_text
+    anchor: { paraId: "", idx: 11, path: "", context: FAX　○○-○○○○-○○○○ }
+    binds: meta.attorneys[0].fax
+    notes: 「FAX　072-000-0001」形式で全文置換

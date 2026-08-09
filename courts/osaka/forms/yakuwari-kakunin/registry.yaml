@@ -1,0 +1,18 @@
+# この書式の現行版。
+form: yakuwari-kakunin
+name: 申立代理人の役割確認表（0201自然人／0101法人）
+doc_type: docx
+procs: [kanzai-shizenjin, kanzai-hojin]
+current: "v4.0"
+current_by_proc:
+  kanzai-shizenjin: "v4.0"
+  kanzai-hojin: "v4.0-hojin"
+generation: none   # 生成対象外（テンプレート保管のみ）。弁護士の申立準備チェックリスト。
+                   # 将来「受任時チェックリスト機能」（案件進行の自動チェック）の種になる資料
+versions:
+  v4.0:
+    received: "2026-08-09（利用者アップロード 0201・管財（自然人）一式 ver.4.0）"
+    note: 自然人用（85段落・checkbox多数。申立準備〜管財人引継ぎまでの代理人タスク一覧）
+  v4.0-hojin:
+    received: "2026-08-09（利用者アップロード 0101・法人一式 ver.4.0）"
+    note: 法人用（84段落。予納金・帳簿管理・従業員対応等の法人固有タスクを含む）

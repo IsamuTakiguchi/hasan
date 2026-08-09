@@ -1,0 +1,975 @@
+form: kanzai-hoju-houkokusho
+court: osaka
+version: "4.0"
+doc_type: docx
+notes:
+  - 管財（自然人）事件固有の補充報告書（0204）。w14:paraId あり。
+  - チェック欄は □→☑ の文字置換。日付3スロット（年/月/日）の欄は underline_slots。
+  - 「郵便取扱局…郵便局（〒　－　）」の下線は**局名のみ**（〒欄は下線でないため
+    機械記入対象外。必要なら局名に続けて手書き）。
+  - 15〜25 は個人事業者（現在または申立て前6か月以内）のみ記入。
+  - 21・22 の「その理由(　)」、24 の「（場所　）」「（番号　）」は記入欄が
+    下線でないため未定義（該当時は questions.md で案内し弁護士が手書き）。
+fields:
+  - id: jiken_bango
+    kind: set_text
+    anchor: { paraId: 4249A6C3, idx: 0, path: "", context: 令和　年（フ）第　号 }
+    binds: meta.case_number
+    notes: 「令和７年（フ）第１２３４号」。申立て前で未付番なら空欄のまま
+  - id: saimusha
+    kind: set_text
+    anchor: { paraId: 1E8F5FB5, idx: 1, path: "", context: 債務者 }
+    binds: meta.applicant.name
+    notes: 「債務者　甲野太郎」形式で全文置換
+  - id: hokoku_date
+    kind: set_text
+    anchor: { paraId: 29DD4EF5, idx: 5, path: "", context: 令和　年　月　日 }
+    binds: meta.filing_date
+  - id: dairinin
+    kind: underline_fill
+    anchor: { paraId: 7FBD05AD, idx: 8, path: "", context: 申立代理人　印 }
+    binds: meta.attorneys[0].name
+    notes: 「　乙　川　一　郎　」形式。この書式は「印」が別の下線runのため
+      値に「印」を**含めない**（B1102/0203 とは逆なので注意）
+  - id: kanzai_kibou
+    kind: checkbox
+    option_anchors:
+      一般管財（招集型）:
+        paraId: 49F156DD
+        idx: 11
+        path: １　一般管財手続（招集型・非招集型）・個
+        context: □本件が，一般管財手続（招集型）として取り扱われることを希望する。
+        literal: □本件が，一般管財手続（招集型）として取り扱われることを希望する。
+      一般管財（非招集型）:
+        paraId: 4A9E4928
+        idx: 12
+        path: １　一般管財手続（招集型・非招集型）・個
+        context: □次の注意事項を了解し，本件が，一般管財手続（非招集型）として取り扱われることに異議がない。
+        literal: □次の注意事項を了解し，本件が，一般管財手続（非招集型）として取り扱われることに異議がない。
+      個別管財:
+        paraId: 25BFBC3B
+        idx: 14
+        path: １　一般管財手続（招集型・非招集型）・個
+        context: □本件が，個別管財手続として取り扱われることを希望する。
+        literal: □本件が，個別管財手続として取り扱われることを希望する。
+    binds: 弁護士の手続選択（利用者に確認）
+  - id: isan_bunkatsu_umu
+    kind: checkbox
+    anchor:
+      paraId: 3681CF33
+      idx: 20
+      path: １　一般管財手続（招集型・非招集型）・個>４　遺産分割協議未了の相続財産の有無　【
+      context: ４　遺産分割協議未了の相続財産の有無　【□有　□無】
+    options: { 有: □有, 無: □無 }
+    binds: assets の相続財産（遺産分割未了）
+  - id: sosho_umu
+    kind: checkbox
+    anchor:
+      paraId: 0CDD0D65
+      idx: 22
+      path: １　一般管財手続（招集型・非招集型）・個>５　係属中の訴訟等（支払督促,仮差押え,
+      context: ５　係属中の訴訟等（支払督促,仮差押え,仮処分,競売手続等を含む）の有無【□有　□無】
+    options: { 有: □有, 無: □無 }
+    binds: lawsuits の有無
+  - id: sosho_ichiran_check
+    kind: checkbox
+    anchor:
+      paraId: 17579E75
+      idx: 23
+      path: １　一般管財手続（招集型・非招集型）・個>５　係属中の訴訟等（支払督促,仮差押え,
+      context: □係属中の訴訟等一覧表記載のとおり
+    options: { のとおり: □係属中の訴訟等一覧表記載のとおり }
+    binds: lawsuits あり＝一覧表添付時
+  - id: tosan_chokuzen_umu
+    kind: checkbox
+    anchor:
+      paraId: "56781654"
+      idx: 25
+      path: １　一般管財手続（招集型・非招集型）・個>６　倒産直前の弁済，資産譲渡，担保設定等
+      context: ６　倒産直前の弁済，資産譲渡，担保設定等の有無　【□有　□無】
+    options: { 有: □有, 無: □無 }
+    binds: menseki.henpa / asset_disposal / bank_analysis
+  - id: tosan_ichiran_check
+    kind: checkbox
+    anchor:
+      paraId: 57FD88CE
+      idx: 26
+      path: １　一般管財手続（招集型・非招集型）・個>６　倒産直前の弁済，資産譲渡，担保設定等
+      context: □倒産直前の処分行為等一覧表記載のとおり
+    options: { のとおり: □倒産直前の処分行為等一覧表記載のとおり }
+    binds: 処分行為あり＝一覧表添付時
+  - id: kouso_tainou_umu
+    kind: checkbox
+    anchor:
+      paraId: 324664BA
+      idx: 28
+      path: １　一般管財手続（招集型・非招集型）・個>７　公租公課の滞納の有無　【□有　□無】
+      context: ７　公租公課の滞納の有無　【□有　□無】
+    options: { 有: □有, 無: □無 }
+    binds: creditors の公租公課
+  - id: kouso_ichiran_check
+    kind: checkbox
+    anchor:
+      paraId: 519312F4
+      idx: 29
+      path: １　一般管財手続（招集型・非招集型）・個>７　公租公課の滞納の有無　【□有　□無】
+      context: □滞納公租公課一覧表のとおり
+    options: { のとおり: □滞納公租公課一覧表のとおり }
+    binds: 滞納あり＝一覧表（0216）添付時
+  - id: hikazei_check_tenpu
+    kind: checkbox
+    anchor:
+      paraId: 3E20B5A8
+      idx: 32
+      path: １　一般管財手続（招集型・非招集型）・個>８　被課税公租公課チェック表
+      context: □添付した。
+    options: { 添付した: □添付した。 }
+    binds: 被課税公租公課チェック表（0217）の添付
+  - id: kyoju_shoyu
+    kind: checkbox
+    option_anchors:
+      自己所有でない:
+        paraId: 242BAA55
+        idx: 36
+        path: １　一般管財手続（招集型・非招集型）・個>９　居住物件の状況
+        context: □自己所有でない。
+        literal: □自己所有でない。
+      自己所有である:
+        paraId: 3A323880
+        idx: 37
+        path: １　一般管財手続（招集型・非招集型）・個>９　居住物件の状況
+        context: □自己所有である。
+        literal: □自己所有である。
+    binds: household.housing / assets.real_estate
+  - id: kyoju_akewatashi
+    kind: checkbox
+    option_anchors:
+      可能:
+        paraId: 33AE5420
+        idx: 38
+        path: １　一般管財手続（招集型・非招集型）・個>９　居住物件の状況
+        context: □４か月以内に明渡しが可能である。
+        literal: □４か月以内に明渡しが可能である。
+      困難:
+        paraId: 41DE305C
+        idx: 39
+        path: １　一般管財手続（招集型・非招集型）・個>９　居住物件の状況
+        context: □４か月以内の明渡しは困難である。
+        literal: □４か月以内の明渡しは困難である。
+    binds: 自己所有のときのみ
+  - id: kyoju_akewatashi_riyu
+    kind: underline_fill
+    anchor:
+      paraId: 75F7043F
+      idx: 41
+      path: １　一般管財手続（招集型・非招集型）・個>９　居住物件の状況
+      context: ""
+    binds: 明渡し困難の理由
+    notes: 空の下線段落（idx41）に理由を記入
+  - id: jusho_check
+    kind: checkbox
+    anchor:
+      paraId: 691DC790
+      idx: 44
+      path: １　一般管財手続（招集型・非招集型）・個>10　住居所
+      context: □住民票記載のとおり　□外国人登録原票記載事項証明書のとおり
+    options: { 住民票のとおり: □住民票記載のとおり, 外国人登録原票のとおり: □外国人登録原票記載事項証明書のとおり }
+    binds: meta.applicant の住所確認資料
+  - id: jusho_yubin_kyoku
+    kind: underline_fill
+    anchor:
+      paraId: 367DD314
+      idx: 45
+      path: １　一般管財手続（招集型・非招集型）・個>10　住居所
+      context: 郵便取扱局　日本郵便株式会社　郵便局（〒　－　）
+    binds: 住居所の集配郵便局名
+    notes: 下線は局名のみ（例 「堺」→「堺郵便局」の「堺」部分）。〒は下線でないため未記入
+  - id: jusho_betsu_check
+    kind: checkbox
+    anchor:
+      paraId: "14177219"
+      idx: 46
+      path: １　一般管財手続（招集型・非招集型）・個>10　住居所
+      context: □住民票と異なる→破産申立書記載のとおり
+    options: { 異なる: □住民票と異なる→破産申立書記載のとおり }
+    binds: 居所が住民票と異なる場合
+  - id: jusho_betsu_kyoku
+    kind: underline_fill
+    anchor:
+      paraId: 6280D5AA
+      idx: 47
+      path: １　一般管財手続（招集型・非招集型）・個>10　住居所
+      context: 郵便取扱局　日本郵便株式会社　郵便局（〒　－　）
+    binds: 居所の集配郵便局名
+  - id: juminhyo_ido
+    kind: checkbox
+    option_anchors:
+      異動していない:
+        paraId: 3D716FBD
+        idx: 50
+        path: １　一般管財手続（招集型・非招集型）・個>11　住民票の異動
+        context: □申立て前１年以内に住民票を異動していない。
+        literal: □申立て前１年以内に住民票を異動していない。
+      異動した:
+        paraId: 43D8827F
+        idx: 51
+        path: １　一般管財手続（招集型・非招集型）・個>11　住民票の異動
+        context: □申立て前１年以内に住民票を異動した。
+        literal: □申立て前１年以内に住民票を異動した。
+    binds: 住民票の異動（申立て前1年以内）
+  - id: zenjusho
+    kind: underline_fill
+    anchor:
+      paraId: 64131DFF
+      idx: 52
+      path: １　一般管財手続（招集型・非招集型）・個>11　住民票の異動
+      context: 前住所は
+    binds: 異動した場合の前住所
+  - id: zenjusho_kyoku
+    kind: underline_fill
+    anchor:
+      paraId: 4C72B400
+      idx: 53
+      path: １　一般管財手続（招集型・非招集型）・個>11　住民票の異動
+      context: 郵便取扱局　日本郵便株式会社　郵便局（〒　－　）
+    binds: 前住所の集配郵便局名
+  - id: kyosho_ido
+    kind: checkbox
+    option_anchors:
+      異動していない:
+        paraId: 236672C4
+        idx: 56
+        path: １　一般管財手続（招集型・非招集型）・個>12　居所の異動
+        context: □申立て前１年以内には居所を異動していない。
+        literal: □申立て前１年以内には居所を異動していない。
+      異動した:
+        paraId: 2C4D81ED
+        idx: 57
+        path: １　一般管財手続（招集型・非招集型）・個>12　居所の異動
+        context: □申立て前１年以内に居所を異動した。
+        literal: □申立て前１年以内に居所を異動した。
+    binds: 居所の異動（申立て前1年以内）
+  - id: zenkyosho
+    kind: underline_fill
+    anchor:
+      paraId: 347E27D5
+      idx: 58
+      path: １　一般管財手続（招集型・非招集型）・個>12　居所の異動
+      context: 前居所は
+    binds: 異動した場合の前居所
+  - id: zenkyosho_kyoku
+    kind: underline_fill
+    anchor:
+      paraId: 66CADBD6
+      idx: 59
+      path: １　一般管財手続（招集型・非招集型）・個>12　居所の異動
+      context: 郵便取扱局　日本郵便株式会社　郵便局（〒　－　）
+    binds: 前居所の集配郵便局名
+  - id: jiyuzaisan_shurui
+    kind: checkbox
+    option_anchors:
+      目録2〜7のみ:
+        paraId: 0AC4200E
+        idx: 63
+        path: １　一般管財手続（招集型・非招集型）・個>13　自由財産拡張の申立てについて
+        context: □金銭及び別紙財産目録２～７の財産のみである。
+        literal: □金銭及び別紙財産目録２～７の財産のみである。
+      目録2〜7以外あり:
+        paraId: 210E624D
+        idx: 64
+        path: １　一般管財手続（招集型・非招集型）・個>13　自由財産拡張の申立てについて
+        context: □金銭及び別紙財産目録２～７以外の財産がある。
+        literal: □金銭及び別紙財産目録２～７以外の財産がある。
+    binds: 自由財産拡張を求める財産の種類
+  - id: jiyuzaisan_shurui_besshi
+    kind: checkbox
+    anchor:
+      paraId: 3FDDDF34
+      idx: 65
+      path: １　一般管財手続（招集型・非招集型）・個>13　自由財産拡張の申立てについて
+      context: □金銭及び別紙財産目録２～７以外の財産を自由財産とすべき具体的理由を記載した別紙を添付した。
+    options: { 別紙添付: □金銭及び別紙財産目録２～７以外の財産を自由財産とすべき具体的理由を記載した別紙を添付した。 }
+    binds: 目録2〜7以外ありの場合
+  - id: jiyuzaisan_gaku
+    kind: checkbox
+    option_anchors:
+      99万円以下:
+        paraId: 56576CD0
+        idx: 67
+        path: １　一般管財手続（招集型・非招集型）・個>13　自由財産拡張の申立てについて
+        context: □９９万円以下である。
+        literal: □９９万円以下である。
+      99万円超:
+        paraId: 72F645E5
+        idx: 68
+        path: １　一般管財手続（招集型・非招集型）・個>13　自由財産拡張の申立てについて
+        context: □９９万円を超える。
+        literal: □９９万円を超える。
+    binds: 拡張対象財産合計の99万円超過の有無
+  - id: jiyuzaisan_gaku_besshi
+    kind: checkbox
+    anchor:
+      paraId: 6CE45654
+      idx: 69
+      path: １　一般管財手続（招集型・非招集型）・個>13　自由財産拡張の申立てについて
+      context: □９９万円を超える財産を自由財産とすべき具体的理由を記載した別紙を添付した。
+    options: { 別紙添付: □９９万円を超える財産を自由財産とすべき具体的理由を記載した別紙を添付した。 }
+    binds: 99万円超の場合
+  - id: jigyo_meisho_umu
+    kind: checkbox
+    anchor:
+      paraId: 72F6E341
+      idx: 74
+      path: １　一般管財手続（招集型・非招集型）・個>15　事業名称　【□有　□無】
+      context: 15　事業名称　【□有　□無】
+    options: { 有: □有, 無: □無 }
+    binds: business.trade_name の有無（個人事業者のみ）
+  - id: yagou
+    kind: underline_fill
+    anchor:
+      paraId: 04792336
+      idx: 75
+      path: １　一般管財手続（招集型・非招集型）・個>15　事業名称　【□有　□無】
+      context: その店名・屋号
+    binds: business.trade_name
+  - id: jigyo_naiyo
+    kind: underline_fill
+    anchor:
+      paraId: 6B03EC08
+      idx: 78
+      path: １　一般管財手続（招集型・非招集型）・個>16　事業の具体的内容
+      context: ""
+    binds: business.description
+    notes: 空の下線段落（idx78）に記入
+  - id: jigyo_bukken_umu
+    kind: checkbox
+    anchor:
+      paraId: 171B9C5C
+      idx: 81
+      path: １　一般管財手続（招集型・非招集型）・個>17　事業用物件（営業所，店舗，倉庫，社
+      context: 【□有　□無】
+    options: { 有: □有, 無: □無 }
+    binds: business の事業用物件
+  - id: bukken1_jusho
+    kind: underline_fill
+    anchor:
+      paraId: 194A44A0
+      idx: 82
+      path: １　一般管財手続（招集型・非招集型）・個>17　事業用物件（営業所，店舗，倉庫，社
+      context: (1)　本店の住所
+    binds: 事業用物件(1)＝本店の住所
+  - id: bukken1_kyoku
+    kind: underline_fill
+    anchor:
+      paraId: "51376160"
+      idx: 83
+      path: １　一般管財手続（招集型・非招集型）・個>17　事業用物件（営業所，店舗，倉庫，社
+      context: 郵便取扱局　日本郵便株式会社　郵便局（〒　－　）
+    binds: 本店の集配郵便局名
+  - id: bukken1_shoyu
+    kind: checkbox
+    option_anchors:
+      自己所有:
+        paraId: 549F8301
+        idx: 84
+        path: １　一般管財手続（招集型・非招集型）・個>17　事業用物件（営業所，店舗，倉庫，社
+        context: □自己所有
+        literal: □自己所有
+      賃借:
+        paraId: 0671A31F
+        idx: 85
+        path: １　一般管財手続（招集型・非招集型）・個>17　事業用物件（営業所，店舗，倉庫，社
+        context: □賃借（賃料月額　円，契約上の返戻金　円）
+        literal: □賃借
+    binds: 本店の所有形態
+  - id: bukken1_chinshaku
+    kind: underline_slots
+    anchor:
+      paraId: 0671A31F
+      idx: 85
+      path: １　一般管財手続（招集型・非招集型）・個>17　事業用物件（営業所，店舗，倉庫，社
+      context: □賃借（賃料月額　円，契約上の返戻金　円）
+    slots: ["賃料月額", "契約上の返戻金"]
+    binds: 賃借の場合の賃料・返戻金
+  - id: bukken1_akewatashi
+    kind: checkbox
+    option_anchors:
+      完了:
+        paraId: 508B8300
+        idx: 86
+        path: １　一般管財手続（招集型・非招集型）・個>17　事業用物件（営業所，店舗，倉庫，社
+        context: □明渡完了
+        literal: □明渡完了
+      未了:
+        paraId: 132D6D52
+        idx: 87
+        path: １　一般管財手続（招集型・非招集型）・個>17　事業用物件（営業所，店舗，倉庫，社
+        context: □明渡未了（その明渡及び原状回復費用見込額　円）
+        literal: □明渡未了
+    binds: 本店の明渡し状況
+  - id: bukken1_akewatashi_hiyo
+    kind: underline_fill
+    anchor:
+      paraId: 132D6D52
+      idx: 87
+      path: １　一般管財手続（招集型・非招集型）・個>17　事業用物件（営業所，店舗，倉庫，社
+      context: □明渡未了（その明渡及び原状回復費用見込額　円）
+    binds: 明渡・原状回復費用見込額
+  - id: bukken1_mitsumori
+    kind: checkbox
+    anchor:
+      paraId: 50C79FDB
+      idx: 88
+      path: １　一般管財手続（招集型・非招集型）・個>17　事業用物件（営業所，店舗，倉庫，社
+      context: □見積書の写しを提出した。
+    options: { 提出した: □見積書の写しを提出した。 }
+    binds: 費用見積書の提出
+  - id: bukken2_meisho_jusho
+    kind: underline_slots
+    anchor:
+      paraId: 154C6FD3
+      idx: 89
+      path: １　一般管財手続（招集型・非招集型）・個>17　事業用物件（営業所，店舗，倉庫，社
+      context: (2)　の住所
+    slots: ["物件名称（「(2)　倉庫」のように (2)　を含めて置換）", "住所"]
+    binds: 事業用物件(2)の名称と住所
+    notes: 1つ目の下線は「(2)　」を含む — 値も「(2)　倉庫」の形で渡す
+  - id: bukken2_kyoku
+    kind: underline_fill
+    anchor:
+      paraId: 306AAE45
+      idx: 90
+      path: １　一般管財手続（招集型・非招集型）・個>17　事業用物件（営業所，店舗，倉庫，社
+      context: 郵便取扱局　日本郵便株式会社　郵便局（〒　－　）
+    binds: 物件(2)の集配郵便局名
+  - id: bukken2_shoyu
+    kind: checkbox
+    option_anchors:
+      自己所有:
+        paraId: 07AC64E3
+        idx: 91
+        path: １　一般管財手続（招集型・非招集型）・個>17　事業用物件（営業所，店舗，倉庫，社
+        context: □自己所有
+        literal: □自己所有
+      賃借:
+        paraId: 7BA70771
+        idx: 92
+        path: １　一般管財手続（招集型・非招集型）・個>17　事業用物件（営業所，店舗，倉庫，社
+        context: □賃借（賃料月額　円，契約上の返戻金　円）
+        literal: □賃借
+    binds: 物件(2)の所有形態
+  - id: bukken2_chinshaku
+    kind: underline_slots
+    anchor:
+      paraId: 7BA70771
+      idx: 92
+      path: １　一般管財手続（招集型・非招集型）・個>17　事業用物件（営業所，店舗，倉庫，社
+      context: □賃借（賃料月額　円，契約上の返戻金　円）
+    slots: ["賃料月額", "契約上の返戻金"]
+    binds: 物件(2)賃借の場合
+  - id: bukken2_akewatashi
+    kind: checkbox
+    option_anchors:
+      完了:
+        paraId: 51D575FB
+        idx: 93
+        path: １　一般管財手続（招集型・非招集型）・個>17　事業用物件（営業所，店舗，倉庫，社
+        context: □明渡完了
+        literal: □明渡完了
+      未了:
+        paraId: 051C08CF
+        idx: 94
+        path: １　一般管財手続（招集型・非招集型）・個>17　事業用物件（営業所，店舗，倉庫，社
+        context: □明渡未了（その明渡及び原状回復費用見込額　円）
+        literal: □明渡未了
+    binds: 物件(2)の明渡し状況
+  - id: bukken2_akewatashi_hiyo
+    kind: underline_fill
+    anchor:
+      paraId: 051C08CF
+      idx: 94
+      path: １　一般管財手続（招集型・非招集型）・個>17　事業用物件（営業所，店舗，倉庫，社
+      context: □明渡未了（その明渡及び原状回復費用見込額　円）
+    binds: 物件(2)の費用見込額
+  - id: bukken2_mitsumori
+    kind: checkbox
+    anchor:
+      paraId: 1F8AB2E3
+      idx: 95
+      path: １　一般管財手続（招集型・非招集型）・個>17　事業用物件（営業所，店舗，倉庫，社
+      context: □見積書の写しを提出した。
+    options: { 提出した: □見積書の写しを提出した。 }
+    binds: 物件(2)の見積書提出
+  - id: jugyoin_umu
+    kind: checkbox
+    anchor:
+      paraId: 6135F123
+      idx: 97
+      path: １　一般管財手続（招集型・非招集型）・個>18　従業員の有無及び状況　【□有　□無
+      context: 18　従業員の有無及び状況　【□有　□無】
+    options: { 有: □有, 無: □無 }
+    binds: business.employees
+  - id: jugyoin_su
+    kind: underline_fill
+    anchor:
+      paraId: 6D70A840
+      idx: 98
+      path: １　一般管財手続（招集型・非招集型）・個>18　従業員の有無及び状況　【□有　□無
+      context: (1)　従業員数　総数　名
+    binds: 従業員総数
+  - id: kaiko_check
+    kind: checkbox
+    option_anchors:
+      解雇した:
+        paraId: 3A594395
+        idx: 100
+        path: １　一般管財手続（招集型・非招集型）・個>18　従業員の有無及び状況　【□有　□無
+        context: □解雇した。　解雇通知　令和　年　月　日
+        literal: □解雇した。
+      解雇していない:
+        paraId: 0D826E6B
+        idx: 101
+        path: １　一般管財手続（招集型・非招集型）・個>18　従業員の有無及び状況　【□有　□無
+        context: □解雇していない。
+        literal: □解雇していない。
+    binds: 解雇の状況
+  - id: kaiko_tsuchi_date
+    kind: underline_slots
+    anchor:
+      paraId: 3A594395
+      idx: 100
+      path: １　一般管財手続（招集型・非招集型）・個>18　従業員の有無及び状況　【□有　□無
+      context: □解雇した。　解雇通知　令和　年　月　日
+    slots: ["年", "月", "日"]
+    binds: 解雇通知の日付
+  - id: mikaiko_su
+    kind: underline_fill
+    anchor:
+      paraId: 5FD2B6B1
+      idx: 102
+      path: １　一般管財手続（招集型・非招集型）・個>18　従業員の有無及び状況　【□有　□無
+      context: 解雇していない従業員の数　名
+    binds: 未解雇の従業員数
+  - id: kaiko_yotei_date
+    kind: underline_slots
+    anchor:
+      paraId: 31B78A81
+      idx: 103
+      path: １　一般管財手続（招集型・非招集型）・個>18　従業員の有無及び状況　【□有　□無
+      context: 解雇予定日　令和　年　月　日
+    slots: ["年", "月", "日"]
+    binds: 解雇予定日
+  - id: rishokuhyo
+    kind: checkbox
+    option_anchors:
+      交付済み:
+        paraId: 3B456B19
+        idx: 105
+        path: １　一般管財手続（招集型・非招集型）・個>18　従業員の有無及び状況　【□有　□無
+        context: □解雇した全ての従業員に離職票を交付済みである。
+        literal: □解雇した全ての従業員に離職票を交付済みである。
+      未交付あり:
+        paraId: 712A83C2
+        idx: 106
+        path: １　一般管財手続（招集型・非招集型）・個>18　従業員の有無及び状況　【□有　□無
+        context: □離職票を交付していない従業員がいる。
+        literal: □離職票を交付していない従業員がいる。
+    binds: 離職票の交付状況
+  - id: koyohoken
+    kind: checkbox
+    option_anchors:
+      提出済み:
+        paraId: 2F3F4BE6
+        idx: 108
+        path: １　一般管財手続（招集型・非招集型）・個>18　従業員の有無及び状況　【□有　□無
+        context: □雇用保険の被保険者である全ての従業員について資格喪失届をハローワークに提出した。
+        literal: □雇用保険の被保険者である全ての従業員について資格喪失届をハローワークに提出した。
+      未提出あり:
+        paraId: 2A4F7340
+        idx: 109
+        path: １　一般管財手続（招集型・非招集型）・個>18　従業員の有無及び状況　【□有　□無
+        context: □資格喪失届を提出していない従業員がいる。
+        literal: □資格喪失届を提出していない従業員がいる。
+    binds: 雇用保険資格喪失届
+  - id: shakaihoken
+    kind: checkbox
+    option_anchors:
+      提出済み:
+        paraId: 531A91B1
+        idx: 113
+        path: １　一般管財手続（招集型・非招集型）・個>18　従業員の有無及び状況　【□有　□無
+        context: □社会保険の被保険者である全ての従業員について資格喪失届を年金事務所に提出した。
+        literal: □社会保険の被保険者である全ての従業員について資格喪失届を年金事務所に提出した。
+      未提出あり:
+        paraId: 3D5403C6
+        idx: 114
+        path: １　一般管財手続（招集型・非招集型）・個>18　従業員の有無及び状況　【□有　□無
+        context: □資格喪失届を提出していない従業員がいる。
+        literal: □資格喪失届を提出していない従業員がいる。
+    binds: 社会保険資格喪失届
+    notes: idx109 と同文の選択肢があるため idx/paraId で区別（こちらは 18(5)）
+  - id: gensen
+    kind: checkbox
+    option_anchors:
+      交付済み:
+        paraId: 3400BDCF
+        idx: 116
+        path: １　一般管財手続（招集型・非招集型）・個>18　従業員の有無及び状況　【□有　□無
+        context: □解雇した全ての従業員に源泉徴収票を交付済みである。
+        literal: □解雇した全ての従業員に源泉徴収票を交付済みである。
+      未交付あり:
+        paraId: 1B7E73F6
+        idx: 117
+        path: １　一般管財手続（招集型・非招集型）・個>18　従業員の有無及び状況　【□有　□無
+        context: □源泉徴収票を交付していない従業員がいる。
+        literal: □源泉徴収票を交付していない従業員がいる。
+    binds: 源泉徴収票の交付状況
+  - id: juminzei
+    kind: checkbox
+    option_anchors:
+      提出済み:
+        paraId: 165BE408
+        idx: 119
+        path: １　一般管財手続（招集型・非招集型）・個>18　従業員の有無及び状況　【□有　□無
+        context: □特別徴収を行っていた全ての従業員について普通徴収への異動届を従業員の住所地の各市町村に提出した。
+        literal: □特別徴収を行っていた全ての従業員について普通徴収への異動届を従業員の住所地の各市町村に提出した。
+      未提出あり:
+        paraId: 5E47BD74
+        idx: 120
+        path: １　一般管財手続（招集型・非招集型）・個>18　従業員の有無及び状況　【□有　□無
+        context: □異動届を提出していない従業員がいる。
+        literal: □異動届を提出していない従業員がいる。
+    binds: 住民税の異動届
+  - id: roso_umu
+    kind: checkbox
+    anchor:
+      paraId: 013BEDFA
+      idx: 121
+      path: １　一般管財手続（招集型・非招集型）・個>18　従業員の有無及び状況　【□有　□無
+      context: (8)　労働組合の有無　【□有　□無】
+    options: { 有: □有, 無: □無 }
+    binds: 労働組合の有無
+  - id: roso_meisho
+    kind: underline_fill
+    anchor:
+      paraId: "73253355"
+      idx: 122
+      path: １　一般管財手続（招集型・非招集型）・個>18　従業員の有無及び状況　【□有　□無
+      context: その名称
+    binds: 労働組合の名称
+  - id: tegata1
+    kind: checkbox
+    anchor:
+      paraId: 7D5DBCEC
+      idx: 125
+      path: １　一般管財手続（招集型・非招集型）・個>19　支払停止の状況
+      context: □１回目の手形不渡（又はその見込み）日　令和　年　月　日
+    options: { 該当: □１回目の手形不渡 }
+    binds: 支払停止（手形不渡1回目）
+  - id: tegata1_date
+    kind: underline_slots
+    anchor:
+      paraId: 7D5DBCEC
+      idx: 125
+      path: １　一般管財手続（招集型・非招集型）・個>19　支払停止の状況
+      context: □１回目の手形不渡（又はその見込み）日　令和　年　月　日
+    slots: ["年", "月", "日"]
+    binds: その日付
+  - id: tegata2
+    kind: checkbox
+    anchor:
+      paraId: 10259F13
+      idx: 126
+      path: １　一般管財手続（招集型・非招集型）・個>19　支払停止の状況
+      context: □２回目の手形不渡（又はその見込み）日　令和　年　月　日
+    options: { 該当: □２回目の手形不渡 }
+    binds: 支払停止（手形不渡2回目）
+  - id: tegata2_date
+    kind: underline_slots
+    anchor:
+      paraId: 10259F13
+      idx: 126
+      path: １　一般管財手続（招集型・非招集型）・個>19　支払停止の状況
+      context: □２回目の手形不渡（又はその見込み）日　令和　年　月　日
+    slots: ["年", "月", "日"]
+    binds: その日付
+  - id: heiten
+    kind: checkbox
+    anchor:
+      paraId: 0E5460C4
+      idx: 127
+      path: １　一般管財手続（招集型・非招集型）・個>19　支払停止の状況
+      context: □閉店又は廃業の日　令和　年　月　日
+    options: { 該当: □閉店又は廃業の日 }
+    binds: 閉店・廃業
+  - id: heiten_date
+    kind: underline_slots
+    anchor:
+      paraId: 0E5460C4
+      idx: 127
+      path: １　一般管財手続（招集型・非招集型）・個>19　支払停止の状況
+      context: □閉店又は廃業の日　令和　年　月　日
+    slots: ["年", "月", "日"]
+    binds: その日付
+  - id: torimodoshi_umu
+    kind: checkbox
+    anchor:
+      paraId: 62D073AB
+      idx: 129
+      path: １　一般管財手続（招集型・非招集型）・個>20　取戻権行使の見込みの有無及び状況
+      context: 20　取戻権行使の見込みの有無及び状況　【□有　□無】
+    options: { 有: □有, 無: □無 }
+    binds: リース物件・預かり商品等
+  - id: torimodoshi_lease
+    kind: checkbox
+    anchor:
+      paraId: 71F23F89
+      idx: 130
+      path: １　一般管財手続（招集型・非招集型）・個>20　取戻権行使の見込みの有無及び状況
+      context: □リース物件の状況は，リース物件一覧表記載のとおり
+    options: { のとおり: □リース物件の状況は，リース物件一覧表記載のとおり }
+    binds: リース物件一覧表（0235）添付時
+  - id: torimodoshi_azukari
+    kind: checkbox
+    anchor:
+      paraId: 757C517E
+      idx: 131
+      path: １　一般管財手続（招集型・非招集型）・個>20　取戻権行使の見込みの有無及び状況
+      context: □預かり商品等の状況は，別紙記載のとおり
+    options: { のとおり: □預かり商品等の状況は，別紙記載のとおり }
+    binds: 預かり商品等の別紙添付時
+  - id: urikake_kaishu
+    kind: checkbox
+    option_anchors:
+      全て回収:
+        paraId: 39579F49
+        idx: 134
+        path: １　一般管財手続（招集型・非招集型）・個>21　売掛金の回収
+        context: □全て回収した。
+        literal: □全て回収した。
+      未回収あり:
+        paraId: 7186839D
+        idx: 135
+        path: １　一般管財手続（招集型・非招集型）・個>21　売掛金の回収
+        context: □回収していないものもある。
+        literal: □回収していないものもある。
+    binds: assets.accounts_receivable
+  - id: urikake_kensu
+    kind: underline_fill
+    anchor:
+      paraId: 507424E8
+      idx: 136
+      path: １　一般管財手続（招集型・非招集型）・個>21　売掛金の回収
+      context: 未回収件数　件
+    binds: 売掛金の未回収件数
+  - id: urikake_kingaku
+    kind: underline_fill
+    anchor:
+      paraId: 12B8B053
+      idx: 137
+      path: １　一般管財手続（招集型・非招集型）・個>21　売掛金の回収
+      context: 未回収金額　円
+    binds: 売掛金の未回収金額
+  - id: urikake_kanosei
+    kind: checkbox
+    option_anchors:
+      有:
+        paraId: "52512409"
+        idx: 138
+        path: １　一般管財手続（招集型・非招集型）・個>21　売掛金の回収
+        context: 回収可能性　□有
+        literal: □有
+      無:
+        paraId: 0DE05CD7
+        idx: 139
+        path: １　一般管財手続（招集型・非招集型）・個>21　売掛金の回収
+        context: □無
+        literal: □無
+    binds: 売掛金の回収可能性
+  - id: kashitsuke_kaishu
+    kind: checkbox
+    option_anchors:
+      全て回収:
+        paraId: 4D5C8ED6
+        idx: 144
+        path: １　一般管財手続（招集型・非招集型）・個>22　貸付金の回収
+        context: □全て回収した。
+        literal: □全て回収した。
+      未回収あり:
+        paraId: 72E076B7
+        idx: 145
+        path: １　一般管財手続（招集型・非招集型）・個>22　貸付金の回収
+        context: □回収していないものもある。
+        literal: □回収していないものもある。
+    binds: assets.loans_receivable
+  - id: kashitsuke_kensu
+    kind: underline_fill
+    anchor:
+      paraId: 2837358E
+      idx: 146
+      path: １　一般管財手続（招集型・非招集型）・個>22　貸付金の回収
+      context: 未回収件数　件
+    binds: 貸付金の未回収件数
+  - id: kashitsuke_kingaku
+    kind: underline_fill
+    anchor:
+      paraId: 690E51CA
+      idx: 147
+      path: １　一般管財手続（招集型・非招集型）・個>22　貸付金の回収
+      context: 未回収金額　円
+    binds: 貸付金の未回収金額
+  - id: kashitsuke_kanosei
+    kind: checkbox
+    option_anchors:
+      有:
+        paraId: 65649DFA
+        idx: 148
+        path: １　一般管財手続（招集型・非招集型）・個>22　貸付金の回収
+        context: 回収可能性　□有
+        literal: □有
+      無:
+        paraId: 600D79BA
+        idx: 149
+        path: １　一般管財手続（招集型・非招集型）・個>22　貸付金の回収
+        context: □無
+        literal: □無
+    binds: 貸付金の回収可能性
+  - id: kikai_umu
+    kind: checkbox
+    anchor:
+      paraId: 60D5A06C
+      idx: 153
+      path: １　一般管財手続（招集型・非招集型）・個>23　機械・工具類・什器備品・在庫商品の
+      context: 23　機械・工具類・什器備品・在庫商品の有無　【□有　□無】
+    options: { 有: □有, 無: □無 }
+    binds: assets の機械・什器・在庫
+  - id: kikai_hyokagaku
+    kind: underline_fill
+    anchor:
+      paraId: 7E784697
+      idx: 154
+      path: １　一般管財手続（招集型・非招集型）・個>23　機械・工具類・什器備品・在庫商品の
+      context: その評価額　円
+    binds: その評価額
+  - id: kikai_kanka
+    kind: checkbox
+    option_anchors:
+      可能:
+        paraId: 67391C9E
+        idx: 155
+        path: １　一般管財手続（招集型・非招集型）・個>23　機械・工具類・什器備品・在庫商品の
+        context: □換価可能
+        literal: □換価可能
+      不可能:
+        paraId: 150BCCB7
+        idx: 156
+        path: １　一般管財手続（招集型・非招集型）・個>23　機械・工具類・什器備品・在庫商品の
+        context: □換価不可能
+        literal: □換価不可能
+    binds: 換価可能性
+  - id: haiki_hiyo
+    kind: underline_fill
+    anchor:
+      paraId: 00B950DE
+      idx: 157
+      path: １　一般管財手続（招集型・非招集型）・個>23　機械・工具類・什器備品・在庫商品の
+      context: 廃棄費用見込額　円
+    binds: 廃棄費用見込額
+  - id: kikai_mitsumori
+    kind: checkbox
+    anchor:
+      paraId: 605FF398
+      idx: 158
+      path: １　一般管財手続（招集型・非招集型）・個>23　機械・工具類・什器備品・在庫商品の
+      context: □見積書を提出した。
+    options: { 提出した: □見積書を提出した。 }
+    binds: 廃棄費用見積書
+  - id: denki
+    kind: checkbox
+    option_anchors:
+      解約済み:
+        paraId: 55EE96FD
+        idx: 162
+        path: １　一般管財手続（招集型・非招集型）・個>24　継続的契約の状況（事業以外に利用し
+        context: □全て解約済み・契約なし
+        literal: □全て解約済み・契約なし
+      未了あり:
+        paraId: 3D234D70
+        idx: 163
+        path: １　一般管財手続（招集型・非招集型）・個>24　継続的契約の状況（事業以外に利用し
+        context: □解約未了の契約がある（場所　）
+        literal: □解約未了の契約がある
+    binds: 電気契約
+  - id: gas
+    kind: checkbox
+    option_anchors:
+      解約済み:
+        paraId: 5F367391
+        idx: 165
+        path: １　一般管財手続（招集型・非招集型）・個>24　継続的契約の状況（事業以外に利用し
+        context: □全て解約済み・契約なし
+        literal: □全て解約済み・契約なし
+      未了あり:
+        paraId: 46FC63FB
+        idx: 166
+        path: １　一般管財手続（招集型・非招集型）・個>24　継続的契約の状況（事業以外に利用し
+        context: □解約未了の契約がある（場所　）
+        literal: □解約未了の契約がある
+    binds: ガス契約
+  - id: suido
+    kind: checkbox
+    option_anchors:
+      解約済み:
+        paraId: 6A199928
+        idx: 168
+        path: １　一般管財手続（招集型・非招集型）・個>24　継続的契約の状況（事業以外に利用し
+        context: □全て解約済み・契約なし
+        literal: □全て解約済み・契約なし
+      未了あり:
+        paraId: 73158C17
+        idx: 169
+        path: １　一般管財手続（招集型・非招集型）・個>24　継続的契約の状況（事業以外に利用し
+        context: □解約未了の契約がある（場所　）
+        literal: □解約未了の契約がある
+    binds: 水道契約
+  - id: kotei_denwa
+    kind: checkbox
+    option_anchors:
+      解約済み:
+        paraId: 150D26A3
+        idx: 171
+        path: １　一般管財手続（招集型・非招集型）・個>24　継続的契約の状況（事業以外に利用し
+        context: □全て解約済み・契約なし
+        literal: □全て解約済み・契約なし
+      未了あり:
+        paraId: "34900997"
+        idx: 172
+        path: １　一般管財手続（招集型・非招集型）・個>24　継続的契約の状況（事業以外に利用し
+        context: □解約未了の契約がある（番号　）
+        literal: □解約未了の契約がある
+    binds: 固定電話契約
+  - id: keitai_denwa
+    kind: checkbox
+    option_anchors:
+      解約済み:
+        paraId: 0DDD2199
+        idx: 174
+        path: １　一般管財手続（招集型・非招集型）・個>24　継続的契約の状況（事業以外に利用し
+        context: □全て解約済み・契約なし
+        literal: □全て解約済み・契約なし
+      未了あり:
+        paraId: 775EA5D9
+        idx: 175
+        path: １　一般管財手続（招集型・非招集型）・個>24　継続的契約の状況（事業以外に利用し
+        context: □解約未了の契約がある（番号　）
+        literal: □解約未了の契約がある
+    binds: 携帯電話契約
+  - id: funshoku_umu
+    kind: checkbox
+    anchor:
+      paraId: 6E9BBE6D
+      idx: 177
+      path: １　一般管財手続（招集型・非招集型）・個>25　粉飾決算の有無　【□有　□無】
+      context: 25　粉飾決算の有無　【□有　□無】
+    options: { 有: □有, 無: □無 }
+    binds: business の粉飾決算

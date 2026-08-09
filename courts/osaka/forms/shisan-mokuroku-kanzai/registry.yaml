@@ -1,0 +1,16 @@
+# この書式の現行版。生成スキルは必ずここを経由して版を解決する。
+form: shisan-mokuroku-kanzai
+name: 財産目録・管財17シート（0218-0234自然人／0116-0131法人）
+doc_type: xlsx
+procs: [kanzai-shizenjin, kanzai-hojin]
+current: "v4.0"
+current_by_proc:
+  kanzai-shizenjin: "v4.0"
+  kanzai-hojin: "v4.0-hojin"
+versions:
+  v4.0:
+    received: "2026-08-09（利用者アップロード 0218-0234・管財（自然人）一式 ver.4.0）"
+    note: 総括表＋16種の個別目録。総括表の存否チェック数式（G列）・合計数式は温存。自由財産拡張申立欄は■。builder がヘッダ文言で列を解決
+  v4.0-hojin:
+    received: "2026-08-09（利用者アップロード・法人一式 ver.4.0）"
+    note: 法人用（0116-0131・16シート）。退職金・積立金なし、順序も法人用。builder はシート名・ヘッダ一致で追従

@@ -1,0 +1,16 @@
+# この書式の現行版。生成スキルは必ずここを経由して版を解決する。
+form: shisan-fusai-ichiran
+name: 資産及び負債一覧表（0208自然人／0106法人）
+doc_type: xlsx
+procs: [kanzai-shizenjin, kanzai-hojin]
+current: "v4.0"
+current_by_proc:
+  kanzai-shizenjin: "v4.0"
+  kanzai-hojin: "v4.0-hojin"
+versions:
+  v4.0:
+    received: "2026-08-09（利用者アップロード 0208・管財（自然人）一式 ver.4.0）"
+    note: 資産17区分×名目額/回収見込額と負債（一般/優先の債権種類別）の総括表。小計・合計・債務超過額の数式組込済み。builder はラベル行に合わせて値のみ書く
+  v4.0-hojin:
+    received: "2026-08-09（利用者アップロード・法人一式 ver.4.0）"
+    note: 法人用（0106）。科目行が法人用（退職金なし・行順相違。ヘッダは商号）。builder はラベル一致で追従

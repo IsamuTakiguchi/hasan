@@ -64,6 +64,9 @@ usage() {
                                 債権者一覧表（--kouso で公租公課用）
   shisan    --case .. --output .. [--generic]   財産目録
   kakei     --case .. --output .. [--generic]   家計収支表
+  kanzai-xlsx --doc <書式> --case .. --output ..
+                                管財xlsx（shisan-fusai/saikensha-kanzai/hikazei-check/
+                                shisan-kanzai/lease/sosho-shobun）
   bank-analyze --csv .. --case .. [-o ..]       通帳明細の異常検知
   inspect-docx <docx> [-o ..] [--full]          docxアンカーダンプ（書式登録用）
   inspect-xlsx <xlsx> [-o ..]                   xlsxセルマップダンプ（書式登録用）
@@ -93,6 +96,7 @@ case "$cmd" in
   saikensha)     exec "$PY" "$ROOT/scripts/build/build_saikensha_ichiran.py" "$@" ;;
   shisan)        exec "$PY" "$ROOT/scripts/build/build_shisan_mokuroku.py" "$@" ;;
   kakei)         exec "$PY" "$ROOT/scripts/build/build_kakei_shushi.py" "$@" ;;
+  kanzai-xlsx)   exec "$PY" "$ROOT/scripts/build/build_kanzai_xlsx.py" "$@" ;;
   bank-analyze)  exec "$PY" "$ROOT/scripts/casekit/bank_analyze.py" "$@" ;;
   inspect-docx)  exec "$PY" "$ROOT/scripts/formkit/inspect_docx.py" "$@" ;;
   inspect-xlsx)  exec "$PY" "$ROOT/scripts/formkit/inspect_xlsx.py" "$@" ;;

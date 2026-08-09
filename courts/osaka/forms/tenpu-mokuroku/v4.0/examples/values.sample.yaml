@@ -1,0 +1,14 @@
+# tenpu-mokuroku（0207）記入値の見本 — 生成・添付した書類だけ「添付」を渡す
+fields:
+  saikensha_ichiran: 添付
+  saikensha_kariire: 添付
+  saikensha_kouso: 添付
+  hikazei_check: 添付
+  zaisan_sokatsu: 添付
+  zaisan_yochokin: 添付
+  zaisan_hoken: 添付
+  zaisan_shikikin: 添付
+  zaisan_shobunzumi: 添付
+  sosho_ichiran: 添付
+  shobun_ichiran: 添付
+  somei_mokuroku: 添付

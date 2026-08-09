@@ -124,6 +124,12 @@ class Filler:
         if p is None:
             return False
         rs = runs_of(p.elem)
+        # フィールドコード（fldChar/instrText。EQ重ね打ちラベル等）を含む run は
+        # 温存する。消すと begin/end が欠けて以降の文書全体がフィールド命令扱いになる
+        rs = [
+            r for r in rs
+            if r.find(f"{W}fldChar") is None and r.find(f"{W}instrText") is None
+        ]
         if rs:
             set_run_text(rs[0], str(value))
             for r in rs[1:]:
@@ -170,33 +176,39 @@ class Filler:
                 self.warn(field["id"], f"リテラル「{literal}」が段落内に見つからない")
         return ok_any
 
-    @staticmethod
-    def _check_literal(p_elem, literal):
+    # チェック記号 → 記入後の記号（疎明資料目録等の ◇=必須・○=該当時 にも対応）
+    BOX_MARKS = {"□": "☑", "◇": "◆", "○": "●"}
+
+    @classmethod
+    def _check_literal(cls, p_elem, literal):
         """段落内の「□ラベル」を「☑ラベル」にする。空白のゆらぎと run 分割を許容する。
 
-        段落の連結テキスト上で（空白を無視して）リテラルの位置を探し、その □ が
-        段落内で何個目の □/☑ かを数えて、該当する w:t の □ だけを ☑ に置換する。
+        段落の連結テキスト上で（空白を無視して）リテラルの位置を探し、その記号が
+        段落内で何個目かを数えて、該当する w:t の記号だけを置換する。
+        リテラル先頭の記号が □ なら ☑、◇ なら ◆、○ なら ● になる。
         """
         import re as _re
+        box = literal[0] if literal else ""
+        mark = cls.BOX_MARKS.get(box)
+        if mark is None:  # 対応記号で始まらないリテラルは想定外
+            return False
         ts = [t for t in p_elem.iter(f"{W}t")]
         full = "".join(t.text or "" for t in ts)
         pattern = "[\\s　]*".join(_re.escape(ch) for ch in literal if not ch.isspace() and ch != "　")
         m = _re.search(pattern, full)
-        if not m or not literal.startswith("□"):
-            if m:  # □で始まらないリテラルは想定外
-                return False
+        if not m:
             return False
-        nth = full[: m.start()].count("□")  # 手前にある□の数 = 対象□の序数
+        nth = full[: m.start()].count(box)  # 手前にある同記号の数 = 対象記号の序数
         seen = 0
         for t in ts:
             if not t.text:
                 continue
-            boxes = t.text.count("□")
+            boxes = t.text.count(box)
             if seen + boxes > nth:
                 i = -1
                 for _ in range(nth - seen + 1):
-                    i = t.text.index("□", i + 1)
-                t.text = t.text[:i] + "☑" + t.text[i + 1:]
+                    i = t.text.index(box, i + 1)
+                t.text = t.text[:i] + mark + t.text[i + 1:]
                 return True
             seen += boxes
         return False

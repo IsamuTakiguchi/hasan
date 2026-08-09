@@ -1,0 +1,21 @@
+# この書式の現行版。
+form: tsuzurijun-setsumei
+name: 破産申立書（ver.4.0）について — 提出書類の綴り順説明書（0202自然人／0102法人）
+doc_type: docx
+procs: [kanzai-shizenjin, kanzai-hojin]
+current: "v4.0"
+current_by_proc:
+  kanzai-shizenjin: "v4.0"
+  kanzai-hojin: "v4.0-hojin"
+generation: none   # 生成対象外（テンプレート保管のみ）。
+                   # procs.yaml の kanzai-shizenjin / kanzai-hojin の forms 構成・生成順は
+                   # この綴り順を一次資料として定義した
+versions:
+  v4.0:
+    received: "2026-08-09（利用者アップロード 0202・管財（自然人）一式 ver.4.0）"
+    note: 自然人用の綴り順（申立書→報告書→管財補充報告書→添付目録→資産及び負債一覧表→
+      債権者一覧表8種→被課税公租公課チェック表→財産目録17種→リース物件→訴訟・処分行為→
+      疎明資料目録→引継資料一覧表 ほか）
+  v4.0-hojin:
+    received: "2026-08-09（利用者アップロード 0102・法人一式 ver.4.0）"
+    note: 法人用の綴り順（資料103〜136＋文字上申書。家計収支表・管財補充報告書なし）

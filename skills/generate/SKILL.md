@@ -20,10 +20,13 @@ description: >-
   forms（生成順・via・when 条件）に従って生成する。下の「実行順序」は
   **同時廃止セット**の展開形。
   - proc_type 未設定 → intake に戻って利用者に確認（勝手に既定しない）
-  - 該当セットの forms が空（**管財書式が未登録**）→ 生成せず、裁判所配布の
-    管財書式一式の提供と register-form での登録を案内して終了する
+  - 該当セットの forms が空（**書式が未登録**）→ 生成せず、裁判所配布の
+    書式一式の提供と register-form での登録を案内して終了する
   - when 条件の判断: 「公租公課の債権者あり」= creditors に kind=公租公課 が存在／
-    「個人事業者（過去含む）」= business.exists が true 又は申立書参考事項1が事業者
+    「個人事業者（過去含む）」= business.exists が true 又は申立書参考事項1が事業者／
+    「リース債権あり」= creditors に kind=リース／「lawsuits または
+    pre_bankruptcy_disposals あり」= 各配列が非空／「自由財産拡張の申立てをする場合」=
+    assets に jiyuzaisan: true の項目がある（無ければ弁護士に確認）
 - **環境準備**: `hasan-kit` が PATH に無い環境（Cowork 等）では、プラグインの
   インストールディレクトリを探して絶対パスで使う
   （例: `ls ~/.claude/plugins/*/*/bin/hasan-kit` や `find ~/.claude -name hasan-kit`）。
@@ -60,6 +63,27 @@ description: >-
 10. 途中で失敗した書式があっても残りは続行し、最後にまとめて報告する。
    （チェックリストに関する上申書 B1113 は、チェックできない項目があると弁護士が
    判断したときのみ指示を受けて作成する）
+
+## 管財（自然人）セットの追加手順
+
+procs.yaml の kanzai-shizenjin の forms 順で生成する。同時廃止との違い:
+
+1. xlsx は `hasan-kit kanzai-xlsx --doc <書式>`（債権者一覧表8シート・被課税公租公課
+   チェック表・財産目録17シート・資産及び負債一覧表・リース物件・訴訟/処分一覧表）。
+   版・書式は case.yaml の proc_type から自動で管財版が選ばれる。
+2. docx は moushitatesho（0203）→ houkokusho（0205版）→ hoju-houkokusho（0204）の
+   順で values を組み立てて fill-docx。数値は xlsx の meta.json と一致させる
+   （crosscheck が 資産計・負債計・回収見込計・申立書の数値を突合する）。
+3. **目録3点は最後に**（生成結果が確定してから）:
+   - tenpu-mokuroku（0207）: 実際に生成・添付した書類だけ「添付」を values に渡す
+   - somei-shiryo-mokuroku（0238）: 添付する疎明資料に応じて◇○（通数は手書き案内）
+   - hikitsugi-shiryo-ichiran（0239）: 財産目録で「あり」の区分＝◇、引継資料の□は
+     **弁護士の判断事項** — 未確認分は questions.md へ
+4. jiyuzaisan-kakucho（0240）は自由財産拡張をする場合のみ（財産目録の■・
+   管財補充報告書13項と3点セットで整合させる）。
+5. **手書き案内を最終報告に必ず含める**: 報告書（0205）の宛先☑（本庁の□は
+   箇条書き記号のため機械記入不可）／0203のふりがな（ルビ）／疎明資料目録の通数／
+   支部名の記入。
 
 ## 出力命名
 

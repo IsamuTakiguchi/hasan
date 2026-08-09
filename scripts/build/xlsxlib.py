@@ -32,19 +32,44 @@ import openpyxl
 REPO = Path(__file__).resolve().parent.parent.parent
 
 
-def resolve_form(court: str, form: str):
-    """registry.yaml から現行版のディレクトリを返す。未登録なら None。"""
+def resolve_form(court: str, form: str, proc: str = None):
+    """registry.yaml から現行版のディレクトリを返す。未登録なら None。
+
+    proc（手続種別ID: douhai / kanzai-shizenjin / kanzai-hojin）を渡すと、
+    registry の current_by_proc: {proc: 版名} を優先して版を解決する
+    （同じ書式で手続種別ごとに配布版が異なる場合に使う）。
+    未指定・該当なしのときは従来どおり current にフォールバックする。
+    """
     reg_path = REPO / "courts" / court / "forms" / form / "registry.yaml"
     if not reg_path.exists():
         return None
     reg = yaml.safe_load(reg_path.read_text(encoding="utf-8"))
-    cur = reg.get("current")
+    cur = None
+    if proc:
+        cur = (reg.get("current_by_proc") or {}).get(proc)
+    cur = cur or reg.get("current")
     if not cur:
         return None
     vdir = reg_path.parent / cur
-    if not (vdir / "fillmap.yaml").exists():
+    # fillmap 駆動の書式は fillmap.yaml、ヘッダ文言駆動の builder（管財xlsx群）は
+    # template だけで成立する
+    if not any((vdir / f).exists() for f in ("fillmap.yaml", "template.xlsx", "template.docx")):
         return None
     return vdir
+
+
+# meta.proc_type（日本語表記）→ procs.yaml の手続種別ID
+PROC_IDS = {
+    "同時廃止": "douhai",
+    "管財（自然人）": "kanzai-shizenjin",
+    "管財（法人）": "kanzai-hojin",
+}
+
+
+def proc_of_case(case: dict):
+    """case.yaml の meta.proc_type から手続種別IDを返す（未設定・不明は None）。"""
+    pt = ((case or {}).get("meta") or {}).get("proc_type")
+    return PROC_IDS.get(pt)
 
 
 def registration_guidance(court: str, form: str, name: str) -> str:

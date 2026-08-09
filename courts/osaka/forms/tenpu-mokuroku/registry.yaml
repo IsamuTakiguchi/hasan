@@ -1,0 +1,17 @@
+# この書式の現行版。生成スキルは必ずここを経由して版を解決する。
+form: tenpu-mokuroku
+name: 添付目録（0207自然人／0105法人）
+doc_type: docx
+procs: [kanzai-shizenjin, kanzai-hojin]
+current: "v4.0"
+current_by_proc:
+  kanzai-shizenjin: "v4.0"
+  kanzai-hojin: "v4.0-hojin"
+versions:
+  v4.0:
+    received: "2026-08-09（利用者アップロード 0207・管財（自然人）一式 ver.4.0）"
+    note: 添付書類のチェック式目録（36段落・checkbox30個）。generate が生成・添付した
+      書類に応じてチェックする
+  v4.0-hojin:
+    received: "2026-08-09（利用者アップロード 0105・法人一式 ver.4.0）"
+    note: 法人用（35段落・checkbox29個）。財産目録の区分番号・順序が法人16種の並び

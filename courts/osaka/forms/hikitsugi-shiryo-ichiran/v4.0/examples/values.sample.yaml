@@ -1,0 +1,11 @@
+# hikitsugi-shiryo-ichiran（0239）記入値の見本 — ◇は財産目録の該当区分、□は引継決定分のみ
+fields:
+  kubun_yochokin: 該当
+  kubun_hoken: 該当
+  kubun_shikikin: 該当
+  zentai_zeimushinkoku: 引継
+  zentai_saiken_somei: 引継
+  zentai_data_baitai: 引継
+  yochokin_tsucho: 引継
+  hoken_shoken: 引継
+  shikikin_keiyakusho: 引継

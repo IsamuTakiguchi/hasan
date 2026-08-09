@@ -1,0 +1,270 @@
+form: tenpu-mokuroku
+court: osaka
+version: 4.0-hojin
+doc_type: docx
+notes:
+- 添付目録（法人用）（0105）。w14:paraId 無し。全項目 checkbox（□→☑）。
+- 財産目録の区分番号・順序が自然人版と異なる（法人16種の順）。
+- 「１　資産及び負債一覧表」は下線=必須・□なし（綴るだけ）。
+fields:
+- id: saikensha_ichiran
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 6
+    path: １　資産及び負債一覧表>２　債権者一覧表関係
+    context: ①□　債権者一覧表
+  options:
+    添付: □　債権者一覧表
+- id: saikensha_kariire
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 7
+    path: １　資産及び負債一覧表>２　債権者一覧表関係
+    context: ②□　借入金一覧表
+  options:
+    添付: □　借入金一覧表
+- id: saikensha_tegata
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 8
+    path: １　資産及び負債一覧表>２　債権者一覧表関係
+    context: ③□　手形・小切手債権一覧表
+  options:
+    添付: □　手形・小切手債権一覧表
+- id: saikensha_kaikake
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 9
+    path: １　資産及び負債一覧表>２　債権者一覧表関係
+    context: ④□　買掛金一覧表
+  options:
+    添付: □　買掛金一覧表
+- id: saikensha_lease
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 10
+    path: １　資産及び負債一覧表>２　債権者一覧表関係
+    context: ⑤□　リース債権一覧表
+  options:
+    添付: □　リース債権一覧表
+- id: saikensha_rodo
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 11
+    path: １　資産及び負債一覧表>２　債権者一覧表関係
+    context: ⑥□　労働債権一覧表
+  options:
+    添付: □　労働債権一覧表
+- id: saikensha_sonota
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 12
+    path: １　資産及び負債一覧表>２　債権者一覧表関係
+    context: ⑦□　その他の債権一覧表
+  options:
+    添付: □　その他の債権一覧表
+- id: saikensha_kouso
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 13
+    path: １　資産及び負債一覧表>２　債権者一覧表関係
+    context: ⑧□　滞納公租公課一覧表
+  options:
+    添付: □　滞納公租公課一覧表
+- id: hikazei_check
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 14
+    path: １　資産及び負債一覧表>３　□　被課税公租公課チェック表
+    context: ３　□　被課税公租公課チェック表
+  options:
+    添付: □　被課税公租公課チェック表
+- id: zaisan_sokatsu
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 15
+    path: １　資産及び負債一覧表>３　□　被課税公租公課チェック表
+    context: ４①□　財産目録（総括表）
+  options:
+    添付: □　財産目録（総括表）
+- id: zaisan_yochokin
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 16
+    path: １　資産及び負債一覧表>３　□　被課税公租公課チェック表
+    context: ②□　預貯金・積立金目録
+  options:
+    添付: □　預貯金・積立金目録
+- id: zaisan_uketori_tegata
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 17
+    path: １　資産及び負債一覧表>３　□　被課税公租公課チェック表
+    context: ③□　受取手形・小切手目録
+  options:
+    添付: □　受取手形・小切手目録
+- id: zaisan_urikakekin
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 18
+    path: １　資産及び負債一覧表>３　□　被課税公租公課チェック表
+    context: ④□　売掛金目録
+  options:
+    添付: □　売掛金目録
+- id: zaisan_zaiko
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 19
+    path: １　資産及び負債一覧表>３　□　被課税公租公課チェック表
+    context: ⑤□　在庫商品目録
+  options:
+    添付: □　在庫商品目録
+- id: zaisan_kashitsukekin
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 20
+    path: １　資産及び負債一覧表>３　□　被課税公租公課チェック表
+    context: ⑥□　貸付金目録
+  options:
+    添付: □　貸付金目録
+- id: zaisan_fudosan
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 21
+    path: １　資産及び負債一覧表>３　□　被課税公租公課チェック表
+    context: ⑦□　不動産目録
+  options:
+    添付: □　不動産目録
+- id: zaisan_kikai
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 22
+    path: １　資産及び負債一覧表>３　□　被課税公租公課チェック表
+    context: ⑧□　機械・工具類目録
+  options:
+    添付: □　機械・工具類目録
+- id: zaisan_juki
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 23
+    path: １　資産及び負債一覧表>３　□　被課税公租公課チェック表
+    context: ⑨□　什器備品目録
+  options:
+    添付: □　什器備品目録
+- id: zaisan_jidosha
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 24
+    path: １　資産及び負債一覧表>３　□　被課税公租公課チェック表
+    context: ⑩□　自動車目録
+  options:
+    添付: □　自動車目録
+- id: zaisan_yukashoken
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 25
+    path: １　資産及び負債一覧表>３　□　被課税公租公課チェック表
+    context: ⑪□　有価証券目録
+  options:
+    添付: □　有価証券目録
+- id: zaisan_shikikin
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 26
+    path: １　資産及び負債一覧表>３　□　被課税公租公課チェック表
+    context: ⑫□　賃借保証金・敷金目録
+  options:
+    添付: □　賃借保証金・敷金目録
+- id: zaisan_hoken
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 27
+    path: １　資産及び負債一覧表>３　□　被課税公租公課チェック表
+    context: ⑬□　保険目録
+  options:
+    添付: □　保険目録
+- id: zaisan_kabaraikin
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 28
+    path: １　資産及び負債一覧表>３　□　被課税公租公課チェック表
+    context: ⑭□　過払金目録
+  options:
+    添付: □　過払金目録
+- id: zaisan_sonota
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 29
+    path: １　資産及び負債一覧表>３　□　被課税公租公課チェック表
+    context: ⑮□　その他の財産目録
+  options:
+    添付: □　その他の財産目録
+- id: zaisan_shobunzumi
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 30
+    path: １　資産及び負債一覧表>３　□　被課税公租公課チェック表
+    context: ⑯□　最終の決算書に記載されており，かつ申立書の財産目録に記載のない財産についての処分状況等一覧表
+  options:
+    添付: □　最終の決算書に記載されており，かつ申立書の財産目録に記載のない財産についての処分状況等一覧表
+- id: lease_ichiran
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 31
+    path: １　資産及び負債一覧表>５　□　リース物件一覧表
+    context: ５　□　リース物件一覧表
+  options:
+    添付: □　リース物件一覧表
+- id: sosho_ichiran
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 32
+    path: １　資産及び負債一覧表>６　□　係属中の訴訟等一覧表
+    context: ６　□　係属中の訴訟等一覧表
+  options:
+    添付: □　係属中の訴訟等一覧表
+- id: shobun_ichiran
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 33
+    path: １　資産及び負債一覧表>７　□　倒産直前の処分行為等一覧表
+    context: ７　□　倒産直前の処分行為等一覧表
+  options:
+    添付: □　倒産直前の処分行為等一覧表
+- id: somei_mokuroku
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 34
+    path: １　資産及び負債一覧表>８　□　疎明資料目録
+    context: ８　□　疎明資料目録
+  options:
+    添付: □　疎明資料目録

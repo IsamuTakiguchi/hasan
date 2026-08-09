@@ -23,8 +23,49 @@ procs:
   kanzai-shizenjin:
     label: 管財（自然人）
     debtor: 自然人
-    forms: []   # 書式未登録。裁判所配布ファイルを受領後、register-form で登録・追記する
+    # 生成順・提出（綴り）順は 0202「自然人用破産申立書（ver.4.0）について」の綴り順に従う。
+    # 版は各 registry の current_by_proc.kanzai-shizenjin で解決（報告書=v4.0-kanzai 等）。
+    forms:
+      - { form: saikensha-ichiran-kanzai, via: "builder:kanzai-xlsx --doc saikensha-kanzai" }
+      - { form: hikazei-kouso-check,      via: "builder:kanzai-xlsx --doc hikazei-check" }
+      - { form: shisan-mokuroku-kanzai,   via: "builder:kanzai-xlsx --doc shisan-kanzai" }
+      - { form: shisan-fusai-ichiran,     via: "builder:kanzai-xlsx --doc shisan-fusai" }
+      - { form: lease-bukken-ichiran,     via: "builder:kanzai-xlsx --doc lease", when: "リース債権あり" }
+      - { form: sosho-shobun-ichiran,     via: "builder:kanzai-xlsx --doc sosho-shobun", when: "lawsuits または pre_bankruptcy_disposals あり" }
+      - { form: kakei-shushi,             via: "builder:kakei" }
+      - { form: moushitatesho-kanzai,     via: "skill:moushitatesho" }
+      - { form: houkokusho,               via: "skill:houkokusho" }
+      - { form: kanzai-hoju-houkokusho,   via: "skill:hoju-houkokusho" }
+      - { form: jigyou-houkokusho,        via: "skill:jigyou-houkokusho", when: "個人事業者（過去含む）" }
+      - { form: tenpu-mokuroku,           via: "skill:generate（生成書類に応じて添付□をチェック）" }
+      - { form: somei-shiryo-mokuroku,    via: "skill:generate（添付資料に応じて◇○をチェック）" }
+      - { form: hikitsugi-shiryo-ichiran, via: "skill:generate（財産目録の該当区分◇＋引継決定資料□）" }
+      - { form: jiyuzaisan-kakucho,       via: "skill:generate（ヘッダ記入のみ）", when: "自由財産拡張の申立てをする場合" }
+    keep_only:  # 生成対象外（保管・参照のみ）
+      - yakuwari-kakunin        # 0201 申立代理人の役割確認表
+      - tsuzurijun-setsumei     # 0202 綴り順の説明書（このセット定義の一次資料）
+    missing:    # 綴り順に載っているが配布ファイル未受領のもの
+      - 文字上申書（付属CD-ROM資料1104。受領後 register-form で登録）
   kanzai-hojin:
     label: 管財（法人）
     debtor: 法人
-    forms: []   # 書式未登録。同上。登録時に case.yaml の corporation セクションも本格拡張する
+    # 生成順・提出（綴り）順は 0102「法人用破産申立書（ver.4.0）について」の綴り順に従う。
+    # 法人セットに家計収支表・管財補充報告書は無い（報告書0104に一本化）。
+    # 版は各 registry の current_by_proc.kanzai-hojin（v4.0-hojin 等）で解決。
+    forms:
+      - { form: saikensha-ichiran-kanzai, via: "builder:kanzai-xlsx --doc saikensha-kanzai" }
+      - { form: hikazei-kouso-check,      via: "builder:kanzai-xlsx --doc hikazei-check" }
+      - { form: shisan-mokuroku-kanzai,   via: "builder:kanzai-xlsx --doc shisan-kanzai" }
+      - { form: shisan-fusai-ichiran,     via: "builder:kanzai-xlsx --doc shisan-fusai" }
+      - { form: lease-bukken-ichiran,     via: "builder:kanzai-xlsx --doc lease", when: "リース債権あり" }
+      - { form: sosho-shobun-ichiran,     via: "builder:kanzai-xlsx --doc sosho-shobun", when: "lawsuits または pre_bankruptcy_disposals あり" }
+      - { form: moushitatesho-hojin,      via: "skill:moushitatesho" }
+      - { form: houkokusho-hojin,         via: "skill:houkokusho-hojin（項目18の別紙も生成）" }
+      - { form: tenpu-mokuroku,           via: "skill:generate（生成書類に応じて添付□をチェック）" }
+      - { form: somei-shiryo-mokuroku,    via: "skill:generate（添付資料に応じて◇○をチェック）" }
+      - { form: hikitsugi-shiryo-ichiran, via: "skill:generate（財産目録の該当区分◇＋引継決定資料□）" }
+    keep_only:  # 生成対象外（保管・参照のみ）
+      - yakuwari-kakunin        # 0101 申立代理人の役割確認表（法人）
+      - tsuzurijun-setsumei     # 0102 綴り順の説明書（このセット定義の一次資料）
+    missing:    # 綴り順に載っているが配布ファイル未受領のもの
+      - 文字上申書（付属CD-ROM資料1104。受領後 register-form で登録）

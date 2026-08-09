@@ -1,0 +1,75 @@
+form: kakei-shushi
+court: osaka
+version: "202508"
+doc_type: xlsx
+notes:
+  - シート「家計収支表」。列C=1か月目（申立前2か月の古い方）、列D=2か月目（直近）。
+  - >-
+    数式セルは書き込み禁止（エンジンが防御）: D3(前月繰越=C43)・C17/D17(収入合計)・
+    C43/D43(翌月繰越)・C44/D44(支出合計)。金額はC/D列の費目行にのみ書く。
+  - 「家計収支表 (記載例)」シートは触らない。
+  - 費目は item_rows の正規名で case.yaml の household に記録する（intake の規約）。
+    対応しない費目は「その他」行（income 16 / expense 41・42）にラベルごと記入する。
+# 費目名 → 行番号（builder が C/D 列に金額を書く）。ラベル文言は label_check で検証可能
+item_rows:
+  income:
+    給与（申立人分）: 4
+    給与（配偶者分）: 5
+    給与（その他）: 6
+    自営収入（申立人分）: 7
+    自営収入（その他）: 8
+    年金（申立人分）: 9
+    年金（その他）: 10
+    雇用保険: 11
+    生活保護: 12
+    児童手当: 13
+    援助: 14
+    借入れ: 15
+    その他: 16
+  expense:
+    住居費: 18
+    駐車場代: 19
+    食費: 20
+    嗜好品代: 21
+    外食費: 22
+    電気代: 23
+    ガス代: 24
+    水道代: 25
+    携帯電話料金: 26
+    その他通信費: 27
+    日用品代: 28
+    新聞代: 29
+    国民健康保険料: 30
+    保険料: 31
+    ガソリン代: 32
+    交通費: 33
+    医療費: 34
+    被服費: 35
+    教育費: 36
+    交際費: 37
+    娯楽費: 38
+    債務返済実額（申立人分）: 39
+    債務返済実額（同居者分）: 40
+    その他1: 41
+    その他2: 42
+fields:
+  - id: title_year
+    kind: set_cell
+    anchor: { sheet: 家計収支表, cell: A1 }
+    binds: household[].month(年)
+    notes: 「　　　　　　　　　家計収支表(令和７年）」の形式で全文置換
+  - id: period_m1
+    kind: set_cell
+    anchor: { sheet: 家計収支表, cell: C2 }
+    binds: household[0].month
+    notes: 「６月１日～６月３０日」形式
+  - id: period_m2
+    kind: set_cell
+    anchor: { sheet: 家計収支表, cell: D2 }
+    binds: household[1].month
+  - id: carryover_m1
+    kind: set_cell
+    anchor: { sheet: 家計収支表, cell: C3 }
+    label_check: { B3: 前月からの繰越 }
+    binds: household[0].carryover
+    notes: 1か月目の前月繰越（資料があるときのみ）。2か月目(D3)は数式で自動

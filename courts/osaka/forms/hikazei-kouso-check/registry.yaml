@@ -1,0 +1,16 @@
+# この書式の現行版。生成スキルは必ずここを経由して版を解決する。
+form: hikazei-kouso-check
+name: 被課税公租公課チェック表（0217自然人／0115法人）
+doc_type: xlsx
+procs: [kanzai-shizenjin, kanzai-hojin]
+current: "v4.0"
+current_by_proc:
+  kanzai-shizenjin: "v4.0"
+  kanzai-hojin: "v4.0-hojin"
+versions:
+  v4.0:
+    received: "2026-08-09（利用者アップロード 0217・管財（自然人）一式 ver.4.0）"
+    note: 課税項目のチェック表（滞納がなくても課税項目を記入）。給与所得者等/事業者/共通の区分。builder が税目ラベル一致でチェック・年度・税額を記入
+  v4.0-hojin:
+    received: "2026-08-09（利用者アップロード・法人一式 ver.4.0）"
+    note: 法人用（0115）。税目行が法人用（法人税・法人府民税・法人等市民税等）

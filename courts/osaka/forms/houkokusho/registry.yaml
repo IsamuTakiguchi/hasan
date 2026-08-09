@@ -1,9 +1,14 @@
 # この書式の現行版。生成スキルは必ずここを経由して版を解決する。
+# current_by_proc: 手続種別ごとに配布版が異なる場合の切替（resolve_form が proc 引数で参照。
+#                  未指定・該当なしは current にフォールバック）。
 form: houkokusho
 name: 報告書（自然人用）
 doc_type: docx
-procs: [douhai]
+procs: [douhai, kanzai-shizenjin]
 current: "v4.1"
+current_by_proc:
+  douhai: "v4.1"
+  kanzai-shizenjin: "v4.0-kanzai"
 versions:
   v4.0:
     received: "2026-07-13以前（hasan-houkokushoスキル同梱版）"
@@ -11,3 +16,10 @@ versions:
   v4.1:
     received: "2026-08-09（利用者アップロード B1110）"
     note: 大阪地裁共通様式 ver.4.1（宛先が□第６民事部/□支部の選択式に。②ア・イ「申立て前」→「申立前」）
+  v4.0-kanzai:
+    received: "2026-08-09（利用者アップロード 0205・管財（自然人）一式 ver.4.0）"
+    note: >-
+      管財（自然人）一式（自然人用破産申立書 ver.4.0）に含まれる報告書。
+      v4.0/v4.1 と paraId を共有する同系統で、v4.1 との差は宛先欄
+      （第６民事部が印字＋□支部。第６民事部の□は箇条書き記号のため機械記入不可）と
+      ②ア・イの「申立て前」表記のみ。

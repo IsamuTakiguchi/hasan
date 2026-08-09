@@ -1,0 +1,736 @@
+=== sheet: 218_総括表 (dim=A1:G21, merged=1, 印刷範囲=-)
+merged: A19:B19
+A1	v	No.
+B1	v	科　目
+C1	v	名目額(簿価額等)(円)
+D1	v	回収見込額(円)
+E1	v	備　考
+F1	v	自由財産の額 及び
+拡張を求める財産の額
+(円)
+A2	v	1
+B2	v	現金
+A3	v	2
+B3	v	預貯金・積立金
+G3	f	=IF('219_預貯金・積立金'!F2="",1,0)
+A4	v	3
+B4	v	保険解約返戻金
+G4	f	=IF('220_保険'!E2="",1,0)
+A5	v	4
+B5	v	自動車
+G5	f	=IF('221_自動車'!F2="",1,0)
+A6	v	5
+B6	v	賃借保証金・敷金
+G6	f	=IF('222_敷金'!C2="",1,0)
+A7	v	6
+B7	v	退職金
+G7	f	=IF(#REF!="",1,0)
+A8	v	7
+B8	v	過払金
+G8	f	=IF('223_退職金'!D2="",1,0)
+A9	v	8
+B9	v	不動産
+A10	v	9
+B10	v	有価証券
+G10	f	=IF('225_不動産'!E2="",1,0)
+A11	v	10
+B11	v	受取手形・小切手
+G11	f	=IF('226_有価証券'!G2="",1,0)
+A12	v	11
+B12	v	売掛金
+G12	f	=IF('227_手形・小切手'!I2="",1,0)
+A13	v	12
+B13	v	貸付金
+G13	f	=IF('228_売掛金'!F2="",1,0)
+A14	v	13
+B14	v	在庫商品
+G14	f	=IF('229_貸付金'!F2="",1,0)
+A15	v	14
+B15	v	機械・工具類
+G15	f	=IF('230_在庫商品'!E2="",1,0)
+A16	v	15
+B16	v	什器備品
+G16	f	=IF('231_機械・工具類'!E2="",1,0)
+A17	v	16
+B17	v	その他
+G17	f	=IF('232_什器備品'!E2="",1,0)
+A18	v	17
+G18	f	=IF('233_その他'!E5="",1,0)
+A19	v	合計
+C19	f	=SUM(C2:C18)
+D19	f	=SUM(D2:D18)
+F19	f	=SUM(F2:F18)
+=== sheet: 219_預貯金・積立金 (dim=A1:K14, merged=0, 印刷範囲=-)
+A1	v	No.
+B1	v	金融機関又は
+積立先の名称
+C1	v	支店名
+D1	v	種類
+E1	v	口座番号・
+積立番号等
+F1	v	残高又は
+積立総額（円）
+G1	v	相殺予定
+H1	v	回収見込額（円）
+I1	v	通帳等
+J1	v	備　　考　　　
+K1	v	自由財産
+拡張申立
+A2	v	1
+G2	v	□
+I2	v	□
+K2	v	□
+A3	v	2
+G3	v	□
+I3	v	□
+K3	v	□
+A4	v	3
+G4	v	□
+I4	v	□
+K4	v	□
+A5	v	4
+G5	v	□
+I5	v	□
+K5	v	□
+A6	v	5
+G6	v	□
+I6	v	□
+K6	v	□
+A7	v	6
+G7	v	□
+I7	v	□
+K7	v	□
+A8	v	7
+G8	v	□
+I8	v	□
+K8	v	□
+A9	v	8
+G9	v	□
+I9	v	□
+K9	v	□
+A10	v	9
+G10	v	□
+I10	v	□
+K10	v	□
+A11	v	10
+G11	v	□
+I11	v	□
+K11	v	□
+E12	v	合計
+F12	f	=SUM(F2:F11)
+H12	f	=SUM(H2:H11)
+K12	v	<openpyxl.worksheet.formula.ArrayFormula object at 0x7f6140fbefd0>
+=== sheet: 220_保険 (dim=A1:I14, merged=0, 印刷範囲=-)
+A1	v	No.
+B1	v	保険会社名
+C1	v	保険種類
+D1	v	証券番号
+E1	v	名目額
+（解約返戻金）（円）
+F1	v	回収見込額
+（解約返戻金）（円）
+G1	v	証券
+H1	v	備　　考
+I1	v	自由財産
+拡張申立
+A2	v	1
+G2	v	□
+I2	v	□
+A3	v	2
+G3	v	□
+I3	v	□
+A4	v	3
+G4	v	□
+I4	v	□
+A5	v	4
+G5	v	□
+I5	v	□
+A6	v	5
+G6	v	□
+I6	v	□
+A7	v	6
+G7	v	□
+I7	v	□
+A8	v	7
+G8	v	□
+I8	v	□
+A9	v	8
+G9	v	□
+I9	v	□
+A10	v	9
+G10	v	□
+I10	v	□
+A11	v	10
+G11	v	□
+I11	v	□
+D12	v	合計
+E12	f	=SUM(E2:E11)
+F12	f	=SUM(F2:F11)
+I12	v	<openpyxl.worksheet.formula.ArrayFormula object at 0x7f6140fab410>
+=== sheet: 221_自動車 (dim=A1:K11, merged=0, 印刷範囲=-)
+A1	v	No.
+B1	v	車名
+C1	v	初度登録年
+D1	v	登録番号
+E1	v	保管場所
+F1	v	簿価等
+（円）
+G1	v	回収見込額
+（円）
+H1	v	所有権留保
+I1	v	登録事項
+証明書等
+J1	v	備考
+K1	v	自由財産
+拡張申立
+A2	v	1
+H2	v	□
+I2	v	□
+K2	v	□
+A3	v	2
+H3	v	□
+I3	v	□
+K3	v	□
+A4	v	3
+H4	v	□
+I4	v	□
+K4	v	□
+A5	v	4
+H5	v	□
+I5	v	□
+K5	v	□
+A6	v	5
+H6	v	□
+I6	v	□
+K6	v	□
+A7	v	6
+H7	v	□
+I7	v	□
+K7	v	□
+E8	v	合計
+F8	f	=SUM(F2:F7)
+G8	f	=SUM(G2:G7)
+K8	v	<openpyxl.worksheet.formula.ArrayFormula object at 0x7f6140faded0>
+=== sheet: 222_敷金 (dim=A1:J8, merged=0, 印刷範囲=-)
+A1	v	No.
+B1	v	賃借物件
+C1	v	差入額（円）
+D1	v	契約上の返戻金（円）
+E1	v	滞納額（円）
+F1	v	原状回復費用等の見込額（円）
+G1	v	回収見込額（円）
+H1	v	契約
+書等
+I1	v	備考
+J1	v	自由財産
+拡張申立
+A2	v	1
+D2	f	=C2
+H2	v	□
+J2	v	□
+A3	v	2
+D3	f	=C3
+H3	v	□
+J3	v	□
+A4	v	3
+D4	f	=C4
+H4	v	□
+J4	v	□
+A5	v	4
+D5	f	=C5
+H5	v	□
+J5	v	□
+B6	v	合計
+C6	f	=SUM(C2:C5)
+D6	f	=SUM(D2:D5)
+E6	f	=SUM(E2:E5)
+F6	f	=SUM(F2:F5)
+G6	f	=SUM(G2:G5)
+J6	v	<openpyxl.worksheet.formula.ArrayFormula object at 0x7f6140fa5e90>
+=== sheet: 223_退職金 (dim=A1:I8, merged=0, 印刷範囲=-)
+A1	v	No.
+B1	v	雇用主の氏名又は会社名
+C1	v	勤務開始日
+D1	v	支給見込額（円）
+E1	v	1/8相当額（円）
+F1	v	証明書
+G1	v	退職金
+規程
+H1	v	備　　考　　　
+I1	v	自由財産
+拡張申立
+A2	v	1
+E2	f	=ROUNDUP(D2/8,0)
+F2	v	□
+G2	v	□
+I2	v	□
+A3	v	2
+E3	f	=ROUNDUP(D3/8,0)
+F3	v	□
+G3	v	□
+I3	v	□
+A4	v	3
+E4	f	=ROUNDUP(D4/8,0)
+F4	v	□
+G4	v	□
+I4	v	□
+A5	v	4
+E5	f	=ROUNDUP(D5/8,0)
+F5	v	□
+G5	v	□
+I5	v	□
+C6	v	合計
+D6	f	=SUM(D2:D5)
+E6	f	=SUM(E2:E5)
+I6	v	<openpyxl.worksheet.formula.ArrayFormula object at 0x7f6140fcbf50>
+=== sheet: 224_過払金 (dim=A1:I13, merged=0, 印刷範囲='224_過払金'!$A$1:$I$12)
+A1	v	No.
+B1	v	相手方の氏名
+又は会社名
+C1	v	額面額（円）
+D1	v	合意額又は
+見込み額（円）
+E1	v	回収費用控除
+予定額（円）
+F1	v	回収費用控除後残金（円）
+G1	v	合意又は
+債務名義
+取得
+H1	v	備考
+I1	v	自由財産
+拡張申立
+A2	v	1
+G2	v	□
+I2	v	□
+A3	v	2
+G3	v	□
+I3	v	□
+A4	v	3
+G4	v	□
+I4	v	□
+A5	v	4
+G5	v	□
+I5	v	□
+A6	v	5
+G6	v	□
+I6	v	□
+A7	v	6
+G7	v	□
+I7	v	□
+A8	v	7
+G8	v	□
+I8	v	□
+A9	v	8
+G9	v	□
+I9	v	□
+A10	v	9
+G10	v	□
+I10	v	□
+A11	v	10
+G11	v	□
+I11	v	□
+B12	v	合計
+C12	f	=SUM(C2:C11)
+D12	f	=SUM(D2:D11)
+E12	f	=SUM(E2:E11)
+F12	f	=SUM(F2:F11)
+I12	v	<openpyxl.worksheet.formula.ArrayFormula object at 0x7f6140e11f90>
+=== sheet: 225_不動産 (dim=A1:L12, merged=0, 印刷範囲=-)
+A1	v	No.
+B1	v	種類
+C1	v	所在地
+D1	v	地番又は家屋番号
+E1	v	評価額(固定資産評価証明書)　又は
+査定価格(査定書) 
+　　　　（円）
+F1	v	被担保債権額　（円）
+G1	v	回収見込額（円）
+H1	v	評価証明書等
+I1	v	査定書
+J1	v	被担保債権
+残額証明書
+K1	v	備　　考
+L1	v	自由財産
+拡張申立
+A2	v	1
+H2	v	□
+I2	v	□
+J2	v	□
+L2	v	□
+A3	v	2
+H3	v	□
+I3	v	□
+J3	v	□
+L3	v	□
+A4	v	3
+H4	v	□
+I4	v	□
+J4	v	□
+L4	v	□
+A5	v	4
+H5	v	□
+I5	v	□
+J5	v	□
+L5	v	□
+A6	v	5
+H6	v	□
+I6	v	□
+J6	v	□
+L6	v	□
+A7	v	6
+H7	v	□
+I7	v	□
+J7	v	□
+L7	v	□
+A8	v	7
+H8	v	□
+I8	v	□
+J8	v	□
+L8	v	□
+A9	v	8
+H9	v	□
+I9	v	□
+J9	v	□
+L9	v	□
+D10	v	合計
+E10	f	=SUM(E2:E9)
+F10	f	=SUM(F2:F9)
+G10	f	=SUM(G2:G9)
+L10	v	<openpyxl.worksheet.formula.ArrayFormula object at 0x7f6140e1dd90>
+=== sheet: 226_有価証券 (dim=A1:K12, merged=2, 印刷範囲=-)
+merged: E10:F10 E1:F1
+A1	v	No.
+B1	v	財産の内容
+（ゴルフ会員権・株式・出資金等）
+C1	v	数量
+D1	v	証券番号等
+E1	v	証券等　／　所在場所
+G1	v	簿価等（円）
+H1	v	回収見込額（円）
+I1	v	取引相場
+資料
+J1	v	備　　考
+K1	v	自由財産
+拡張申立
+A2	v	1
+E2	v	□
+I2	v	□
+K2	v	□
+A3	v	2
+E3	v	□
+I3	v	□
+K3	v	□
+A4	v	3
+E4	v	□
+I4	v	□
+K4	v	□
+A5	v	4
+E5	v	□
+I5	v	□
+K5	v	□
+A6	v	5
+E6	v	□
+I6	v	□
+K6	v	□
+A7	v	6
+E7	v	□
+I7	v	□
+K7	v	□
+A8	v	7
+E8	v	□
+I8	v	□
+K8	v	□
+A9	v	8
+E9	v	□
+I9	v	□
+K9	v	□
+E10	v	合計
+G10	f	=SUM(G2:G9)
+H10	f	=SUM(H2:H9)
+K10	v	<openpyxl.worksheet.formula.ArrayFormula object at 0x7f6140e2c850>
+=== sheet: 227_手形・小切手 (dim=A1:L31, merged=0, 印刷範囲=-)
+A1	v	No.
+B1	v	振出人の氏名
+又は会社名
+C1	v	〒
+D1	v	住　　所
+E1	v	TEL
+FAX
+F1	v	手形小切手番号
+G1	v	裏書人
+H1	v	支払期日
+I1	v	額面（円）
+J1	v	回収見込額（円）
+K1	v	備考
+L1	v	自由財産
+拡張申立
+A2	v	1
+L2	v	□
+A3	v	2
+L3	v	□
+A4	v	3
+L4	v	□
+A5	v	4
+L5	v	□
+A6	v	5
+L6	v	□
+A7	v	6
+L7	v	□
+A8	v	7
+L8	v	□
+A9	v	8
+L9	v	□
+H10	v	合計
+I10	f	=SUM(I2:I9)
+J10	f	=SUM(J2:J9)
+L10	v	<openpyxl.worksheet.formula.ArrayFormula object at 0x7f6140e44650>
+=== sheet: 228_売掛金 (dim=A1:J33, merged=0, 印刷範囲=-)
+A1	v	No.
+B1	v	債務者の氏名
+又は会社名
+C1	v	〒
+D1	v	住　　所
+E1	v	TEL
+FAX
+F1	v	金　額（円）
+G1	v	回収見込額（円）
+H1	v	契約書等
+I1	v	備考
+J1	v	自由財産
+拡張申立
+A2	v	1
+H2	v	□
+J2	v	□
+A3	v	2
+H3	v	□
+J3	v	□
+A4	v	3
+H4	v	□
+J4	v	□
+A5	v	4
+H5	v	□
+J5	v	□
+A6	v	5
+H6	v	□
+J6	v	□
+A7	v	6
+H7	v	□
+J7	v	□
+A8	v	7
+H8	v	□
+J8	v	□
+A9	v	8
+H9	v	□
+J9	v	□
+E10	v	合計
+F10	f	=SUM(F2:F9)
+G10	f	=SUM(G2:G9)
+J10	v	<openpyxl.worksheet.formula.ArrayFormula object at 0x7f6140e51090>
+=== sheet: 229_貸付金 (dim=A1:J31, merged=0, 印刷範囲=-)
+A1	v	No.
+B1	v	債務者の氏名
+又は会社名
+C1	v	〒
+D1	v	住　　所
+E1	v	TEL
+FAX
+F1	v	金　額（円）
+G1	v	回収見込額（円）
+H1	v	契約書等
+I1	v	備考
+J1	v	自由財産
+拡張申立
+A2	v	1
+H2	v	□
+J2	v	□
+A3	v	2
+H3	v	□
+J3	v	□
+A4	v	3
+H4	v	□
+J4	v	□
+A5	v	4
+H5	v	□
+J5	v	□
+A6	v	5
+H6	v	□
+J6	v	□
+A7	v	6
+H7	v	□
+J7	v	□
+A8	v	7
+H8	v	□
+J8	v	□
+A9	v	8
+H9	v	□
+J9	v	□
+E10	v	合計
+F10	f	=SUM(F2:F9)
+G10	f	=SUM(G2:G9)
+J10	v	<openpyxl.worksheet.formula.ArrayFormula object at 0x7f6140e63e90>
+=== sheet: 230_在庫商品 (dim=A1:H10, merged=0, 印刷範囲=-)
+A1	v	No.
+B1	v	品名
+C1	v	個数
+D1	v	所在場所
+E1	v	簿価等（円）
+F1	v	回収見込額（円）
+G1	v	備考
+H1	v	自由財産
+拡張申立
+A2	v	1
+H2	v	□
+A3	v	2
+H3	v	□
+A4	v	3
+H4	v	□
+A5	v	4
+H5	v	□
+A6	v	5
+H6	v	□
+A7	v	6
+H7	v	□
+A8	v	7
+H8	v	□
+A9	v	8
+H9	v	□
+D10	v	合計
+E10	f	=SUM(E2:E9)
+F10	f	=SUM(F2:F9)
+H10	v	<openpyxl.worksheet.formula.ArrayFormula object at 0x7f6140e6c710>
+=== sheet: 231_機械・工具類 (dim=A1:H10, merged=0, 印刷範囲=-)
+A1	v	No.
+B1	v	名称
+C1	v	個数
+D1	v	所在場所
+E1	v	簿価等（円）
+F1	v	回収見込額（円）
+G1	v	備　　考
+H1	v	自由財産
+拡張申立
+A2	v	1
+H2	v	□
+A3	v	2
+H3	v	□
+A4	v	3
+H4	v	□
+A5	v	4
+H5	v	□
+A6	v	5
+H6	v	□
+A7	v	6
+H7	v	□
+A8	v	7
+H8	v	□
+A9	v	8
+H9	v	□
+D10	v	合計
+E10	f	=SUM(E2:E9)
+F10	f	=SUM(F2:F9)
+H10	v	<openpyxl.worksheet.formula.ArrayFormula object at 0x7f6140e1db10>
+=== sheet: 232_什器備品 (dim=A1:H10, merged=0, 印刷範囲=-)
+A1	v	No.
+B1	v	品名
+C1	v	個数
+D1	v	所在場所
+E1	v	簿価等（円）
+F1	v	回収見込額（円）
+G1	v	備　　考
+H1	v	自由財産
+拡張申立
+A2	v	1
+H2	v	□
+A3	v	2
+H3	v	□
+A4	v	3
+H4	v	□
+A5	v	4
+H5	v	□
+A6	v	5
+H6	v	□
+A7	v	6
+H7	v	□
+A8	v	7
+H8	v	□
+A9	v	8
+H9	v	□
+D10	v	合計
+E10	f	=SUM(E2:E9)
+F10	f	=SUM(F2:F9)
+H10	v	<openpyxl.worksheet.formula.ArrayFormula object at 0x7f6140e98090>
+=== sheet: 233_その他 (dim=A1:H10, merged=0, 印刷範囲=-)
+A1	v	No.
+B1	v	財産の種類・内容
+C1	v	数量
+D1	v	所在場所
+E1	v	簿価等（円）
+F1	v	回収見込額（円）
+G1	v	備　　考
+H1	v	自由財産
+拡張申立
+A2	v	1
+H2	v	□
+A3	v	2
+H3	v	□
+A4	v	3
+H4	v	□
+A5	v	4
+H5	v	□
+A6	v	5
+H6	v	□
+A7	v	6
+H7	v	□
+A8	v	7
+H8	v	□
+A9	v	8
+H9	v	□
+D10	v	合計
+E10	f	=SUM(E2:E9)
+F10	f	=SUM(F2:F9)
+H10	v	<openpyxl.worksheet.formula.ArrayFormula object at 0x7f6140ec2250>
+=== sheet: 234_処分済財産 (dim=A1:I19, merged=3, 印刷範囲=-)
+merged: B1:H1 B3:H3 B2:H2
+A1	v	※
+B1	v	決算書が存在する事業者については、最終の決算書に記載されており、かつ申立書別紙財産目録に記載のない財産を記載する。
+A2	v	※
+B2	v	それ以外の者については、過去２年以内に処分した財産で20万円以上の価値のあるものを記載する。
+A3	v	※
+B3	v	ただし，①現金，②預貯金，⑩受取手形・小切手，⑪売掛金，⑬在庫商品（原材料）など，通常流動性が高いと思われる資産については記入する必要がありません。
+③保険解約返戻金，④自動車，⑤保証金・敷金，⑧不動産，⑨有価証券，⑫貸付金，⑭機械・工具，⑮什器備品，⑯その他の財産等の資産についてのみ記入してください。
+A4	v	番号
+B4	v	財産の種類・内容
+C4	v	架空計上
+D4	v	処分
+E4	v	処分日
+F4	v	処分価格(円）
+G4	v	処分代金の使途 又は 財産目録非掲載の理由
+H4	v	決算書
+記載
+A5	v	1
+C5	v	□
+D5	v	□
+H5	v	□
+A6	v	2
+C6	v	□
+D6	v	□
+H6	v	□
+A7	v	3
+C7	v	□
+D7	v	□
+H7	v	□
+A8	v	4
+C8	v	□
+D8	v	□
+H8	v	□
+A9	v	5
+C9	v	□
+D9	v	□
+H9	v	□
+A10	v	6
+C10	v	□
+D10	v	□
+H10	v	□
+A11	v	7
+C11	v	□
+D11	v	□
+H11	v	□

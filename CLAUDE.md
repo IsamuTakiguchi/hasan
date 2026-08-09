@@ -30,24 +30,64 @@
 
 事件は `meta.proc_type` で **同時廃止／管財（自然人）／管財（法人）** に分かれ、
 書式セット・生成順は `courts/osaka/procs.yaml` が定義する（registry.yaml の `procs:` が
-所属セット）。管財2セットは書式未登録の受け皿（受領後 register-form で登録・追記）。
+所属セット。**3セットとも書式登録済み**）。同じ書式IDで手続種別により配布版が異なる場合は
+registry の `current_by_proc:` が版を切り替える（resolve_form の proc 引数／builder は
+case.yaml の proc_type から自動解決）。
 管財（法人）は債務者＝法人（case.yaml の `corporation` を使い、自然人用セクションは使わない）。
 
-## 登録済み書式（courts/osaka/ — 大阪地裁 本庁・堺支部・岸和田支部共通様式、同時廃止セット）
+## 登録済み書式（courts/osaka/ — 大阪地裁 本庁・堺支部・岸和田支部）
+
+### 同時廃止セット（B系列 ver.4.1世代）
 
 | 書式ID | 書式（原番号） | 形式 | 生成 |
 |---|---|---|---|
-| moushitatesho-douhai | 破産手続開始申立書・同時廃止用（B1102） | docx | hasan-moushitatesho |
-| houkokusho | 報告書・自然人用 ver.4.1（B1110） | docx | hasan-houkokusho |
-| jigyou-houkokusho | 事業に関する報告書（B1112） | docx | hasan-jigyou-houkokusho（個人事業者のみ） |
+| moushitatesho-douhai | 破産手続開始申立書・同時廃止用（B1102） | docx | skill:moushitatesho |
+| houkokusho（v4.1） | 報告書・自然人用 ver.4.1（B1110） | docx | skill:houkokusho |
+| jigyou-houkokusho | 事業に関する報告書（B1112） | docx | skill:jigyou-houkokusho（個人事業者のみ） |
 | saikensha-ichiran | 債権者一覧表（B1105） | xlsx | build_saikensha_ichiran.py |
 | saikensha-ichiran-kouso | 債権者一覧表・公租公課用（B1106） | xlsx | 同 --kouso |
 | shisan-mokuroku | 財産目録（B1109） | xlsx | build_shisan_mokuroku.py |
-| kakei-shushi | 家計収支表（B1111） | xlsx | build_kakei_shushi.py |
+| kakei-shushi（v202508） | 家計収支表（B1111） | xlsx | build_kakei_shushi.py |
 | joshinsho-checklist | チェックリストに関する上申書（B1113） | docx | fill_docx.py（弁護士指示時のみ） |
-| checklist-douhai | 同時廃止チェックリスト（B1114） | docx | 生成対象外（保管のみ） |
-| hyojun-shiryo-ichiran | 標準資料一覧表（B1103） | xlsx | 生成対象外（保管のみ） |
+| checklist-douhai / hyojun-shiryo-ichiran | チェックリスト（B1114）・標準資料一覧表（B1103） | docx/xlsx | 生成対象外（保管のみ） |
 
+### 管財（自然人）セット（0201〜0240・自然人用破産申立書 ver.4.0 一式）
+
+| 書式ID | 書式（原番号） | 形式 | 生成 |
+|---|---|---|---|
+| moushitatesho-kanzai | 破産申立書・自然人管財用（0203） | docx | skill:moushitatesho |
+| houkokusho（v4.0-kanzai） | 報告書・自然人用（0205） | docx | skill:houkokusho（版は current_by_proc） |
+| kanzai-hoju-houkokusho | 管財補充報告書（0204） | docx | skill:hoju-houkokusho |
+| saikensha-ichiran-kanzai | 債権者一覧表8シート（0209-0216） | xlsx | build_kanzai_xlsx --doc saikensha-kanzai |
+| hikazei-kouso-check | 被課税公租公課チェック表（0217） | xlsx | 同 --doc hikazei-check |
+| shisan-mokuroku-kanzai | 財産目録17シート（0218-0234） | xlsx | 同 --doc shisan-kanzai |
+| shisan-fusai-ichiran | 資産及び負債一覧表（0208） | xlsx | 同 --doc shisan-fusai |
+| lease-bukken-ichiran | リース物件一覧表（0235＝法人0132と共通） | xlsx | 同 --doc lease |
+| sosho-shobun-ichiran | 訴訟・処分行為一覧表（0236-0237） | xlsx | 同 --doc sosho-shobun |
+| kakei-shushi（v4.0-kanzai） | 家計収支表（0206） | xlsx | build_kakei_shushi.py（版は current_by_proc） |
+| tenpu-mokuroku | 添付目録（0207） | docx | generate が生成書類に応じて☑ |
+| somei-shiryo-mokuroku | 疎明資料目録（0238） | docx | 同（◇→◆・○→●） |
+| hikitsugi-shiryo-ichiran | 管財人引継資料一覧表（0239） | docx | 同（財産目録連動＋弁護士判断） |
+| jiyuzaisan-kakucho | 自由財産拡張申立書（0240） | docx | fill_docx（ヘッダのみ） |
+| yakuwari-kakunin / tsuzurijun-setsumei | 役割確認表（0201）・綴り順説明（0202） | docx | 生成対象外（保管のみ） |
+
+### 管財（法人）セット（0101〜0136・法人用破産申立書 ver.4.0 一式）
+
+| 書式ID | 書式（原番号） | 形式 | 生成 |
+|---|---|---|---|
+| moushitatesho-hojin | 破産申立書・法人用（0103） | docx | skill:moushitatesho |
+| houkokusho-hojin | 報告書・法人用（0104。18項目一本化・項目18は別紙） | docx | skill:houkokusho-hojin |
+| tenpu-mokuroku（v4.0-hojin） | 添付目録・法人用（0105） | docx | generate |
+| saikensha-ichiran-kanzai（v4.0-hojin） | 債権者一覧表8シート（0107-0114） | xlsx | build_kanzai_xlsx（版は current_by_proc で自動） |
+| hikazei-kouso-check（v4.0-hojin） | 被課税公租公課チェック表（0115） | xlsx | 同 |
+| shisan-mokuroku-kanzai（v4.0-hojin） | 財産目録16シート（0116-0131） | xlsx | 同 |
+| shisan-fusai-ichiran（v4.0-hojin） | 資産及び負債一覧表（0106） | xlsx | 同 |
+| sosho-shobun-ichiran（v4.0-hojin） | 訴訟・処分行為一覧表（0133-0134） | xlsx | 同 |
+| somei-shiryo-mokuroku（v4.0-hojin） | 疎明資料目録（0135） | docx | generate |
+| hikitsugi-shiryo-ichiran（v4.0-hojin） | 管財人引継資料一覧表（0136） | docx | generate |
+| yakuwari-kakunin / tsuzurijun-setsumei（v4.0-hojin） | 役割確認表（0101）・綴り順説明（0102） | docx | 生成対象外（保管のみ） |
+
+文字上申書（付属CD-ROM資料1104）のみ未受領（procs.yaml の missing に明示）。
 宛先支部は事件ごとに case.yaml の `meta.court_branch`（第６民事部/堺支部/岸和田支部）で指定。
 
 ## ディレクトリ規約
@@ -82,6 +122,15 @@
 - この環境に pdftoppm は無い。PDF→画像は PyMuPDF（`python3 -m scripts.verify.render_preview`）を使う。
 - 日付は裁判所書式の実態に合わせ「R4後半ころ」等の曖昧文字列も許容。短縮元号（H22.6）等の
   表記変換は fillmap の `date_style` 指定が担う。
+- 管財書式（ver.4.0世代）で判明した記入上の罠:
+  - **EQフィールド**（0203の年齢・住居所ラベル等）— fill_docx の set_text は
+    fldChar/instrText を含む run を温存する（消すと以降の文書全体が消える）。
+  - **純数字の paraId は fillmap で必ずクォート**（YAML が整数化して解決に失敗する）。
+  - 代理人記名の「印」は書式により下線runの内側（B1102/0103）と外側（0204/0104）があり、
+    値に印を含めるかが逆になる（各 fillmap の notes 参照）。
+  - チェック記号は □→☑ のほか ◇→◆・○→●（疎明資料目録等。fill_docx の BOX_MARKS）。
+  - 管財xlsx（build_kanzai_xlsx.py）は列を**ヘッダ文言で動的解決**し、行不足は
+    書式コピーで挿入。数式セル（総括表の集計・存否チェック）には書き込まない。
 
 ## 書式が改訂されたら
 

@@ -1,0 +1,361 @@
+form: hikitsugi-shiryo-ichiran
+court: osaka
+version: 4.0-hojin
+doc_type: docx
+notes:
+- 管財人引継資料一覧表（法人用）（0136）。w14:paraId 無し。
+- ◇区分（→◆）は財産目録（0116-0131）の記載と連動。□（→☑）は代理人の引継判断。
+- 「５　印鑑（□代表者印　□銀行印）」の内訳□2つは未定義（必要なら手書き）。
+- 在庫商品・機械工具・什器備品の区分ヘッダは無い（一覧表に◇項目が無い）。
+fields:
+- id: kubun_yochokin
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 16
+    path: １　□　登記事項証明書（法人）の写し>９　□　事務所・金庫等の鍵
+    context: ◇預貯金・積立金（②預貯金・積立金目録）
+  options:
+    該当: ◇預貯金・積立金（②預貯金・積立金目録）
+- id: kubun_uketori_tegata
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 20
+    path: １　□　登記事項証明書（法人）の写し>９　□　事務所・金庫等の鍵
+    context: ◇受取手形（③受取手形・小切手目録）
+  options:
+    該当: ◇受取手形（③受取手形・小切手目録）
+- id: kubun_urikakekin
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 23
+    path: １　□　登記事項証明書（法人）の写し>９　□　事務所・金庫等の鍵
+    context: ◇売掛金（④売掛金目録）
+  options:
+    該当: ◇売掛金（④売掛金目録）
+- id: kubun_kashitsukekin
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 27
+    path: １　□　登記事項証明書（法人）の写し>９　□　事務所・金庫等の鍵
+    context: ◇貸付金（⑥貸付金目録）
+  options:
+    該当: ◇貸付金（⑥貸付金目録）
+- id: kubun_fudosan
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 30
+    path: １　□　登記事項証明書（法人）の写し>９　□　事務所・金庫等の鍵
+    context: ◇不動産（⑦不動産目録）
+  options:
+    該当: ◇不動産（⑦不動産目録）
+- id: kubun_jidosha
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 35
+    path: １　□　登記事項証明書（法人）の写し>９　□　事務所・金庫等の鍵
+    context: ◇自動車（⑩自動車目録）
+  options:
+    該当: ◇自動車（⑩自動車目録）
+- id: kubun_yukashoken
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 40
+    path: １　□　登記事項証明書（法人）の写し>９　□　事務所・金庫等の鍵
+    context: ◇有価証券（⑪有価証券目録）
+  options:
+    該当: ◇有価証券（⑪有価証券目録）
+- id: kubun_shikikin
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 43
+    path: １　□　登記事項証明書（法人）の写し>９　□　事務所・金庫等の鍵
+    context: ◇賃借保証金，敷金（⑫賃借保証金・敷金目録）
+  options:
+    該当: ◇賃借保証金，敷金（⑫賃借保証金・敷金目録）
+- id: kubun_hoken
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 46
+    path: １　□　登記事項証明書（法人）の写し>９　□　事務所・金庫等の鍵
+    context: ◇保険解約返戻金（⑬保険目録）
+  options:
+    該当: ◇保険解約返戻金（⑬保険目録）
+- id: kubun_kabaraikin
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 50
+    path: １　□　登記事項証明書（法人）の写し>９　□　事務所・金庫等の鍵
+    context: ◇過払金（⑭過払金目録）
+  options:
+    該当: ◇過払金（⑭過払金目録）
+- id: kubun_sosho
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 53
+    path: １　□　登記事項証明書（法人）の写し>９　□　事務所・金庫等の鍵
+    context: ◇係属中の訴訟（係属中の訴訟等一覧表）
+  options:
+    該当: ◇係属中の訴訟（係属中の訴訟等一覧表）
+- id: zentai_tokibo
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 2
+    path: １　□　登記事項証明書（法人）の写し
+    context: １　□　登記事項証明書（法人）の写し
+  options:
+    引継: □　登記事項証明書（法人）の写し
+- id: zentai_kessansho
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 3
+    path: １　□　登記事項証明書（法人）の写し>２　□○　決算書（少なくとも直近年度から
+    context: ２　□○　決算書（少なくとも直近年度から順に過去２年分，勘定科目明細書を含む）
+  options:
+    引継: □○　決算書（少なくとも直近年度から順に過去２年分，勘定科目明細書を含む）
+- id: zentai_zeimushinkoku
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 4
+    path: １　□　登記事項証明書（法人）の写し>３　□○　税務申告書控え（税務署の受付印
+    context: ３　□○　税務申告書控え（税務署の受付印のあるものを，少なくとも直近年度から順に過去２年分）
+  options:
+    引継: □○　税務申告書控え（税務署の受付印のあるものを，少なくとも直近年度から順に過去２年分）
+- id: zentai_saiken_somei
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 5
+    path: １　□　登記事項証明書（法人）の写し>４　□○　債権疎明資料（金銭消費貸借契約
+    context: ４　□○　債権疎明資料（金銭消費貸借契約書，債権額回答書，債権調査票等）
+  options:
+    引継: □○　債権疎明資料（金銭消費貸借契約書，債権額回答書，債権調査票等）
+- id: zentai_inkan
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 6
+    path: １　□　登記事項証明書（法人）の写し>５　□　印鑑（□代表者印　□銀行印）
+    context: ５　□　印鑑（□代表者印　□銀行印）
+  options:
+    引継: □　印鑑（□代表者印　□銀行印）
+- id: zentai_sokanjo
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 7
+    path: １　□　登記事項証明書（法人）の写し>６　□　総勘定元帳・現金出納帳
+    context: ６　□　総勘定元帳・現金出納帳
+  options:
+    引継: □　総勘定元帳・現金出納帳
+- id: zentai_yokin_suito
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 8
+    path: １　□　登記事項証明書（法人）の写し>７　□　預金出納帳
+    context: ７　□　預金出納帳
+  options:
+    引継: □　預金出納帳
+- id: zentai_tegata_cho
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 9
+    path: １　□　登記事項証明書（法人）の写し>８　□　手形帳・小切手帳
+    context: ８　□　手形帳・小切手帳
+  options:
+    引継: □　手形帳・小切手帳
+- id: zentai_kagi
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 10
+    path: １　□　登記事項証明書（法人）の写し>９　□　事務所・金庫等の鍵
+    context: ９　□　事務所・金庫等の鍵
+  options:
+    引継: □　事務所・金庫等の鍵
+- id: zentai_taishokukin_kitei
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 11
+    path: １　□　登記事項証明書（法人）の写し>９　□　事務所・金庫等の鍵
+    context: １０□○　退職金規程
+  options:
+    引継: □○　退職金規程
+- id: zentai_chingin_daicho
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 12
+    path: １　□　登記事項証明書（法人）の写し>９　□　事務所・金庫等の鍵
+    context: １１□○　賃金台帳
+  options:
+    引継: □○　賃金台帳
+- id: zentai_data_baitai
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 13
+    path: １　□　登記事項証明書（法人）の写し>９　□　事務所・金庫等の鍵
+    context: １２□　申立書及び添付書類等一式のデータを納めた媒体（CD･DVD･
+  options:
+    引継: □　申立書及び添付書類等一式のデータを納めた媒体（CD･DVD･
+- id: yochokin_tsucho
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 17
+    path: １　□　登記事項証明書（法人）の写し>９　□　事務所・金庫等の鍵
+    context: ②－１　□○　預金（貯金）通帳
+  options:
+    引継: □○　預金（貯金）通帳
+- id: yochokin_toza
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 18
+    path: １　□　登記事項証明書（法人）の写し>９　□　事務所・金庫等の鍵
+    context: ②－２　□○　当座勘定照合表
+  options:
+    引継: □○　当座勘定照合表
+- id: uketori_tegata_genbutsu
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 21
+    path: １　□　登記事項証明書（法人）の写し>９　□　事務所・金庫等の鍵
+    context: ③－１　□○　受取手形・小切手
+  options:
+    引継: □○　受取手形・小切手
+- id: urikake_daicho
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 24
+    path: １　□　登記事項証明書（法人）の写し>９　□　事務所・金庫等の鍵
+    context: ④－１　□　売掛台帳
+  options:
+    引継: □　売掛台帳
+- id: kashitsuke_keiyakusho
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 28
+    path: １　□　登記事項証明書（法人）の写し>９　□　事務所・金庫等の鍵
+    context: ⑥－１　□○　金銭消費貸借契約書
+  options:
+    引継: □○　金銭消費貸借契約書
+- id: fudosan_kenrisho
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 31
+    path: １　□　登記事項証明書（法人）の写し>９　□　事務所・金庫等の鍵
+    context: ⑦－１　□○　登記済権利証・登記識別情報通知書
+  options:
+    引継: □○　登記済権利証・登記識別情報通知書
+- id: fudosan_tokibo
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 32
+    path: １　□　登記事項証明書（法人）の写し>９　□　事務所・金庫等の鍵
+    context: ⑦－２　□○　登記事項証明書（不動産）
+  options:
+    引継: □○　登記事項証明書（不動産）
+- id: fudosan_hyoka_shomei
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 33
+    path: １　□　登記事項証明書（法人）の写し>９　□　事務所・金庫等の鍵
+    context: ⑦－３　□○　固定資産税評価証明書
+  options:
+    引継: □○　固定資産税評価証明書
+- id: jidosha_shaken
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 36
+    path: １　□　登記事項証明書（法人）の写し>９　□　事務所・金庫等の鍵
+    context: ⑩－１　□○　車検証
+  options:
+    引継: □○　車検証
+- id: jidosha_kagi
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 37
+    path: １　□　登記事項証明書（法人）の写し>９　□　事務所・金庫等の鍵
+    context: ⑩－２　□　自動車の鍵
+  options:
+    引継: □　自動車の鍵
+- id: yukashoken_shoken
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 41
+    path: １　□　登記事項証明書（法人）の写し>９　□　事務所・金庫等の鍵
+    context: ⑪－１　□○　会員権証書，株券，出資証券
+  options:
+    引継: □○　会員権証書，株券，出資証券
+- id: shikikin_keiyakusho
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 44
+    path: １　□　登記事項証明書（法人）の写し>９　□　事務所・金庫等の鍵
+    context: ⑫－１　□○　賃貸借契約書
+  options:
+    引継: □○　賃貸借契約書
+- id: hoken_shoken
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 47
+    path: １　□　登記事項証明書（法人）の写し>９　□　事務所・金庫等の鍵
+    context: ⑬－１　□○　保険証券
+  options:
+    引継: □○　保険証券
+- id: hoken_kaiyaku_shomei
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 48
+    path: １　□　登記事項証明書（法人）の写し>９　□　事務所・金庫等の鍵
+    context: ⑬－２　□○　解約返戻金証明書
+  options:
+    引継: □○　解約返戻金証明書
+- id: kabaraikin_goisho
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 51
+    path: １　□　登記事項証明書（法人）の写し>９　□　事務所・金庫等の鍵
+    context: ⑭－１　□○　合意書等
+  options:
+    引継: □○　合意書等
+- id: sosho_shiryo
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 54
+    path: １　□　登記事項証明書（法人）の写し>１　□　係属中の訴訟等に関する訴訟資料
+    context: １　□　係属中の訴訟等に関する訴訟資料
+  options:
+    引継: □　係属中の訴訟等に関する訴訟資料

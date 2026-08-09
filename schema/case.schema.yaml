@@ -138,8 +138,13 @@ properties:
         address: { type: string }
         kind:
           type: string
-          description: "債権の種類"
-          enum: [貸金, クレジット, 立替金, 保証, 求償, 公租公課, 家賃, 養育費, その他]
+          description: >-
+            債権の種類。管財分類（手形小切手・買掛金・リース・労働債権）は
+            債権者一覧表（0209-0216/0107-0114）のシート振り分けに使う。
+            貸金・クレジット・立替金・保証・求償は借入金シート、家賃・養育費・その他は
+            その他シートに振り分けられる
+          enum: [貸金, クレジット, 立替金, 保証, 求償, 公租公課, 家賃, 養育費,
+                 手形小切手, 買掛金, リース, 労働債権, その他]
         origin_date: { type: string, description: "借入開始・発生時期" }
         use: { type: string, description: "使途（生活費・事業資金等）" }
         principal: { type: [integer, "null"], description: "当初借入額（円）" }
@@ -150,13 +155,46 @@ properties:
         tax_kind:
           type: string
           description: "kind=公租公課 のときの税目（公租公課用一覧表 B1106 の行に対応）"
-          enum: [所得税, 住民税, 固定資産税, 事業税, 国民健康保険料, 年金保険料, 自動車税・軽自動車税, 相続税, その他]
+          enum: [所得税, 住民税, 固定資産税, 事業税, 消費税, 源泉所得税,
+                 法人税, 法人住民税, 国民健康保険料, 年金保険料, 社会保険料,
+                 自動車税・軽自動車税, 相続税, その他]
         tax_year: { type: string, description: "kind=公租公課 のときの年度（例 R5年度）" }
+        zip: { type: string, description: "郵便番号（管財の債権者一覧表で使用）" }
+        tel: { type: string, description: "電話番号" }
+        fax: { type: string, description: "FAX番号" }
+        tax_office: { type: string, description: "kind=公租公課 のときの所轄（例 堺税務署）" }
+        lease:
+          type: object
+          description: "kind=リース のときのリース物件情報（0213/0235 リース物件一覧表）"
+          properties:
+            item: { type: string, description: "リース物件（コピー機等）" }
+            location: { type: string, description: "物件の所在地" }
+            returned: { type: [boolean, "null"], description: "返還済みか" }
+            contract_doc: { type: [boolean, "null"], description: "契約書等の有無" }
+        labor:
+          type: object
+          description: "kind=労働債権 のときの内訳（0214 労働債権一覧表）"
+          properties:
+            period: { type: string, description: "給料未払期間（例 R7.1〜R7.2）" }
+            salary: { type: [integer, "null"], description: "①未払給料（円）" }
+            retirement_allowance: { type: [integer, "null"], description: "②退職手当（円）" }
+            dismissal_notice_allowance: { type: [integer, "null"], description: "③解雇予告手当（円）" }
+        tegata:
+          type: object
+          description: "kind=手形小切手 のときの手形情報（0211）"
+          properties:
+            number: { type: string, description: "手形小切手番号" }
+            endorsement: { type: string, description: "裏書関係" }
+            due: { type: string, description: "支払期日" }
         note: { type: string }
 
   assets:
     type: object
     additionalProperties: true
+    description: >-
+      財産。管財事件では各項目に recovery（回収見込額・円）と jiyuzaisan
+      （自由財産拡張申立の対象なら true）を付けられる（財産目録 0218-0234 の
+      回収見込額欄・自由財産拡張申立欄に対応。未指定の recovery は名目額と同額扱い）
     properties:
       cash: { type: [integer, "null"], description: "手持ち現金（円）" }
       deposits:
@@ -217,6 +255,7 @@ properties:
             deposit: { type: [integer, "null"], description: "差入金額（円）" }
             refund: { type: [integer, "null"], description: "返戻見込（円）" }
             arrears: { type: [integer, "null"], description: "滞納額（円）" }
+            restore_cost: { type: [integer, "null"], description: "原状回復費用等の見込額（円）" }
       loans_receivable:
         type: array
         description: "貸付金・求償金等（申立人が有する債権）"
@@ -245,6 +284,92 @@ properties:
           properties:
             against: { type: string }
             amount: { type: [integer, "null"] }
+      securities:
+        type: array
+        description: "有価証券（株式・出資金・ゴルフ会員権等。0226/財産目録⑨）"
+        items:
+          type: object
+          properties:
+            name: { type: string, description: "財産の内容" }
+            quantity: { type: string, description: "数量" }
+            cert_no: { type: string, description: "証券番号等" }
+            location: { type: string, description: "証券等の所在場所" }
+            value: { type: [integer, "null"], description: "簿価等（円）" }
+            recovery: { type: [integer, "null"], description: "回収見込額（円）" }
+      notes_receivable:
+        type: array
+        description: "受取手形・小切手（0227/財産目録⑩）"
+        items:
+          type: object
+          properties:
+            drawer: { type: string, description: "振出人" }
+            zip: { type: string }
+            address: { type: string }
+            number: { type: string, description: "手形小切手番号" }
+            endorser: { type: string, description: "裏書人" }
+            due: { type: string, description: "支払期日" }
+            face_value: { type: [integer, "null"], description: "額面（円）" }
+            recovery: { type: [integer, "null"] }
+      accounts_receivable:
+        type: array
+        description: "売掛金（0228/財産目録⑪。個人事業者）"
+        items:
+          type: object
+          properties:
+            debtor: { type: string, description: "債務者名" }
+            zip: { type: string }
+            address: { type: string }
+            amount: { type: [integer, "null"], description: "金額（円）" }
+            recovery: { type: [integer, "null"] }
+      inventory:
+        type: array
+        description: "在庫商品（0230/財産目録⑬。個人事業者）"
+        items:
+          type: object
+          properties:
+            name: { type: string, description: "品名" }
+            quantity: { type: string, description: "個数" }
+            location: { type: string, description: "所在場所" }
+            value: { type: [integer, "null"], description: "簿価等（円）" }
+            recovery: { type: [integer, "null"] }
+      machinery:
+        type: array
+        description: "機械・工具類（0231/財産目録⑭。個人事業者）"
+        items:
+          type: object
+          properties:
+            name: { type: string }
+            quantity: { type: string }
+            location: { type: string }
+            value: { type: [integer, "null"] }
+            recovery: { type: [integer, "null"] }
+      fixtures:
+        type: array
+        description: "什器備品（0232/財産目録⑮。個人事業者）"
+        items:
+          type: object
+          properties:
+            name: { type: string }
+            quantity: { type: string }
+            location: { type: string }
+            value: { type: [integer, "null"] }
+            recovery: { type: [integer, "null"] }
+      disposed:
+        type: array
+        description: >-
+          処分済財産（0234/財産目録⑰）。過去2年以内に処分した20万円以上の財産
+          （流動性の高い現金・預貯金・受取手形・売掛金・在庫は記載不要）。
+          menseki.asset_disposal・bank_analysis の資産処分検知と同源の情報
+        items:
+          type: object
+          properties:
+            name: { type: string, description: "財産の種類・内容" }
+            fictitious: { type: [boolean, "null"], description: "架空計上か（決算書事業者）" }
+            disposed: { type: [boolean, "null"], description: "処分したか" }
+            date: { type: string, description: "処分日" }
+            price: { type: [integer, "null"], description: "処分価格（円）" }
+            use: { type: string, description: "処分代金の使途・財産目録非掲載の理由" }
+            in_financials: { type: [boolean, "null"], description: "決算書記載か" }
       other:
         type: array
         items:
@@ -257,17 +382,100 @@ properties:
   corporation:
     type: object
     description: >-
-      管財（法人）事件用の債務者法人情報の骨格。法人用書式の登録時に項目を本格拡張する。
+      管財（法人）事件用の債務者法人情報（法人用書式 0103 申立書・0104 報告書に対応）。
       法人事件では applicant は代表者ではなく、債務者＝この法人（申立代理人は法人の代理人）
     additionalProperties: true
     properties:
       name: { type: string, description: "商号" }
-      address: { type: string, description: "本店所在地" }
-      representative: { type: string, description: "代表者の資格・氏名" }
+      kana: { type: string, description: "商号のふりがな" }
+      address: { type: string, description: "本店所在地（登記）" }
+      head_office_zip: { type: string, description: "本店所在地の郵便番号" }
+      registered_as_actual: { type: [boolean, "null"], description: "本店が登記事項証明書記載のとおりか" }
+      actual_office: { type: string, description: "登記と異なる実際の主たる事務所（あれば）" }
+      representative: { type: string, description: "代表者の資格・氏名（例 代表取締役　甲野太郎）" }
+      representative_address: { type: string, description: "代表者の現住所（0104項目16）" }
+      representative_tel: { type: string, description: "代表者の連絡先電話番号" }
+      representative_mobile: { type: string, description: "代表者の携帯電話番号" }
       established: { type: string, description: "設立年月" }
-      business_description: { type: string, description: "事業内容" }
-      employees: { type: [integer, "null"], description: "従業員数（直近）" }
+      business_description: { type: string, description: "申立て前に現実に行っていた事業の内容（0104項目2）" }
       capital: { type: [integer, "null"], description: "資本金（円）" }
+      shareholders: { type: string, description: "株主構成の概要" }
+      officers:
+        type: array
+        description: "役員（代表者以外も）"
+        items:
+          type: object
+          properties:
+            name: { type: string }
+            position: { type: string, description: "役職（取締役・監査役等）" }
+            note: { type: string, description: "就任経緯・報酬・法人との貸借等" }
+      offices:
+        type: array
+        description: "営業所・事務所・工場・倉庫・社宅・駐車場等（0104項目3。[0]=本店）"
+        items:
+          type: object
+          properties:
+            name: { type: string, description: "名称（本店・○○倉庫等）" }
+            address: { type: string }
+            post_office: { type: string, description: "取扱郵便局名（局名のみ）" }
+            owned: { type: [boolean, "null"], description: "自己所有か（false=賃借）" }
+            rent: { type: [integer, "null"], description: "賃料月額（円）" }
+            deposit_refund: { type: [integer, "null"], description: "契約上の返戻金（円）" }
+            vacated: { type: [boolean, "null"], description: "明渡完了か" }
+            vacate_due: { type: string, description: "明渡未了の場合の明渡予定日" }
+            restore_cost: { type: [integer, "null"], description: "明渡・原状回復費用見込額（円）" }
+            estimate_submitted: { type: [boolean, "null"], description: "見積書の写しを提出したか" }
+      employees:
+        type: object
+        description: "従業員関係（0104項目4）"
+        properties:
+          count: { type: [integer, "null"], description: "総数" }
+          dismissed: { type: [boolean, "null"], description: "解雇したか" }
+          dismissal_notice_date: { type: string, description: "解雇通知日（例 R7.2.28）" }
+          undismissed_count: { type: [integer, "null"], description: "未解雇の人数" }
+          dismissal_due: { type: string, description: "解雇予定日" }
+          rishokuhyo_done: { type: [boolean, "null"], description: "離職票を全員に交付済みか" }
+          koyohoken_done: { type: [boolean, "null"], description: "雇用保険資格喪失届を提出済みか" }
+          shakaihoken_done: { type: [boolean, "null"], description: "社会保険資格喪失届を提出済みか" }
+          gensen_done: { type: [boolean, "null"], description: "源泉徴収票を全員に交付済みか" }
+          juminzei_done: { type: [boolean, "null"], description: "住民税の異動届を提出済みか" }
+          unpaid_wages: { type: [boolean, "null"], description: "未払賃金の有無（労働債権は creditors に）" }
+      union:
+        type: object
+        description: "労働組合（0104項目4(8)）"
+        properties:
+          exists: { type: [boolean, "null"] }
+          name: { type: string }
+          office: { type: string, description: "主たる事務所所在地" }
+          members: { type: [integer, "null"] }
+          representative: { type: string, description: "組合代表者氏名" }
+          majority_rep: { type: string, description: "労組が無い場合の従業員過半数代表者の氏名" }
+          majority_rep_address: { type: string }
+      shiharai_teishi:
+        type: object
+        description: "支払停止の状況（0104項目5）"
+        properties:
+          tegata1_date: { type: string, description: "1回目の手形不渡（見込み含む）日" }
+          tegata2_date: { type: string, description: "2回目の手形不渡日" }
+          heiten_date: { type: string, description: "閉店・廃業の日" }
+      licenses:
+        type: object
+        description: "事業の免許・登録・許可（0104項目6）"
+        properties:
+          exists: { type: [boolean, "null"] }
+          authority: { type: string, description: "所轄行政庁・機関の名称" }
+          authority_address: { type: string }
+      bank_accounts_closed:
+        type: string
+        description: "相殺予定以外の預金口座の解約状況（0104項目10）: 終了した／解約予定／未了口座が残る"
+        enum: [終了した, 解約予定, 未了口座が残る]
+      bank_accounts_close_due: { type: string, description: "解約予定の場合の終了予定日" }
+      hasan_gennin:
+        type: string
+        description: >-
+          破産原因が生じた事情（事業不振の経緯・債務増大の理由）と粉飾決算の有無
+          （0104項目18）。書式に記入欄が無いため別紙として生成・添付する本文
+      funshoku: { type: [boolean, "null"], description: "粉飾決算の有無" }
       fiscal:
         type: array
         description: "直近数期の決算概要"
@@ -420,6 +628,37 @@ properties:
       past_saisei_ninka: { $ref: "#/$defs/umu_setsumei", description: "7年以内の個人再生の認可決定の確定（申立書参考事項4・同10号）" }
       sairyo_jijo: { type: string, description: "裁量免責され得る事情（第３の７）の本文" }
       saiken_chosa_hanron: { type: string, description: "債権調査票の意見への反論（第３の８）" }
+
+  lawsuits:
+    type: array
+    description: >-
+      係属中の訴訟等（支払督促・仮差押え・仮処分・競売・保全処分・民事執行を含む）。
+      係属中の訴訟等一覧表（0236/0133）と管財補充報告書項目5に対応
+    items:
+      type: object
+      required: [kind]
+      properties:
+        kind: { type: string, description: "事件の種類（貸金請求訴訟・支払督促・給料差押え等）" }
+        counterparty: { type: string, description: "相手方" }
+        court: { type: string, description: "係属裁判所" }
+        case_no: { type: string, description: "事件番号" }
+        note: { type: string, description: "訴訟内容・進行状況等" }
+
+  pre_bankruptcy_disposals:
+    type: array
+    description: >-
+      倒産直前の処分行為等（否認権行使の判断材料。否認権の成否に疑問がある場合も記載）。
+      倒産直前の処分行為等一覧表（0237/0134）と管財補充報告書項目6に対応。
+      bank_analysis の資産処分・偏頗弁済疑いの確定版
+    items:
+      type: object
+      required: [counterparty]
+      properties:
+        counterparty: { type: string, description: "相手方" }
+        date: { type: string, description: "行為時期" }
+        kind: { type: string, description: "行為類型（弁済・資産譲渡・担保設定等）" }
+        price: { type: [integer, "null"], description: "処分価格（円）" }
+        note: { type: string, description: "参考となるべき事項" }
 
   bank_analysis:
     type: array

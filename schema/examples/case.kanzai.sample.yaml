@@ -1,0 +1,306 @@
+# 架空事例（管財（自然人）用のテスト・スモークフィル・evals 用）。実在の人物・法人とは
+# 関係ありません。乙山ストア事例を「個人事業（食品小売店）を営んでいた自然人の管財事件」に
+# 置き換えて、管財書式（0203〜0240）の全シートに値が入るよう資産・債権を拡張したもの。
+meta:
+  case_id: sample-otsuyama-kanzai
+  court: osaka
+  proc_type: 管財（自然人）
+  applicant:
+    name: 甲野太郎
+    kana: こうの　たろう
+    birth: S63.3.10
+    address: 〒590-0000 大阪府堺市堺区甲町１丁２番３号
+    honseki: 住民票のとおり
+    phone: 090-0000-0000
+  court_branch: 堺支部
+  attorneys:
+    - name: 乙川一郎
+      office: 丙山法律事務所
+      address: 〒590-0000 大阪府堺市堺区丙町４丁５番６号
+      phone: 072-000-0000
+      fax: 072-000-0001
+  seikatsu_hogo: false
+  junin_tsuchi_date: R7.3.10
+  filing_date: R7.9.1
+  shiharai_funo:
+    date: R7.1
+    yakujo_monthly: null
+
+career:
+  - period: { start: H22.6, end: R7.2 }
+    employment_type: 自営
+    employer: 乙山ストア（個人事業・食品小売店）
+    position: 店主
+    monthly_income: 350000
+    retirement_pay: false
+  - period: { start: R7.2, end: 現在 }
+    employment_type: 勤め
+    employer: 株式会社丁原食品（配送員）
+    position: 配送員
+    monthly_income: 200000
+    retirement_pay: false
+
+family:
+  marriages:
+    - { kind: 婚姻, date: H24.11, note: 妻・甲野花子と婚姻 }
+  members:
+    - { relation: 妻, name: 甲野花子, age: 36, occupation: パート, income: 80000 }
+    - { relation: 長女, name: 甲野一美, age: 10, occupation: 小学生, income: null }
+  inheritance: []
+  housing:
+    kind: 賃貸
+    rent: 65000
+    note: 賃借人は申立人本人
+
+business:
+  is_business_owner: true
+  trade_name: 乙山ストア
+  description: 食料品小売業（個人経営の食品スーパー）
+  period: { start: H22.6, end: R7.2 }
+  employees:
+    exists: true
+    unpaid_wages: true
+    unpaid_detail: 元従業員１名に未払給料２６万円・解雇予告手当１２万円（R7.1〜R7.2分）
+  closed: true
+  closed_date: R7.2.28
+
+creditors:
+  - no: 1
+    name: 株式会社戊田銀行
+    zip: "590-0001"
+    address: 大阪府堺市堺区戊町１番１号
+    tel: 072-100-0001
+    kind: 貸金
+    origin_date: H28.4
+    use: 事業の運転資金借入
+    principal: 20000000
+    balance: 14800000
+    last_payment: R7.1
+    guarantor: true
+    secured: false
+    note: 保証人は妻・甲野花子
+  - no: 2
+    name: 己川商事株式会社
+    zip: "590-0002"
+    address: 大阪府堺市中区己町２番２号
+    tel: 072-100-0002
+    kind: 買掛金
+    origin_date: R6.11
+    use: 商品仕入代金
+    principal: null
+    balance: 1850000
+    last_payment: R7.1
+  - no: 3
+    name: 庚山リース株式会社
+    zip: "541-0003"
+    address: 大阪府大阪市中央区庚町３番３号
+    tel: 06-100-0003
+    kind: リース
+    origin_date: R3.5
+    use: 店舗POSレジ・冷蔵ケースのリース
+    principal: null
+    balance: 960000
+    last_payment: R7.1
+    lease:
+      item: POSレジ１台・冷蔵ショーケース２台
+      location: 大阪府堺市西区浜寺公園町２－３４（旧店舗）
+      returned: false
+      contract_doc: true
+  - no: 4
+    name: 丁野次郎（元従業員）
+    zip: "590-0004"
+    address: 大阪府堺市堺区丁町４番４号
+    kind: 労働債権
+    origin_date: R7.1
+    use: 未払給料
+    balance: 380000
+    labor:
+      period: R7.1〜R7.2
+      salary: 260000
+      dismissal_notice_allowance: 120000
+  - no: 5
+    name: 壬田物産株式会社
+    zip: "541-0005"
+    address: 大阪府大阪市中央区壬町５番５号
+    kind: 手形小切手
+    origin_date: R6.12
+    use: 仕入代金の支払のため振り出した約束手形
+    balance: 750000
+    tegata:
+      number: AB１２３４５６
+      due: R7.3.31
+  - no: 6
+    name: 辛島市（固定資産税）
+    zip: "590-0006"
+    address: 大阪府堺市辛区辛町４番４号
+    kind: 公租公課
+    tax_kind: 固定資産税
+    tax_year: R5年度
+    tax_office: 辛島市税事務所
+    origin_date: R5年度
+    use: 固定資産税（旧店舗設備）
+    balance: 320000
+    last_payment: R6.5
+  - no: 7
+    name: 堺税務署（消費税）
+    zip: "590-0007"
+    address: 大阪府堺市堺区税町１番１号
+    kind: 公租公課
+    tax_kind: 消費税
+    tax_year: R6年度
+    tax_office: 堺税務署
+    use: 消費税・地方消費税（R6年度分）
+    balance: 410000
+
+assets:
+  cash: 350000
+  deposits:
+    - { bank: 戊田銀行, branch: 堺支店, account_type: 普通, account_no: "1234567", balance: 128000, as_of: R7.7.31 }
+    - { bank: 壬水信用金庫, branch: 中央支店, account_type: 普通, account_no: "7654321", balance: 4200, as_of: R7.7.31 }
+  insurance:
+    - { company: 癸空生命, kind: 終身保険, policy_no: "T-111222", surrender_value: 180000, jiyuzaisan: true }
+  vehicles:
+    - { name: 軽自動車（子丑号）, first_registration: H29, registration_no: 堺580あ1234,
+        location: 自宅駐車場, value: 150000, loan_balance: 0, jiyuzaisan: true }
+  real_estate: []
+  retirement_expectation: 0
+  tsumitate: []
+  shikikin:
+    - { property: 自宅（賃借）, start: R7.2, deposit: 130000, refund: null, arrears: 0, jiyuzaisan: true }
+  loans_receivable:
+    - { debtor: 癸山三郎（知人）, amount: 200000, date: R5.6, recoverable: false,
+        reason: 連絡が取れず回収の見込みなし }
+  upcoming: []
+  overpayment: []
+  securities:
+    - { name: 庚山ゴルフクラブ会員権, quantity: １口, cert_no: "G-0123", location: 自宅,
+        value: 100000, recovery: 50000 }
+  notes_receivable: []
+  accounts_receivable:
+    - { debtor: 乙原食堂（取引先）, zip: "590-0008", address: 大阪府堺市堺区乙原町８番８号,
+        amount: 350000, recovery: 200000 }
+    - { debtor: 丙沢弁当株式会社, zip: "590-0009", address: 大阪府堺市北区丙沢町９番９号,
+        amount: 150000, recovery: 0 }
+  inventory: []
+  machinery: []
+  fixtures:
+    - { name: 店舗陳列棚一式, quantity: ６台, location: 旧店舗（明渡済・倉庫保管）,
+        value: 120000, recovery: 30000 }
+  disposed:
+    - { name: 業務用冷凍庫, disposed: true, date: R7.1.20, price: 250000,
+        use: 従業員の未払給料の一部に充当, in_financials: true }
+  other: []
+
+household:
+  - month: R7.6
+    income: { 給与（申立人分）: 200000, 給与（配偶者分）: 80000 }
+    expense: { 住居費: 65000, 食費: 60000, 電気代: 8000, ガス代: 5000, 水道代: 5000,
+               携帯電話料金: 8000, その他通信費: 4000, 日用品代: 10000, 保険料: 8000,
+               教育費: 15000, 交通費: 10000, 医療費: 5000, 被服費: 5000, 娯楽費: 10000 }
+    note: ""
+  - month: R7.7
+    income: { 給与（申立人分）: 200000, 給与（配偶者分）: 80000 }
+    expense: { 住居費: 65000, 食費: 62000, 電気代: 7000, ガス代: 4000, 水道代: 5000,
+               携帯電話料金: 8000, その他通信費: 4000, 日用品代: 9000, 保険料: 8000,
+               教育費: 15000, 交通費: 10000, 医療費: 3000, 被服費: 8000, 娯楽費: 10000 }
+    note: ""
+
+lawsuits:
+  - kind: 貸金請求訴訟
+    counterparty: 株式会社戊田銀行
+    court: 大阪地方裁判所堺支部
+    case_no: 令和７年（ワ）第１２３号
+    note: 第１回口頭弁論期日は未指定
+  - kind: 支払督促
+    counterparty: 己川商事株式会社
+    court: 堺簡易裁判所
+    case_no: 令和７年（ロ）第４５６号
+    note: 督促異議申立て済み
+
+pre_bankruptcy_disposals:
+  - counterparty: 丁野次郎（元従業員）
+    date: R7.1.25
+    kind: 弁済（未払給料の一部支払）
+    price: 250000
+    note: 業務用冷凍庫の売却代金を充当。労働債権への弁済であり否認権の成否に疑問があるが記載
+  - counterparty: 取引先（乙原食堂）
+    date: R7.1.20
+    kind: 資産譲渡（業務用冷凍庫の売却）
+    price: 250000
+    note: 相場相当額での売却
+
+timeline:
+  - date: H22.6
+    event: 個人事業「乙山ストア」開業
+    detail: 堺市内で食品スーパー１店舗を開業した。
+  - date: R4後半ころ
+    event: 競合出店と物価高騰で売上減少
+    detail: 近隣に大型スーパーが出店し客足が減少。仕入価格・光熱費の高騰も重なり資金繰りが悪化した。
+  - date: R6.4
+    event: 借入のリスケジュール
+    detail: 戊田銀行に対する借入の返済条件変更（リスケジュール）を受けたが、売上は回復しなかった。
+  - date: R7.1
+    event: 支払停止
+    detail: 資金繰りが尽き、仕入代金・リース料の支払を停止した。
+  - date: R7.2
+    event: 廃業・再就職
+    detail: 店舗を閉鎖して廃業し、従業員３名を解雇。株式会社丁原食品に配送員として就職した。
+  - date: R7.3
+    event: 弁護士に破産申立てを委任
+    detail: 代理人弁護士に破産申立てを委任し受任通知を発送した。
+
+menseki:
+  rouhi:
+    ギャンブル: { exists: false }
+    飲食飲酒: { exists: false }
+    投資投機: { exists: false }
+    商品購入: { exists: false }
+  asset_disposal:
+    - { date: R7.1.20, item: 業務用冷凍庫, price: 250000, note: 未払給料の支払に充当 }
+  henpa:
+    exists: true
+    detail: 廃業直前に元従業員へ未払給料の一部２５万円を支払った（労働債権への弁済）。
+  sajutsu: { exists: false, detail: "" }
+  past_menseki: { exists: false, detail: "" }
+  past_saisei_ninka: { exists: false, detail: "" }
+  sairyo_jijo: >-
+    本件の負債は個人事業の破綻によるもので、浪費や射幸行為によるものではない。
+    廃業に際しては従業員の再就職支援と労働債権の一部弁済を行い、受任後は家計を見直して
+    誠実に手続に協力している。
+  saiken_chosa_hanron: ""
+
+bank_analysis: []
+
+sources:
+  "meta.junin_tsuchi_date": 受任通知控え
+  "career[0]": 確定申告書控え（R4〜R6）・面談メモp1
+  "career[1]": 給与明細（R7.3〜R7.7）
+  "business": 確定申告書控え・面談メモp1
+  "family.members[0]": 面談メモp1
+  "family.members[1]": 面談メモp1
+  "family.housing": 賃貸借契約書
+  "creditors[0]": 債権調査票（戊田銀行）p1
+  "creditors[1]": 請求書（己川商事）
+  "creditors[2]": リース契約書（庚山リース）
+  "creditors[3]": 賃金台帳・本人聴取
+  "creditors[4]": 手形帳控え
+  "creditors[5]": 納税通知書（辛島市）
+  "creditors[6]": 督促状（堺税務署）
+  "assets.cash": 面談メモp2（引継予定現金として保管中）
+  "assets.deposits[0]": 通帳（戊田銀行）
+  "assets.deposits[1]": 通帳（壬水信用金庫）
+  "assets.insurance[0]": 解約返戻金証明書
+  "assets.vehicles[0]": 車検証・査定書
+  "assets.shikikin[0]": 賃貸借契約書
+  "assets.loans_receivable[0]": 借用書・面談メモp2
+  "assets.securities[0]": 会員権証書
+  "assets.accounts_receivable[0]": 売掛台帳
+  "assets.accounts_receivable[1]": 売掛台帳
+  "assets.fixtures[0]": 資産台帳・査定書
+  "assets.disposed[0]": 売買契約書・面談メモp3
+  "lawsuits[0]": 訴状（送達分）
+  "lawsuits[1]": 支払督促正本
+  "pre_bankruptcy_disposals[0]": 賃金台帳・振込記録
+  "pre_bankruptcy_disposals[1]": 売買契約書
+  "household[0]": 家計簿メモ・領収書（R7.6）
+  "household[1]": 家計簿メモ・領収書（R7.7）

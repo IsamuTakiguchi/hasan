@@ -1,0 +1,381 @@
+form: hikitsugi-shiryo-ichiran
+court: osaka
+version: '4.0'
+doc_type: docx
+notes:
+- w14:paraId 無し。context＋idx で解決。
+- ◇区分ヘッダ（→◆）は財産目録に当該財産が存在する場合にチェック（0218-0234 と連動）。
+- □個別資料（→☑）は管財人に引き継ぐと**代理人が決めたものだけ**チェック。判断がついていない資料は値を渡さず questions.md（引継予定の確認）へ。
+- △（査定書・請求書控え等）は任意資料・チェック欄なし。
+- 「５　印鑑（□実印　□銀行印）」の内訳□2つは未定義（必要なら手書き）。
+- 下線付きの資料（通帳・車検証・権利証等）は代理人が保管して引継ぎ（書式の注記）。
+fields:
+- id: kubun_yochokin
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 14
+    path: １　□○　税務申告書控え（税務署の受付印>９　□　事務所・金庫等の鍵
+    context: ◇預貯金・積立金（②預貯金・積立金目録）
+  options:
+    該当: ◇預貯金・積立金（②預貯金・積立金目録）
+- id: kubun_hoken
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 18
+    path: １　□○　税務申告書控え（税務署の受付印>９　□　事務所・金庫等の鍵
+    context: ◇保険解約返戻金（③保険目録）
+  options:
+    該当: ◇保険解約返戻金（③保険目録）
+- id: kubun_jidosha
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 22
+    path: １　□○　税務申告書控え（税務署の受付印>９　□　事務所・金庫等の鍵
+    context: ◇自動車（④自動車目録）
+  options:
+    該当: ◇自動車（④自動車目録）
+- id: kubun_shikikin
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 27
+    path: １　□○　税務申告書控え（税務署の受付印>９　□　事務所・金庫等の鍵
+    context: ◇賃借保証金・敷金（⑤賃借保証金・敷金目録）
+  options:
+    該当: ◇賃借保証金・敷金（⑤賃借保証金・敷金目録）
+- id: kubun_taishokukin
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 30
+    path: １　□○　税務申告書控え（税務署の受付印>９　□　事務所・金庫等の鍵
+    context: ◇退職金（⑥退職金目録）
+  options:
+    該当: ◇退職金（⑥退職金目録）
+- id: kubun_kabaraikin
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 34
+    path: １　□○　税務申告書控え（税務署の受付印>９　□　事務所・金庫等の鍵
+    context: ◇過払金（⑦過払金目録）
+  options:
+    該当: ◇過払金（⑦過払金目録）
+- id: kubun_fudosan
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 37
+    path: １　□○　税務申告書控え（税務署の受付印>９　□　事務所・金庫等の鍵
+    context: ◇不動産（⑧不動産目録）
+  options:
+    該当: ◇不動産（⑧不動産目録）
+- id: kubun_yukashoken
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 43
+    path: １　□○　税務申告書控え（税務署の受付印>９　□　事務所・金庫等の鍵
+    context: ◇有価証券（⑨有価証券目録）
+  options:
+    該当: ◇有価証券（⑨有価証券目録）
+- id: kubun_uketori_tegata
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 46
+    path: １　□○　税務申告書控え（税務署の受付印>９　□　事務所・金庫等の鍵
+    context: ◇受取手形・小切手（⑩受取手形・小切手目録）
+  options:
+    該当: ◇受取手形・小切手（⑩受取手形・小切手目録）
+- id: kubun_urikakekin
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 49
+    path: １　□○　税務申告書控え（税務署の受付印>９　□　事務所・金庫等の鍵
+    context: ◇売掛金（⑪売掛金目録）
+  options:
+    該当: ◇売掛金（⑪売掛金目録）
+- id: kubun_kashitsukekin
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 53
+    path: １　□○　税務申告書控え（税務署の受付印>９　□　事務所・金庫等の鍵
+    context: ◇貸付金（⑫貸付金目録）
+  options:
+    該当: ◇貸付金（⑫貸付金目録）
+- id: kubun_sosho
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 56
+    path: １　□○　税務申告書控え（税務署の受付印>９　□　事務所・金庫等の鍵
+    context: ◇係属中の訴訟
+  options:
+    該当: ◇係属中の訴訟
+- id: zentai_zeimushinkoku
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 2
+    path: １　□○　税務申告書控え（税務署の受付印
+    context: １　□○　税務申告書控え（税務署の受付印のあるものを，少なくとも直近年度から順に過去２年分）
+  options:
+    引継: □○　税務申告書控え（税務署の受付印のあるものを，少なくとも直近年度から順に過去２年分）
+- id: zentai_kazei_shomei
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 3
+    path: １　□○　税務申告書控え（税務署の受付印>２　□○　課税証明書・源泉徴収票等
+    context: ２　□○　課税証明書・源泉徴収票等
+  options:
+    引継: □○　課税証明書・源泉徴収票等
+- id: zentai_saiken_somei
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 4
+    path: １　□○　税務申告書控え（税務署の受付印>３　□○　債権疎明資料（金銭消費貸借契約
+    context: ３　□○　債権疎明資料（金銭消費貸借契約書，債権額回答書，債権調査票）
+  options:
+    引継: □○　債権疎明資料（金銭消費貸借契約書，債権額回答書，債権調査票）
+- id: zentai_joshinsho
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 5
+    path: １　□○　税務申告書控え（税務署の受付印>４　□○　債権調査に関する上申書
+    context: ４　□○　債権調査に関する上申書
+  options:
+    引継: □○　債権調査に関する上申書
+- id: zentai_inkan
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 6
+    path: １　□○　税務申告書控え（税務署の受付印>５　□　印鑑（□実印　□銀行印）
+    context: ５　□　印鑑（□実印　□銀行印）
+  options:
+    引継: □　印鑑（□実印　□銀行印）
+- id: zentai_sokanjo
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 7
+    path: １　□○　税務申告書控え（税務署の受付印>６　□　総勘定元帳・現金出納帳
+    context: ６　□　総勘定元帳・現金出納帳
+  options:
+    引継: □　総勘定元帳・現金出納帳
+- id: zentai_yokin_suito
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 8
+    path: １　□○　税務申告書控え（税務署の受付印>７　□　預金出納帳
+    context: ７　□　預金出納帳
+  options:
+    引継: □　預金出納帳
+- id: zentai_tegata_cho
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 9
+    path: １　□○　税務申告書控え（税務署の受付印>８　□　手形帳・小切手帳
+    context: ８　□　手形帳・小切手帳
+  options:
+    引継: □　手形帳・小切手帳
+- id: zentai_kagi
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 10
+    path: １　□○　税務申告書控え（税務署の受付印>９　□　事務所・金庫等の鍵
+    context: ９　□　事務所・金庫等の鍵
+  options:
+    引継: □　事務所・金庫等の鍵
+- id: zentai_chingin_daicho
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 11
+    path: １　□○　税務申告書控え（税務署の受付印>９　□　事務所・金庫等の鍵
+    context: １０□○　賃金台帳
+  options:
+    引継: □○　賃金台帳
+- id: zentai_data_baitai
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 12
+    path: １　□○　税務申告書控え（税務署の受付印>９　□　事務所・金庫等の鍵
+    context: １１□　申立書及び添付書類等一式のデータを納めた媒体（CD･DVD･USBメモリー等。電子メールによる送付も可。）
+  options:
+    引継: □　申立書及び添付書類等一式のデータを納めた媒体（CD･DVD･USBメモリー等。電子メールによる送付も可。）
+- id: yochokin_tsucho
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 15
+    path: １　□○　税務申告書控え（税務署の受付印>９　□　事務所・金庫等の鍵
+    context: ②－１　□○　預金（貯金）通帳
+  options:
+    引継: □○　預金（貯金）通帳
+- id: yochokin_toza
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 16
+    path: １　□○　税務申告書控え（税務署の受付印>９　□　事務所・金庫等の鍵
+    context: ②－２　□○　当座勘定照合表
+  options:
+    引継: □○　当座勘定照合表
+- id: hoken_shoken
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 19
+    path: １　□○　税務申告書控え（税務署の受付印>９　□　事務所・金庫等の鍵
+    context: ③－１　□○　保険証券
+  options:
+    引継: □○　保険証券
+- id: hoken_kaiyaku_shomei
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 20
+    path: １　□○　税務申告書控え（税務署の受付印>９　□　事務所・金庫等の鍵
+    context: ③－２　□○　解約返戻金証明書
+  options:
+    引継: □○　解約返戻金証明書
+- id: jidosha_shaken
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 23
+    path: １　□○　税務申告書控え（税務署の受付印>９　□　事務所・金庫等の鍵
+    context: ④－１　□○　車検証
+  options:
+    引継: □○　車検証
+- id: jidosha_kagi
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 24
+    path: １　□○　税務申告書控え（税務署の受付印>９　□　事務所・金庫等の鍵
+    context: ④－２　□　自動車の鍵
+  options:
+    引継: □　自動車の鍵
+- id: shikikin_keiyakusho
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 28
+    path: １　□○　税務申告書控え（税務署の受付印>９　□　事務所・金庫等の鍵
+    context: ⑤－１　□○　賃貸借契約書
+  options:
+    引継: □○　賃貸借契約書
+- id: taishokukin_kitei
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 31
+    path: １　□○　税務申告書控え（税務署の受付印>９　□　事務所・金庫等の鍵
+    context: ⑥－１　□○　退職金規程
+  options:
+    引継: □○　退職金規程
+- id: taishokukin_keisansho
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 32
+    path: １　□○　税務申告書控え（税務署の受付印>９　□　事務所・金庫等の鍵
+    context: ⑥－２　□○　退職金計算書
+  options:
+    引継: □○　退職金計算書
+- id: kabaraikin_goisho
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 35
+    path: １　□○　税務申告書控え（税務署の受付印>９　□　事務所・金庫等の鍵
+    context: ⑦－１　□○　合意書等
+  options:
+    引継: □○　合意書等
+- id: fudosan_kenrisho
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 38
+    path: １　□○　税務申告書控え（税務署の受付印>９　□　事務所・金庫等の鍵
+    context: ⑧－１　□○　登記済権利証・登記識別情報通知書
+  options:
+    引継: □○　登記済権利証・登記識別情報通知書
+- id: fudosan_tokibo
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 39
+    path: １　□○　税務申告書控え（税務署の受付印>９　□　事務所・金庫等の鍵
+    context: ⑧－２　□○　登記事項証明書（不動産）
+  options:
+    引継: □○　登記事項証明書（不動産）
+- id: fudosan_hyoka_shomei
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 40
+    path: １　□○　税務申告書控え（税務署の受付印>９　□　事務所・金庫等の鍵
+    context: ⑧－３　□○　固定資産税評価証明書
+  options:
+    引継: □○　固定資産税評価証明書
+- id: yukashoken_shoken
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 44
+    path: １　□○　税務申告書控え（税務署の受付印>９　□　事務所・金庫等の鍵
+    context: ⑨－１　□○　会員権証書，株券，出資証券
+  options:
+    引継: □○　会員権証書，株券，出資証券
+- id: uketori_tegata_genbutsu
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 47
+    path: １　□○　税務申告書控え（税務署の受付印>９　□　事務所・金庫等の鍵
+    context: ⑩－１　□○　受取手形・小切手
+  options:
+    引継: □○　受取手形・小切手
+- id: urikake_daicho
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 50
+    path: １　□○　税務申告書控え（税務署の受付印>９　□　事務所・金庫等の鍵
+    context: ⑪－１　□　売掛台帳
+  options:
+    引継: □　売掛台帳
+- id: kashitsuke_keiyakusho
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 54
+    path: １　□○　税務申告書控え（税務署の受付印>９　□　事務所・金庫等の鍵
+    context: ⑫－１　□○　金銭消費貸借契約書
+  options:
+    引継: □○　金銭消費貸借契約書
+- id: sosho_shiryo
+  kind: checkbox
+  anchor:
+    paraId: ''
+    idx: 57
+    path: １　□○　税務申告書控え（税務署の受付印>１　□　係属中の訴訟等に関する訴訟資料
+    context: １　□　係属中の訴訟等に関する訴訟資料
+  options:
+    引継: □　係属中の訴訟等に関する訴訟資料

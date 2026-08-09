@@ -193,7 +193,8 @@ def main():
     args = ap.parse_args()
 
     case = yaml.safe_load(open(args.case, encoding="utf-8"))
-    vdir = None if args.generic else xlsxlib.resolve_form(args.court, "kakei-shushi")
+    vdir = None if args.generic else xlsxlib.resolve_form(
+        args.court, "kakei-shushi", proc=xlsxlib.proc_of_case(case))
     if vdir is None and not args.generic:
         print(xlsxlib.registration_guidance(args.court, "kakei-shushi", "家計収支表"))
         sys.exit(3)

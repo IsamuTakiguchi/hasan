@@ -1,0 +1,80 @@
+# schema/examples/case.sample.yaml（架空事例）から hasan-houkokusho の転記ルールで
+# 組み立てた fill 値の見本。スモークフィル（登録時検証・回帰テスト）に使う。
+#   python3 scripts/build/fill_docx.py \
+#     --template courts/osaka/forms/houkokusho/v4.1/template.docx \
+#     --fillmap  courts/osaka/forms/houkokusho/v4.1/fillmap.yaml \
+#     --values   courts/osaka/forms/houkokusho/v4.1/examples/values.sample.yaml \
+#     --output   <出力先>.docx
+fields:
+  hokoku_date: 令和７年９月１日
+  sign_dairinin: 弁護士　乙　川　一　郎
+  sign_moushitatenin: 甲　野　太　郎
+
+  # 職歴は新しい順（1組目=現職）。日付は短縮元号、1セル1行
+  shokureki1_start: R7.2～
+  shokureki1_shubetsu: 勤め
+  shokureki1_gekkyu: "200,000"
+  shokureki1_shugyosaki: 株式会社丁原食品（配送員）
+  shokureki2_start: H22.6～
+  shokureki2_end: R7.2
+  shokureki2_shubetsu: 法人代表者
+  shokureki2_gekkyu: "350,000"
+  shokureki2_shugyosaki: 株式会社乙山ストア（代表取締役）
+
+  konin1_jiki: H24.11
+  konin1_aite: 甲野花子
+  konin1_jiyu: 婚姻
+
+  kazoku1_shimei: 甲野花子
+  kazoku1_zokugara: 妻
+  kazoku1_nenrei: "36"
+  kazoku1_shokugyo: パート
+  kazoku1_dokyo: 同
+  kazoku1_gesshu: "80,000"
+  kazoku2_shimei: 甲野一美
+  kazoku2_zokugara: 長女
+  kazoku2_nenrei: "10"
+  kazoku2_shokugyo: 小学生
+  kazoku2_dokyo: 同
+
+  jukyo: 民間賃貸住宅
+
+  shakkin_riyu: [事業経営破綻, 債務保証]
+  kikkake: [収入以上の返済金額]
+  shiharai_funo: ["７", "１", ""]        # 令和7年1月。約定返済額は資料なし→空欄
+  junin_tsuchi_date: ["７", "３", "１０"]
+
+  gutaiteki_jijo:
+    - date: H22.6
+      text: 申立人は，株式会社乙山ストアを設立して代表取締役に就任し，堺市内で食品スーパー１店舗を経営してきた。
+    - date: R4後半ころ
+      text: 近隣に大型スーパーが出店して客足が減少し，仕入価格・光熱費の高騰も重なって，法人の資金繰りが悪化した。
+    - date: R6.4
+      text: 戊田銀行に対する法人借入について返済条件の変更（リスケジュール）を受けたが，売上は回復しなかった。
+    - date: R7.1
+      text: 資金繰りが尽きて法人は支払を停止し，営業を終了した。店舗設備は取引先に事業譲渡し，従業員の再就職先を確保した。
+    - date: R7.2
+      text: 申立人は代表取締役を退任し，株式会社丁原食品に配送員として就職した。
+    - date: R7.3
+      text: 法人債務の連帯保証債務等の支払が不能となり，代理人弁護士に破産申立てを委任して受任通知を発送した。
+
+  rouhi_shohin_check: 有
+  shohin1_jiki: R6.12
+  shohin1_hinmei: 自動車タイヤ・冷蔵庫
+  shohin1_kingaku: 120,000円
+
+  renka_umu: 無
+  henpa_umu: 無
+  sajutsu_umu: 無
+  kako_hasan_umu: 無
+  saisei_a_umu: 無
+  saisei_i_umu: 無
+  sonota_menseki_umu: 無
+  sairyo_umu: 有
+  sairyo_jijo_text: >-
+    本件の負債は，申立人が代表を務めた株式会社乙山ストアの事業が競合出店・物価高騰という外部要因により破綻し，
+    その連帯保証債務を負担したことによるものであり，浪費や射幸行為によるものではない。第３の１で申告した支出も，
+    通勤に必要な自動車の整備と生活に必要な範囲の家電買替えにとどまる。廃業に際しては事業譲渡により取引先・
+    従業員への影響を最小限にとどめ，受任後は家計を見直して生活の再建に努めており，破産手続にも誠実に協力する所存である。
+
+  atesaki: 支部        # 堺支部の事件（v4.1新設の宛先チェック）

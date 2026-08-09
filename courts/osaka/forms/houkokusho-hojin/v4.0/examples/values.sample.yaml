@@ -1,0 +1,58 @@
+# houkokusho-hojin（0104）記入値の見本 — 架空の法人事例（株式会社乙山ストア）
+fields:
+  hokoku_date: 令和７年９月１日
+  dairinin: 　乙　川　一　郎
+  daihyosha_sign: 甲　野　太　郎
+  kanzai_kibou: 一般管財（非招集型）
+  eigyo_naiyo: 食料品小売業（食品スーパー２店舗の経営）
+  bukken1_jusho: 大阪府堺市堺区甲町１丁２番３号
+  bukken1_kyoku: 堺
+  bukken1_shoyu: 賃借
+  bukken1_chinshaku: ["３００，０００", "１，２００，０００"]
+  bukken1_akewatashi: 未了
+  bukken1_akewatashi_yotei: ["７", "１０", "３１"]
+  bukken1_hiyo: ８００，０００
+  bukken1_mitsumori: 提出した
+  jugyoin_su: １２
+  kaiko_check: 解雇した
+  kaiko_tsuchi_date: ["７", "２", "２８"]
+  rishokuhyo: 交付済み
+  koyohoken: 提出済み
+  shakaihoken: 提出済み
+  gensen: 交付済み
+  juminzei: 提出済み
+  roso_umu: 無
+  kahansu_daihyo: 丁野次郎
+  kahansu_daihyo_jusho: ５９０－０００４　大阪府堺市堺区丁町４番４号
+  heiten: 該当
+  heiten_date: ["７", "２", "２８"]
+  kyoninka_umu: 有
+  kyoninka_kancho: 堺市保健所（食品衛生法上の営業許可）
+  kyoninka_shozaichi: ５９０－００７８　大阪府堺市堺区南瓦町３番１号
+  torimodoshi: [有, リース物件]
+  sosho_umu: 有
+  tosan_chokuzen_umu: 有
+  koza_kaiyaku: 解約予定
+  koza_kaiyaku_yotei: ["７", "９", "３０"]
+  urikake_kaishu: 未回収あり
+  urikake_kensu: ４
+  urikake_kingaku: １，２５０，０００
+  urikake_kanosei: 有
+  kashitsuke_kaishu: 全て回収
+  kikai_umu: 有
+  kikai_hyokagaku: ８５０，０００
+  kikai_kanka: 可能
+  denki: 解約済み
+  gas: 解約済み
+  suido: 解約済み
+  kotei_denwa: 未了あり
+  kotei_denwa_bango: （番号　０７２－０００－９９９９）
+  keitai_denwa: 解約済み
+  jyunin_chosa: 確認した
+  jyunin_hokan: 確認した
+  jyunin_kaiko: 確認した
+  daihyosha_renraku: 確認した
+  daihyosha_jusho: （〒５９０－００００）
+  daihyosha_jusho_text: 大阪府堺市堺区甲町１丁２番３号
+  daihyosha_tel: ②　連絡がとれる電話番号（０７２）－（０００）－（００００）
+  daihyosha_keitai: 携帯電話の番号　（０９０）－（００００）－（００００）

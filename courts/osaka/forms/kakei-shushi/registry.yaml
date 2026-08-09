@@ -2,9 +2,15 @@
 form: kakei-shushi
 name: 家計収支表（B1111）
 doc_type: xlsx
-procs: [douhai]
+procs: [douhai, kanzai-shizenjin]
 current: "v202508"
+current_by_proc:
+  douhai: "v202508"
+  kanzai-shizenjin: "v4.0-kanzai"
 versions:
   v202508:
     received: "2026-08-09（利用者アップロード B1111）"
     note: 大阪地裁 破産同時廃止申立て用。申立前2か月分の対比表・数式組込済み。版表記なし
+  v4.0-kanzai:
+    received: "2026-08-09（利用者アップロード 0206・管財（自然人）一式 ver.4.0）"
+    note: B1111 と同一構造（セル差は表題「（令和○年）」と B2「申立て前」の2箇所のみ）。fillmap・builder とも共用

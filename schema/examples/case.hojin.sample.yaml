@@ -1,0 +1,251 @@
+# 架空事例（管財（法人）用のテスト・スモークフィル・evals 用）。実在の人物・法人とは
+# 関係ありません。債務者＝株式会社乙山ストア（食品スーパー）の法人破産事件。
+# 法人事件では applicant は便宜上債務者法人名を入れる（書式生成・命名に使用）。
+meta:
+  case_id: sample-otsuyama-hojin
+  court: osaka
+  proc_type: 管財（法人）
+  applicant:
+    name: 株式会社乙山ストア
+  court_branch: 堺支部
+  attorneys:
+    - name: 乙川一郎
+      office: 丙山法律事務所
+      address: 〒590-0000 大阪府堺市堺区丙町４丁５番６号
+      phone: 072-000-0000
+      fax: 072-000-0001
+  junin_tsuchi_date: R7.3.10
+  filing_date: R7.9.1
+
+corporation:
+  name: 株式会社乙山ストア
+  kana: かぶしきがいしゃおとやまストア
+  address: 大阪府堺市堺区甲町１丁２番３号
+  head_office_zip: "590-0000"
+  registered_as_actual: true
+  representative: 代表取締役　甲野太郎
+  representative_address: 〒590-0000 大阪府堺市堺区甲町１丁２番３号
+  representative_tel: 072-000-1111
+  representative_mobile: 090-0000-0000
+  established: H22.6
+  business_description: 食料品小売業（食品スーパー２店舗の経営）
+  capital: 3000000
+  shareholders: 甲野太郎100%（発行済株式300株）
+  officers:
+    - { name: 甲野太郎, position: 代表取締役, note: 設立時から。役員報酬月35万円 }
+    - { name: 甲野花子, position: 取締役, note: 代表者の妻。非常勤・無報酬 }
+  offices:
+    - { name: 本店（堺本店）, address: 大阪府堺市堺区甲町１丁２番３号, post_office: 堺,
+        owned: false, rent: 300000, deposit_refund: 1200000, vacated: false,
+        vacate_due: R7.10.31, restore_cost: 800000, estimate_submitted: true }
+    - { name: 浜寺店, address: 大阪府堺市西区浜寺公園町２－３４, post_office: 堺,
+        owned: false, rent: 150000, deposit_refund: 600000, vacated: true }
+  employees:
+    count: 12
+    dismissed: true
+    dismissal_notice_date: R7.2.28
+    rishokuhyo_done: true
+    koyohoken_done: true
+    shakaihoken_done: true
+    gensen_done: true
+    juminzei_done: true
+    unpaid_wages: true
+  union:
+    exists: false
+    majority_rep: 丁野次郎
+    majority_rep_address: 〒590-0004 大阪府堺市堺区丁町４番４号
+  shiharai_teishi:
+    heiten_date: R7.2.28
+  licenses:
+    exists: true
+    authority: 堺市保健所（食品衛生法上の営業許可）
+    authority_address: 〒590-0078 大阪府堺市堺区南瓦町３番１号
+  bank_accounts_closed: 解約予定
+  bank_accounts_close_due: R7.9.30
+  funshoku: false
+  hasan_gennin: >-
+    債務者会社は平成22年6月の設立以来、堺市内で食品スーパーを経営してきたが、
+    令和4年後半ころから近隣への大型スーパーの出店により売上が減少し、仕入価格・
+    光熱費の高騰も重なって資金繰りが悪化した。令和6年4月に主要取引銀行の借入の
+    リスケジュールを受けたが売上は回復せず、令和7年1月に仕入代金の支払を停止、
+    同年2月28日に全店舗を閉鎖して事業を廃止した。粉飾決算はない。
+  fiscal:
+    - { term: 第13期（R5.5期）, sales: 210000000, profit: -3200000 }
+    - { term: 第14期（R6.5期）, sales: 175000000, profit: -12800000 }
+
+creditors:
+  - no: 1
+    name: 株式会社戊田銀行
+    zip: "590-0001"
+    address: 大阪府堺市堺区戊町１番１号
+    tel: 072-100-0001
+    kind: 貸金
+    origin_date: H28.4
+    use: 運転資金借入
+    principal: 30000000
+    balance: 24500000
+    last_payment: R7.1
+    guarantor: true
+    secured: false
+    note: 連帯保証人は代表者・甲野太郎
+  - no: 2
+    name: 己川商事株式会社
+    zip: "590-0002"
+    address: 大阪府堺市中区己町２番２号
+    kind: 買掛金
+    use: 商品仕入代金
+    balance: 8600000
+    last_payment: R7.1
+  - no: 3
+    name: 庚山リース株式会社
+    zip: "541-0003"
+    address: 大阪府大阪市中央区庚町３番３号
+    kind: リース
+    use: POSレジ・冷蔵ケースのリース
+    balance: 2400000
+    lease:
+      item: POSレジ４台・冷蔵ショーケース８台
+      location: 大阪府堺市堺区甲町１丁２番３号（堺本店）
+      returned: false
+      contract_doc: true
+  - no: 4
+    name: 壬田物産株式会社
+    zip: "541-0005"
+    address: 大阪府大阪市中央区壬町５番５号
+    kind: 手形小切手
+    use: 仕入代金の約束手形
+    balance: 3200000
+    tegata:
+      number: CD７８９０１２
+      due: R7.3.31
+  - no: 5
+    name: 従業員１２名（未払給料）
+    kind: 労働債権
+    use: 未払給料（R7.1〜R7.2分）
+    balance: 4800000
+    labor:
+      period: R7.1〜R7.2
+      salary: 4800000
+  - no: 6
+    name: 堺税務署
+    zip: "590-0007"
+    address: 大阪府堺市堺区税町１番１号
+    kind: 公租公課
+    tax_kind: 消費税
+    tax_year: R6年度
+    tax_office: 堺税務署
+    balance: 2100000
+  - no: 7
+    name: 堺市（法人市民税）
+    zip: "590-0006"
+    address: 大阪府堺市堺区市町１番１号
+    kind: 公租公課
+    tax_kind: 法人住民税
+    tax_year: R6年度
+    tax_office: 堺市税事務所
+    balance: 350000
+  - no: 8
+    name: 日本年金機構（社会保険料）
+    zip: "590-0008"
+    address: 大阪府堺市堺区年金町１番１号
+    kind: 公租公課
+    tax_kind: 社会保険料
+    tax_year: R7.1〜R7.2
+    balance: 1450000
+
+assets:
+  cash: 1000000
+  deposits:
+    - { bank: 戊田銀行, branch: 堺支店, account_type: 当座, account_no: "1111111",
+        balance: 350000, as_of: R7.7.31, note: 相殺予定 }
+    - { bank: 壬水信用金庫, branch: 中央支店, account_type: 普通, account_no: "2222222",
+        balance: 1850000, as_of: R7.7.31 }
+  insurance: []
+  vehicles:
+    - { name: 配送用軽バン（H30年式）, first_registration: H30, registration_no: 堺480あ5678,
+        location: 堺本店駐車場, value: 300000 }
+  real_estate: []
+  shikikin:
+    - { property: 堺本店（賃借）, deposit: 1200000, refund: 400000, arrears: 0,
+        restore_cost: 800000, note: 原状回復費用控除後 }
+    - { property: 浜寺店（賃借・明渡済）, deposit: 600000, refund: 600000, arrears: 0 }
+  loans_receivable: []
+  overpayment: []
+  securities: []
+  notes_receivable: []
+  accounts_receivable:
+    - { debtor: 乙原食堂, zip: "590-0008", address: 大阪府堺市堺区乙原町８番８号,
+        amount: 850000, recovery: 500000 }
+  inventory:
+    - { name: 食品在庫（賞味期限内の加工食品）, quantity: 一式, location: 堺本店,
+        value: 1200000, recovery: 300000 }
+  machinery: []
+  fixtures:
+    - { name: 店舗什器（陳列棚・レジ台等）, quantity: 一式, location: 堺本店,
+        value: 800000, recovery: 200000 }
+  disposed:
+    - { name: 業務用冷凍庫２台, disposed: true, date: R7.1.20, price: 500000,
+        use: 従業員の未払給料の一部に充当, in_financials: true }
+  other: []
+
+lawsuits:
+  - kind: 売掛金請求訴訟
+    counterparty: 己川商事株式会社
+    court: 大阪地方裁判所堺支部
+    case_no: 令和７年（ワ）第７８９号
+    note: 答弁書提出済み・第１回期日 R7.9.20
+
+pre_bankruptcy_disposals:
+  - counterparty: 従業員（12名）
+    date: R7.1.25
+    kind: 弁済（未払給料の一部支払）
+    price: 500000
+    note: 業務用冷凍庫の売却代金を充当。労働債権への弁済
+  - counterparty: 乙原食堂
+    date: R7.1.20
+    kind: 資産譲渡（業務用冷凍庫２台の売却）
+    price: 500000
+    note: 相場相当額での売却
+
+timeline:
+  - date: H22.6
+    event: 会社設立
+    detail: 甲野太郎が食品スーパー経営を目的として設立（資本金300万円）。
+  - date: R4後半ころ
+    event: 売上減少
+    detail: 大型スーパー出店・物価高騰により資金繰りが悪化。
+  - date: R7.1
+    event: 支払停止
+    detail: 仕入代金・リース料の支払を停止。
+  - date: R7.2.28
+    event: 全店舗閉鎖・廃業・従業員解雇
+    detail: 全従業員12名を解雇し事業を廃止した。
+  - date: R7.3.10
+    event: 受任通知発送
+    detail: 代理人弁護士が受任し各債権者へ通知を発送した。
+
+bank_analysis: []
+
+sources:
+  "corporation": 登記事項証明書・決算書（第13期・第14期）・代表者聴取
+  "creditors[0]": 債権調査票（戊田銀行）
+  "creditors[1]": 請求書（己川商事）
+  "creditors[2]": リース契約書
+  "creditors[3]": 手形帳控え
+  "creditors[4]": 賃金台帳
+  "creditors[5]": 督促状（堺税務署）
+  "creditors[6]": 納税通知書（堺市）
+  "creditors[7]": 督促状（日本年金機構）
+  "assets.cash": 現金出納帳（引継予定として代理人保管）
+  "assets.deposits[0]": 当座勘定照合表
+  "assets.deposits[1]": 通帳（壬水信用金庫）
+  "assets.vehicles[0]": 車検証・査定書
+  "assets.shikikin[0]": 賃貸借契約書（堺本店）
+  "assets.shikikin[1]": 賃貸借契約書（浜寺店）
+  "assets.accounts_receivable[0]": 売掛台帳
+  "assets.inventory[0]": 在庫表・査定書
+  "assets.fixtures[0]": 資産台帳・査定書
+  "assets.disposed[0]": 売買契約書
+  "lawsuits[0]": 訴状（送達分）
+  "pre_bankruptcy_disposals[0]": 賃金台帳・振込記録
+  "pre_bankruptcy_disposals[1]": 売買契約書

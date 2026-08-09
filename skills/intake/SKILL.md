@@ -29,11 +29,14 @@ description: >-
    （対話環境では AskUserQuestion）、`meta.proc_type` に記録する。
    以後の聴取シート・一式生成の書式セットはこの種別で決まる
    （`$(hasan-kit courts)/osaka/procs.yaml`）。
-   - **管財（法人）**の場合: 債務者＝法人。applicant ではなく `corporation`
-     （商号・本店・代表者・設立・事業内容・従業員・決算）に記入し、
-     自然人用セクション（household・family 等）は使わない。
-     ※ 管財書式が未登録の間はその旨を伝え、書式ファイルの提供と register-form での
-     登録を案内する（intake 自体は進めてよい）
+   - **管財（自然人）**の場合: 同時廃止の項目に加えて、引継予定現金・自由財産拡張の希望
+     （assets の `jiyuzaisan: true`）・lawsuits（係属訴訟）・pre_bankruptcy_disposals
+     （倒産直前の処分行為）・郵便取扱局も聴取・記録する（管財補充報告書0204が要求）。
+   - **管財（法人）**の場合: 債務者＝法人。applicant には便宜上商号を入れ、実体は
+     `corporation`（商号・本店・代表者連絡先・設立・事業内容・事業用物件 offices・
+     従業員 employees・労働組合 union・許認可 licenses・破産原因 hasan_gennin・決算 fiscal）
+     に記入する。自然人用セクション（household・family・menseki 等）は使わない。
+     債権者は creditors に（買掛金・手形小切手・リース・労働債権の kind を活用）。
 2. **事件フォルダの確認**: `cases/<事件ID>/` に `input/ work/ output/` が無ければ作る
    （`cases/README.md` の規約参照）。事件IDは `<年>-<連番>-<識別名>`。
 3. **資料の棚卸し**: input/ を走査し、資料の種類を分類してから読む。

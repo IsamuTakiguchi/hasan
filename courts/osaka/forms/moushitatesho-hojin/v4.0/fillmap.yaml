@@ -1,0 +1,167 @@
+form: moushitatesho-hojin
+court: osaka
+version: "4.0"
+doc_type: docx
+notes:
+  - 破産申立書（法人用）（0103）。w14:paraId 無し。0203（自然人・管財）と同系の構造。
+  - 金額の下線runは「万」を含んで1run（値も「１，８３６万」の形で渡す）。
+  - 債務者商号のふりがなはルビのラベル — 商号の下線に社名を入れ、ふりがなは手書き案内。
+  - 数値は債権者一覧表（0107-0114）・財産目録（0116-0131）と一致必須（crosscheck対象）。
+fields:
+  - id: filing_date
+    kind: set_text
+    anchor: { paraId: "", idx: 3, path: "", context: 令和　年　月　日 }
+    binds: meta.filing_date
+  - id: atesaki_shibu
+    kind: checkbox
+    anchor: { paraId: "", idx: 4, path: "", context: 大阪地方裁判所（□　支部）御中 }
+    options: { 支部: □　支部 }
+    binds: meta.court_branch
+    notes: 支部事件のみ☑（支部名は提出時に手書き）。本庁は値を渡さない
+  - id: dairinin
+    kind: underline_fill
+    anchor: { paraId: "", idx: 6, path: "", context: 申立代理人弁護士（担当）　印 }
+    binds: meta.attorneys[0].name
+    notes: 「　乙　川　一　郎　　印　」形式（この書式は「印」が下線内 — 印ごと置換）
+  - id: soutatsu_basho
+    kind: underline_fill
+    anchor: { paraId: "", idx: 7, path: "", context: 送達場所（事務所）〒 }
+    binds: meta.attorneys[0].address + office
+    notes: 「〒590-0000　住所　事務所名」（元の〒を含めて置換）
+  - id: tel_fax
+    kind: set_text
+    anchor: { paraId: "", idx: 9, path: "", context: TEL（　）　－　FAX（　）　－ }
+    binds: meta.attorneys[0].phone/fax
+    notes: 「ＴＥＬ（０６）０００－００００　ＦＡＸ（０６）０００－０００１」形式で全文置換
+  - id: shogo
+    kind: underline_fill
+    anchor: { paraId: "", idx: 11, path: "", context: ふり債務者(が　な商号) }
+    binds: corporation.name
+    notes: 債務者の商号（例 株式会社乙山ストア）。ふりがなはルビのため手書き案内
+  - id: daihyosha
+    kind: underline_fill
+    anchor: { paraId: "", idx: 12, path: "", context: 代表者 }
+    binds: corporation.representative
+    notes: 「代表取締役　甲野太郎」形式
+  - id: junjiko_moushitatenin
+    kind: underline_fill
+    anchor: { paraId: "", idx: 13, path: "", context: 申立人　（準自己破産の場合のみ） }
+    binds: 準自己破産の申立人（取締役等）
+    notes: 準自己破産（取締役の一部による申立て）の場合のみ
+  - id: honten
+    kind: set_text
+    anchor: { paraId: "", idx: 14, path: "", context: 本店所在地　(〒　－　)□登記事項証明書（法人）記載のとおり }
+    binds: corporation.head_office_zip + 登記どおりか
+    notes: 全文置換。「本店所在地　(〒５４１－００００)☑登記事項証明書（法人）記載のとおり」
+  - id: honten_betsu
+    kind: underline_fill
+    anchor: { paraId: "", idx: 15, path: "", context: □〒　(登記事項と異なる場合のみ） }
+    binds: corporation.actual_office
+    notes: 登記と実際の所在地が異なる場合のみ下線に記入
+  - id: honten_betsu_check
+    kind: checkbox
+    anchor: { paraId: "", idx: 15, path: "", context: □〒　(登記事項と異なる場合のみ） }
+    options: { 有: "□〒" }
+    binds: 同上のチェック
+  - id: shushi_saimusha
+    kind: underline_fill
+    anchor: { paraId: "", idx: 18, path: "", context: 債務者　について破産手続を開始する。 }
+    binds: corporation.name
+    notes: 申立ての趣旨の債務者名（商号を下線に）
+  - id: ippan_saiken
+    kind: underline_slots
+    anchor:
+      paraId: ""
+      idx: 23
+      path: １　債務の状況（別紙債権者一覧表記載のと
+      context: (1)　一般破産債権総額　万　円（債権者　人）
+    slots: ["金額（万込み 例 １，８３６万）", "債権者数"]
+    binds: creditors の一般破産債権 合計/件数
+  - id: yusen_saiken
+    kind: underline_slots
+    anchor:
+      paraId: ""
+      idx: 25
+      path: １　債務の状況（別紙債権者一覧表記載のと
+      context: 万　円（債権者　人）
+    slots: ["金額（万込み）", "債権者数"]
+    binds: creditors の優先的破産債権・財団債権（労働債権・公租公課） 合計/件数
+  - id: kaishu_mikomi
+    kind: underline_fill
+    anchor:
+      paraId: ""
+      idx: 27
+      path: １　債務の状況（別紙債権者一覧表記載のと>２　財産の状況（別紙財産目録記載のとおり
+      context: 回収見込額合計　万　円
+    binds: assets の回収見込額合計（財産目録0116総括表と一致）
+  - id: hikitsugi_genkin
+    kind: underline_fill
+    anchor:
+      paraId: ""
+      idx: 31
+      path: １　債務の状況（別紙債権者一覧表記載のと>１　破産管財人への引継予定の現金　円
+      context: １　破産管財人への引継予定の現金　円
+    binds: assets.cash のうち引継予定額
+    notes: 必ず記載する欄
+  - id: daihyosha_hasan
+    kind: checkbox
+    anchor:
+      paraId: ""
+      idx: 32
+      path: １　債務の状況（別紙債権者一覧表記載のと>２　代表者の破産申立てをしたか（□有・□
+      context: ２　代表者の破産申立てをしたか（□有・□無）
+    options: { 有: □有, 無: □無 }
+    binds: 代表者個人の破産申立ての有無
+  - id: daihyosha_jiken
+    kind: underline_slots
+    anchor:
+      paraId: ""
+      idx: 34
+      path: １　債務の状況（別紙債権者一覧表記載のと>２　代表者の破産申立てをしたか（□有・□
+      context: 地方裁判所　支部　令和　年(フ)第　号，　係
+    slots: ["裁判所名", "支部名", "年", "号", "係"]
+    binds: 代表者破産事件の係属裁判所・事件番号
+  - id: daihyosha_shinko
+    kind: checkbox
+    anchor:
+      paraId: ""
+      idx: 35
+      path: １　債務の状況（別紙債権者一覧表記載のと>２　代表者の破産申立てをしたか（□有・□
+      context: その事件の進行（□開始決定済・□同時申立・□開始決定未）
+    options: { 開始決定済: □開始決定済, 同時申立: □同時申立, 開始決定未: □開始決定未 }
+    binds: 代表者破産事件の進行状況
+  - id: daihyosha_kanzainin
+    kind: underline_slots
+    anchor:
+      paraId: ""
+      idx: 36
+      path: １　債務の状況（別紙債権者一覧表記載のと>２　代表者の破産申立てをしたか（□有・□
+      context: その破産管財人の氏名等（弁護士　，TEL（　）　－　）
+    slots: ["管財人弁護士名", "TEL（（　　）　－　の形で全体を置換）"]
+    binds: 代表者破産事件の管財人
+  - id: daihyosha_yotei
+    kind: checkbox
+    anchor:
+      paraId: ""
+      idx: 37
+      path: １　債務の状況（別紙債権者一覧表記載のと>２　代表者の破産申立てをしたか（□有・□
+      context: 今後の予定（□予定有　令和　年　月ころ・□予定無）
+    options: { 予定有: □予定有, 予定無: □予定無 }
+    binds: 代表者破産申立ての予定
+  - id: daihyosha_yotei_jiki
+    kind: underline_slots
+    anchor:
+      paraId: ""
+      idx: 37
+      path: １　債務の状況（別紙債権者一覧表記載のと>２　代表者の破産申立てをしたか（□有・□
+      context: 今後の予定（□予定有　令和　年　月ころ・□予定無）
+    slots: ["年", "月"]
+    binds: その予定時期
+  - id: denshi_nofu_code
+    kind: underline_fill
+    anchor:
+      paraId: ""
+      idx: 39
+      path: １　債務の状況（別紙債権者一覧表記載のと>２　代表者の破産申立てをしたか（□有・□
+      context: 電子納付希望の場合　登録コード
+    binds: meta.denshi_nofu_code
