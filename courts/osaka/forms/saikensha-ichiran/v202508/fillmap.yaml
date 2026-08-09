@@ -1,0 +1,49 @@
+form: saikensha-ichiran
+court: osaka
+version: "202508"
+doc_type: xlsx
+notes:
+  - 1債権者=3行ブロック×16枠（行2〜49）。A列の番号1〜16は印字済み（書き込まない）。
+  - D60(=SUM)・G60(=D60-D61-F61) は数式のため書き込み禁止（エンジンが防御）。
+  - >-
+    書式の記載方法（行51〜59）: 個人債権者は申立人との関係を記載／「購入」は物品名・
+    金額・購入日・現状／「保証」は主債務者名と関係／「その他」は具体的内容を記載。
+    住宅ローン・保証債務の金額（D61/F61）は0円でも「0」を記載する。
+  - 公租公課は本書式ではなく B1106（債権者一覧表・公租公課用）に記載する。
+fields:
+  - id: creditors
+    kind: row_blocks
+    anchor: { sheet: 債権者一覧表 }
+    first_row: 2
+    block_rows: 3
+    count: 16
+    cells:
+      - { r: 0, c: B, key: name }
+      - { r: 0, c: C, key: postal, notes: "「〒590-0000」形式で〒ごと置換" }
+      - { r: 1, c: C, key: address }
+      - { r: 0, c: D, key: balance, notes: "円の整数" }
+      - { r: 0, c: E, key: date_from, notes: "借入・購入等の日（自）例 H28.4" }
+      - { r: 2, c: E, key: date_to, notes: "（至）継続取引の場合のみ" }
+      - { r: 0, c: F, key: use_r0, checkbox: true, notes: "□住宅ローン/□購入/□生活費 のリテラル" }
+      - { r: 1, c: F, key: use_r1, checkbox: true, notes: "□返済/□飲食交際遊興費 のリテラル" }
+      - { r: 2, c: F, key: use_r2, checkbox: true, notes: "□保証/□その他 のリテラル" }
+      - { r: 0, c: G, key: note }
+      - { r: 0, c: H, key: chosahyo, checkbox: true, notes: "残高資料があれば「□」" }
+      - { r: 0, c: I, key: iken, checkbox: true, notes: "債権調査票に意見があれば「□」" }
+    binds: creditors
+  - id: creditor_count
+    kind: set_cell
+    anchor: { sheet: 債権者一覧表, cell: B60 }
+    label_check: { C60: "債務総額　　" }
+    binds: creditors(件数)
+    notes: 「債権者数　4　名」の形式で全文置換
+  - id: housing_loan_total
+    kind: set_cell
+    anchor: { sheet: 債権者一覧表, cell: D61 }
+    binds: creditors(住宅ローン合計)
+    notes: 0円でも 0 を記載（書式の指示）
+  - id: hosho_total
+    kind: set_cell
+    anchor: { sheet: 債権者一覧表, cell: F61 }
+    binds: creditors(保証債務合計)
+    notes: 0円でも 0 を記載（書式の指示）

@@ -93,30 +93,96 @@ def build_generic(case, out):
     return {"total_debt": total, "creditor_count": row - 5, "unknown_balance": unknown}
 
 
+USE_LITERALS = {
+    "住宅ローン": "□住宅ローン", "購入": "□購入", "生活費": "□生活費",
+    "返済": "□返済", "飲食交際遊興費": "□飲食交際遊興費", "保証": "□保証", "その他": "□その他",
+}
+USE_ROW = {"住宅ローン": "use_r0", "購入": "use_r0", "生活費": "use_r0",
+           "返済": "use_r1", "飲食交際遊興費": "use_r1", "保証": "use_r2", "その他": "use_r2"}
+
+
+def classify_use(c):
+    """case.yaml の債権者から書式の使途チェック（複数可）を決める。判定できなければ その他。"""
+    use = c.get("use", "") or ""
+    kind = c.get("kind", "") or ""
+    hits = []
+    if "住宅ローン" in use:
+        hits.append("住宅ローン")
+    if kind in ("クレジット", "立替金") and ("生活費" in use):
+        hits.append("生活費")
+    elif kind in ("クレジット", "立替金"):
+        hits.append("購入")
+    elif "生活費" in use:
+        hits.append("生活費")
+    if any(k in use for k in ("飲食", "交際", "遊興")):
+        hits.append("飲食交際遊興費")
+    if "借換" in use or "返済のため" in use:
+        hits.append("返済")
+    if kind in ("保証", "求償") or "保証" in use:
+        hits.append("保証")
+    if not hits:
+        hits.append("その他")
+    return hits
+
+
+def split_address(addr):
+    """住所文字列から (〒表記, 残り住所) を切り出す。〒が無ければ ("", addr)。"""
+    import re
+    m = re.match(r"^(〒?\s*\d{3}-?\d{4})\s*(.*)$", addr or "")
+    if m:
+        z = m.group(1)
+        return (z if z.startswith("〒") else "〒" + z), m.group(2)
+    return "", addr or ""
+
+
 def build_from_template(case, vdir, out):
+    """B1105（3行/債権者×16枠）への記入。公租公課は B1106 に回すため除外する。"""
     fillmap = yaml.safe_load((vdir / "fillmap.yaml").read_text(encoding="utf-8"))
-    meta = case.get("meta", {})
+    general = [c for c in case.get("creditors", []) if c.get("kind") != "公租公課"]
+    kouso_count = len(case.get("creditors", [])) - len(general)
+
     rows = []
     total = 0
-    for c in order_creditors(case.get("creditors", [])):
-        rows.append({"no": c.get("no"), "name": c.get("name", ""), "address": c.get("address", ""),
-                     "kind": c.get("kind", ""), "origin_date": c.get("origin_date", ""),
-                     "use": c.get("use", ""), "principal": c.get("principal"),
-                     "balance": c.get("balance"), "last_payment": c.get("last_payment", ""),
-                     "guarantor": umu(c.get("guarantor")), "note": c.get("note", "")})
-        if isinstance(c.get("balance"), int):
-            total += c["balance"]
+    housing_total = 0
+    hosho_total = 0
+    for c in general:
+        uses = classify_use(c)
+        postal, address = split_address(c.get("address", ""))
+        note_parts = [c.get("note", "")] if c.get("note") else []
+        if ("保証" in uses or "その他" in uses) and c.get("use"):
+            note_parts.append(c["use"])
+        row = {"name": c.get("name", ""), "postal": postal, "address": address,
+               "balance": c.get("balance"), "date_from": c.get("origin_date", ""),
+               "date_to": "", "note": "　".join(p for p in note_parts if p)}
+        for u in uses:
+            row[USE_ROW[u]] = USE_LITERALS[u]
+        if c.get("balance") is not None or c.get("sources_ok", True):
+            row["chosahyo"] = "□"  # 残高資料がある前提（intakeで残高の出所必須のため）
+        rows.append(row)
+        b = c.get("balance")
+        if isinstance(b, int):
+            total += b
+            if "住宅ローン" in uses:
+                housing_total += b
+            if "保証" in uses:
+                hosho_total += b
+
     values = {"fields": {
-        "applicant_name": meta.get("applicant", {}).get("name", ""),
         "creditors": rows,
+        "creditor_count": f"債権者数　{len(rows)}　名",
+        "housing_loan_total": housing_total,
+        "hosho_total": hosho_total,
     }}
     filler = xlsxlib.XlsxFiller(vdir / "template.xlsx")
     filler.apply(fillmap, values)
     filler.save(out)
     for w in filler.warnings:
         print(f"警告: {w}")
+    if kouso_count:
+        print(f"注記: 公租公課 {kouso_count} 件はこの書式に載せていない（B1106 公租公課用一覧表で出力する）")
     return {"total_debt": total, "creditor_count": len(rows),
-            "unknown_balance": sum(1 for r in rows if r["balance"] is None)}
+            "unknown_balance": sum(1 for r in rows if r["balance"] is None),
+            "kouso_excluded": kouso_count}
 
 
 def main():

@@ -1,0 +1,9 @@
+# この書式の現行版。生成スキルは必ずここを経由して版を解決する。
+form: saikensha-ichiran
+name: 債権者一覧表（B1105）
+doc_type: xlsx
+current: "v202508"
+versions:
+  v202508:
+    received: "2026-08-09（利用者アップロード B1105）"
+    note: 大阪地裁 破産同時廃止申立て用。版表記なしのため受領年月で管理
