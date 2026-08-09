@@ -1,0 +1,119 @@
+form: moushitatesho-douhai
+court: osaka
+version: "4.1"
+doc_type: docx
+notes:
+  - この docx には w14:paraId が無い。アンカーは context（文言）＋path＋idx の3層で解決する
+    （anchorlib は paraId 無しでも動作。版更新時も同様）。
+  - 申立ての理由（idx20）の債権者数・債務総額は債権者一覧表（B1105/B1106）と必ず一致させる
+    （公租公課を含む全債権者の人数・総額。除外後額＝総額−保証債務−住宅ローン）。
+fields:
+  - id: filing_date
+    kind: set_text
+    anchor: { paraId: "", idx: 2, path: "", context: 令和　年　月　日 }
+    binds: meta.filing_date
+    notes: 正式表記（令和７年９月１日）。未定なら空欄のまま
+  - id: atesaki
+    kind: checkbox
+    anchor: { paraId: "", idx: 4, path: "", context: 大阪地方裁判所（□第６民事部　□堺支部　□岸和田支部）　御中 }
+    options: { 第６民事部: □第６民事部, 堺支部: □堺支部, 岸和田支部: □岸和田支部 }
+    binds: meta.court_branch
+  - id: dairinin
+    kind: underline_fill
+    anchor: { paraId: "", idx: 6, path: "", context: 申立代理人弁護士（担当）印 }
+    binds: meta.attorneys[0].name
+    notes: 下線runに「　乙　川　一　郎　　印　」の形で入れる（元の「印」を含めて置換）
+  - id: soutatsu_basho
+    kind: underline_fill
+    anchor: { paraId: "", idx: 7, path: "", context: 送達場所（事務所）〒 }
+    binds: meta.attorneys[0].address + office
+    notes: 「〒590-0000　大阪府…　丙山法律事務所」の形（元の〒を含めて置換）
+  - id: tel_fax
+    kind: set_text
+    anchor: { paraId: "", idx: 8, path: "", context: Tel（）－Fax（）－ }
+    binds: meta.attorneys[0].phone/fax
+    notes: 「Tel（072）000－0000　Fax（072）000－0001」形式で全文置換
+  - id: furigana
+    kind: set_text
+    anchor: { paraId: "", idx: 9, path: "", context: (ふりがな) }
+    binds: meta.applicant.kana
+    notes: 「(ふりがな)　こうの　たろう」形式で全文置換
+  - id: shimei_kyusei
+    kind: underline_slots
+    anchor: { paraId: "", idx: 10, path: "", context: 申立人氏名　（旧姓）（旧姓で借り入れた場合） }
+    slots: ["氏名 例 甲　野　太　郎", "旧姓（ある場合のみ）", "（触らないラベル下線）"]
+    binds: meta.applicant.name / kyusei
+  - id: nenrei_seinengappi
+    kind: set_text
+    anchor: { paraId: "", idx: 11, path: "", context: 年　齢　（　歳）（大・昭・平　年　月　日生） }
+    binds: meta.applicant.birth
+    notes: 「年　　　齢　（３７歳）（昭和６３年３月１０日生）」形式で全文置換（元号は生年から確定）
+  - id: honseki
+    kind: checkbox
+    anchor: { paraId: "", idx: 12, path: "", context: 本籍・国籍　□住民票本籍欄記載のとおり　□国籍 }
+    options: { 住民票のとおり: □住民票本籍欄記載のとおり, 国籍: □国籍 }
+    binds: meta.applicant.honseki / nationality
+  - id: honseki_kokuseki_text
+    kind: underline_fill
+    anchor: { paraId: "", idx: 12, path: "", context: 本籍・国籍　□住民票本籍欄記載のとおり　□国籍 }
+    binds: meta.applicant.nationality
+    notes: 外国籍の場合のみ国名を下線に
+  - id: jusho
+    kind: set_text
+    anchor: { paraId: "", idx: 13, path: "", context: 住　居　所　□〒(-)　住民票記載のとおり }
+    binds: meta.applicant.address
+    notes: 「住　居　所　☑〒(590-0000)　住民票記載のとおり」形式で全文置換（住民票と同じ場合）
+  - id: jusho_betsu
+    kind: underline_fill
+    anchor: { paraId: "", idx: 14, path: "", context: □〒（住民票と異なる場合） }
+    binds: meta.applicant.address
+    notes: 住民票と異なる場合のみ。□〒のチェックは別途 checkbox で（通常は使わない）
+  - id: renrakusaki
+    kind: set_text
+    anchor: { paraId: "", idx: 15, path: "", context: 連　絡　先　（）－ }
+    binds: meta.applicant.phone
+    notes: 「連　絡　先　（090）0000－0000」形式で全文置換
+  - id: riyu
+    kind: set_text
+    anchor: { paraId: "", idx: 20, path: "１　申立人につき破産手続を開始する。>２　本件破産手続を廃止する。", context: 申立人は，債権者一覧表記載のとおり，債権者人に対し，金円の債務 }
+    binds: creditors（人数・総額・保証/住宅ローン除外後額）
+    notes: >-
+      「申立人は，債権者一覧表記載のとおり，債権者４人に対し，金２２，１７０，０００円の債務
+      （うち，保証債務と住宅ローンを除く債務額は，金８５０，０００円である。）を負担しているが，
+      財産目録及び報告書記載のとおり，支払不能状態にある。また，破産財団を構成すべき財産が
+      ほとんどなく，破産手続の費用を支弁するに足りない。」の全文置換。数値は一覧表と一致必須
+  - id: sanko1_kojin_jigyo
+    kind: checkbox
+    anchor: { paraId: "", idx: 22, path: "１　申立人につき破産手続を開始する。>１　個人事業者か（□否・□申立前６か月以", context: １　個人事業者か（□否・□申立前６か月以内・□現在） }
+    options: { 否: □否, 申立前６か月以内: □申立前６か月以内, 現在: □現在 }
+    binds: career/business
+  - id: sanko2_hojin_daihyo
+    kind: checkbox
+    anchor: { paraId: "", idx: 24, path: "１　申立人につき破産手続を開始する。>２　現在，法人の代表者であるか（□否・□", context: ２　現在，法人の代表者であるか（□否・□当［登記簿上の者も含む。］） }
+    options: { 否: □否, 当: □当 }
+    binds: career（現在の法人代表か。登記簿上も含む）
+  - id: sanko2_hojin_hasan
+    kind: checkbox
+    anchor: { paraId: "", idx: 25, path: "１　申立人につき破産手続を開始する。>２　現在，法人の代表者であるか（□否・□", context: その法人の破産申立て（□申立済み･□同時申立て･□申立て予定･□予定なし） }
+    options: { 申立済み: □申立済み, 同時申立て: □同時申立て, 申立て予定: □申立て予定, 予定なし: □予定なし }
+    notes: 参考事項2が「当」のときのみ
+  - id: sanko3_seikatsu_hogo
+    kind: checkbox
+    anchor: { paraId: "", idx: 26, path: "１　申立人につき破産手続を開始する。>３　生活保護受給世帯に属しているか（□当", context: ３　生活保護受給世帯に属しているか（□当・□否） }
+    options: { 当: □当, 否: □否 }
+    binds: meta.seikatsu_hogo
+  - id: sanko4_saisei
+    kind: checkbox
+    anchor: { paraId: "", idx: 27, path: "１　申立人につき破産手続を開始する。>４　申立前７年以内に個人再生の認可決定が", context: ４　申立前７年以内に個人再生の認可決定が確定したことがあるか（□有・□無） }
+    options: { 有: □有, 無: □無 }
+    binds: menseki.past_saisei_ninka.exists
+  - id: sanko5_menseki
+    kind: checkbox
+    anchor: { paraId: "", idx: 28, path: "１　申立人につき破産手続を開始する。>５　申立前７年以内に破産免責決定が確定し", context: ５　申立前７年以内に破産免責決定が確定したことがあるか（□有・□無） }
+    options: { 有: □有, 無: □無 }
+    binds: menseki.past_menseki.exists
+    notes: 報告書第３の５①と必ず一致させる
+  - id: denshi_nofu
+    kind: underline_fill
+    anchor: { paraId: "", idx: 30, path: "１　申立人につき破産手続を開始する。>５　申立前７年以内に破産免責決定が確定し", context: 電子納付希望の場合　登録コード }
+    binds: meta.denshi_nofu_code

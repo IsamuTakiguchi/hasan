@@ -103,6 +103,8 @@ class ParaIndex:
         p = self.by_id.get(pid)
         if p is not None and (not ctx or ctx in p.text or p.text == ctx):
             return p, "OK", ""
+        # paraId を持たない書式（旧型式docx）では文言＋構造解決が正規経路 → OK 扱い
+        rebound = "REBOUND" if pid else "OK"
 
         # 第2層: context で候補を集める（完全一致を優先）
         subs = [q for q in self.paras if ctx and ctx in q.text]
@@ -113,15 +115,15 @@ class ParaIndex:
             if path:
                 hit = pick_nearest([q for q in cands if q.path == path], f"{label}+path")
                 if hit:
-                    return hit[0], "REBOUND", f"paraId {pid} -> {hit[0].para_id} ({hit[1]})"
+                    return hit[0], rebound, f"paraId {pid} -> {hit[0].para_id} ({hit[1]})"
                 # path 完全一致がなければ表位置だけ（見出し文言の微修正に強い）
                 tail = path.split(">")[-2:]
                 hit = pick_nearest([q for q in cands if q.path.split(">")[-2:] == tail], f"{label}+path末尾")
                 if hit:
-                    return hit[0], "REBOUND", f"paraId {pid} -> {hit[0].para_id} ({hit[1]})"
+                    return hit[0], rebound, f"paraId {pid} -> {hit[0].para_id} ({hit[1]})"
             hit = pick_nearest(cands, label)
             if hit:
-                return hit[0], "REBOUND", f"paraId {pid} -> {hit[0].para_id} ({hit[1]})"
+                return hit[0], rebound, f"paraId {pid} -> {hit[0].para_id} ({hit[1]})"
 
         # 空欄アンカー（空セル・空欄行）: パス一致の空欄段落のうち最初のもの
         if not ctx and path:
@@ -129,7 +131,7 @@ class ParaIndex:
             if blanks:
                 q = blanks[0]
                 note = "path,空欄先頭" if len(blanks) > 1 else "path,空欄"
-                return q, "REBOUND", f"paraId {pid} -> {q.para_id} ({note})"
+                return q, rebound, f"paraId {pid} -> {q.para_id} ({note})"
 
         if p is not None:
             # paraId 一致を最後の拠り所として使う（文言不一致の警告付き）

@@ -5,12 +5,19 @@ meta:
   court: osaka
   applicant:
     name: 甲野太郎
-    kana: コウノタロウ
+    kana: こうの　たろう
     birth: S63.3.10
-    address: 大阪府堺市堺区甲町１丁２番３号
+    address: 〒590-0000 大阪府堺市堺区甲町１丁２番３号
+    honseki: 住民票のとおり
+    phone: 090-0000-0000
+  court_branch: 堺支部
   attorneys:
     - name: 乙川一郎
       office: 丙山法律事務所
+      address: 〒590-0000 大阪府堺市堺区丙町４丁５番６号
+      phone: 072-000-0000
+      fax: 072-000-0001
+  seikatsu_hogo: false
   junin_tsuchi_date: R7.3.10
   filing_date: R7.9.1
   shiharai_funo:
@@ -158,6 +165,7 @@ menseki:
   henpa: { exists: false, detail: "" }
   sajutsu: { exists: false, detail: "" }
   past_menseki: { exists: false, detail: "" }
+  past_saisei_ninka: { exists: false, detail: "" }
   sairyo_jijo: >-
     本件の負債は、申立人が代表を務めた株式会社乙山ストアの事業が競合出店・物価高騰という
     外部要因により破綻し、その連帯保証債務を負担したことによるものであり、浪費や射幸行為に

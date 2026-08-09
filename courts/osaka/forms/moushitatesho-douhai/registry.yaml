@@ -1,0 +1,9 @@
+# この書式の現行版。生成スキルは必ずここを経由して版を解決する。
+form: moushitatesho-douhai
+name: 破産手続開始申立書（同時廃止用）（B1102）
+doc_type: docx
+current: "v4.1"
+versions:
+  v4.1:
+    received: "2026-08-09（利用者アップロード B1102）"
+    note: 大阪地裁共通様式（同時廃止一式 ver.4.1 世代）。w14:paraId 無しの旧型式docx

@@ -29,6 +29,14 @@ properties:
           kana: { type: string }
           birth: { type: string, description: "生年月日（例 S63.3.1）" }
           address: { type: string }
+          kyusei: { type: string, description: "旧姓（旧姓で借入れがある場合のみ）" }
+          honseki: { type: string, description: "本籍。「住民票のとおり」または本籍地の表示" }
+          nationality: { type: string, description: "外国籍の場合の国籍" }
+          phone: { type: string, description: "連絡先電話番号" }
+      court_branch:
+        type: string
+        enum: [第６民事部, 堺支部, 岸和田支部]
+        description: "申立先（大阪地裁共通様式の宛先チェック）"
       attorneys:
         type: array
         description: "申立代理人。筆頭を先頭に"
@@ -37,7 +45,12 @@ properties:
           properties:
             name: { type: string }
             office: { type: string }
+            address: { type: string, description: "事務所所在地（〒含む。送達場所）" }
+            phone: { type: string }
+            fax: { type: string }
           required: [name]
+      denshi_nofu_code: { type: string, description: "電子納付希望の場合の登録コード" }
+      seikatsu_hogo: { type: [boolean, "null"], description: "生活保護受給世帯か" }
       junin_tsuchi_date: { type: string, description: "受任通知発送日" }
       filing_date: { type: string, description: "申立（予定）日。未定なら省略" }
       shiharai_funo:
@@ -298,7 +311,8 @@ properties:
             sold_price: { type: [integer, "null"] }
       henpa: { $ref: "#/$defs/umu_setsumei", description: "偏頗行為（破産法252条1項3号）" }
       sajutsu: { $ref: "#/$defs/umu_setsumei", description: "詐術による信用取引（同5号）" }
-      past_menseki: { $ref: "#/$defs/umu_setsumei", description: "7年以内の免責決定等（同10号）" }
+      past_menseki: { $ref: "#/$defs/umu_setsumei", description: "7年以内の破産免責決定の確定（同10号）" }
+      past_saisei_ninka: { $ref: "#/$defs/umu_setsumei", description: "7年以内の個人再生の認可決定の確定（申立書参考事項4・同10号）" }
       sairyo_jijo: { type: string, description: "裁量免責され得る事情（第３の７）の本文" }
       saiken_chosa_hanron: { type: string, description: "債権調査票の意見への反論（第３の８）" }
 

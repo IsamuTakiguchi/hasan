@@ -83,10 +83,18 @@ def underlined_runs(p):
 
 
 def set_run_text(run, text):
-    """run 内の最初の w:t のテキストを差し替える（tab 等の他要素は維持）。"""
-    t = run.find(f"{W}t")
-    if t is None:
+    """run 内のテキストを差し替える（tab 等の他要素は維持）。
+
+    run が複数の <w:t> を持つ場合（merge_runs 後もあり得る）は、先頭に全文を
+    入れて残りは削除する（置換残りを防ぐ）。
+    """
+    ts = run.findall(f"{W}t")
+    if not ts:
         t = etree.SubElement(run, f"{W}t")
+    else:
+        t = ts[0]
+        for extra in ts[1:]:
+            run.remove(extra)
     t.text = text
     t.set("{http://www.w3.org/XML/1998/namespace}space", "preserve")
 

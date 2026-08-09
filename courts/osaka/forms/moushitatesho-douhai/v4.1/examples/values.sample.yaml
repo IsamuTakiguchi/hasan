@@ -1,0 +1,24 @@
+# schema/examples/case.sample.yaml（架空事例）から hasan-moushitatesho の転記ルールで
+# 組み立てた fill 値の見本。スモークフィル用。
+fields:
+  filing_date: 令和７年９月１日
+  atesaki: 堺支部
+  dairinin: 　乙　川　一　郎　　印
+  soutatsu_basho: 〒590-0000　大阪府堺市堺区丙町４丁５番６号　丙山法律事務所
+  tel_fax: Tel（072）000－0000　Fax（072）000－0001
+  furigana: (ふりがな)　こうの　たろう
+  shimei_kyusei: ["甲　野　太　郎", ""]
+  nenrei_seinengappi: 年　　　齢　（３７歳）（昭和６３年３月１０日生）
+  honseki: 住民票のとおり
+  jusho: 住　居　所　☑〒(590-0000)　住民票記載のとおり
+  renrakusaki: 連　絡　先　（090）0000－0000
+  riyu: >-
+    申立人は，債権者一覧表記載のとおり，債権者４人に対し，金２２，１７０，０００円の債務
+    （うち，保証債務と住宅ローンを除く債務額は，金１，１７０，０００円である。）を負担しているが，
+    財産目録及び報告書記載のとおり，支払不能状態にある。また，破産財団を構成すべき財産が
+    ほとんどなく，破産手続の費用を支弁するに足りない。
+  sanko1_kojin_jigyo: 否
+  sanko2_hojin_daihyo: 否
+  sanko3_seikatsu_hogo: 否
+  sanko4_saisei: 無
+  sanko5_menseki: 無
