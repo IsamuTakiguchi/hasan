@@ -7,6 +7,46 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")/.." && pwd)"
 PY=python3
 
+# 依存ブートストラップ: 不足している pip パッケージだけを初回に自動導入する
+# （Cowork 等のクリーンな実行環境向け。HASAN_KIT_NO_BOOTSTRAP=1 でスキップ）
+ensure_deps() {
+  [ "${HASAN_KIT_NO_BOOTSTRAP:-}" = "1" ] && return 0
+  "$PY" -c "import lxml, openpyxl, yaml, jsonschema" 2>/dev/null && return 0
+  echo "hasan-kit: 依存パッケージを導入します（初回のみ）..." >&2
+  "$PY" -m pip install --user --quiet lxml openpyxl PyYAML jsonschema PyMuPDF 2>&1 | tail -1 >&2 || \
+    "$PY" -m pip install --quiet lxml openpyxl PyYAML jsonschema PyMuPDF 2>&1 | tail -1 >&2 || {
+      echo "hasan-kit: pip での依存導入に失敗。'hasan-kit doctor' で環境を確認してください" >&2
+      return 1
+    }
+}
+
+doctor() {
+  echo "hasan-kit doctor — 環境診断"
+  echo "  プラグインルート : $ROOT"
+  echo "  python3          : $(command -v "$PY" || echo '✗ 見つからない')"
+  "$PY" --version 2>/dev/null | sed 's/^/  /'
+  echo "  pip              : $("$PY" -m pip --version 2>/dev/null | cut -d' ' -f1-2 || echo '✗ 見つからない')"
+  for m in lxml openpyxl yaml jsonschema pymupdf; do
+    if "$PY" -c "import $m" 2>/dev/null; then echo "  $m : OK"; else echo "  $m : ✗ 未導入（初回実行時に自動導入）"; fi
+  done
+  for c in soffice unoconvert; do
+    if command -v "$c" >/dev/null 2>&1; then echo "  $c : OK ($(command -v $c))"; else echo "  $c : ✗ なし"; fi
+  done
+  if ! command -v soffice >/dev/null 2>&1 && ! command -v unoconvert >/dev/null 2>&1; then
+    echo "  注意: PDF目視検証（preview）は省略運転になります（数値整合検査 crosscheck は動作）"
+  fi
+}
+
+package() {
+  local version
+  version=$("$PY" -c "import json; print(json.load(open('$ROOT/.claude-plugin/plugin.json'))['version'])")
+  local out="${1:-$PWD/hasan-plugin-v${version}.zip}"
+  ( cd "$ROOT" && zip -qr "$out" . \
+      -x ".git/*" -x "cases/*" -x "*__pycache__*" -x "*.pyc" -x ".claude/*" )
+  echo "配布用パッケージ: $out"
+  echo "Cowork へは: Cowork タブ → Customize → Install → このzipをアップロード"
+}
+
 usage() {
   cat <<'EOF'
 使い方: hasan-kit <subcommand> [args...]
@@ -14,6 +54,8 @@ usage() {
   root                          プラグインルートのパスを表示
   courts                        courts/（書式ディレクトリ）のパスを表示
   schema                        schema/ のパスを表示
+  doctor                        環境診断（Python/pip/依存/LibreOffice の有無）
+  package [出力zip]             Cowork等へ配布するプラグインzipを生成
   validate-case <case.yaml>     事件モデルの検証（生成前ゲート）
   fill-docx --template .. --fillmap .. --values .. --output ..
                                 docx書式のfillmap駆動記入
@@ -35,9 +77,15 @@ EOF
 cmd="${1:-}"
 [ $# -gt 0 ] && shift || true
 case "$cmd" in
+  root|courts|schema|doctor|package|""|-h|--help|help) : ;;  # 依存不要のコマンド
+  *) ensure_deps ;;
+esac
+case "$cmd" in
   root)          echo "$ROOT" ;;
   courts)        echo "$ROOT/courts" ;;
   schema)        echo "$ROOT/schema" ;;
+  doctor)        doctor ;;
+  package)       package "$@" ;;
   validate-case) exec "$PY" "$ROOT/scripts/casekit/validate_case.py" "$@" ;;
   fill-docx)     exec "$PY" "$ROOT/scripts/build/fill_docx.py" "$@" ;;
   saikensha)     exec "$PY" "$ROOT/scripts/build/build_saikensha_ichiran.py" "$@" ;;

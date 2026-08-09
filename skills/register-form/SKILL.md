@@ -22,6 +22,8 @@ description: >-
 コミット・プッシュし、必要なら `claude plugin tag --push` で版タグを付けて配布する
 （各利用環境はプラグイン更新で新書式を受け取る）。
 以下のパス表記 `courts/...` `scripts/...` はそのクローンのリポジトリルート相対。
+登録完了後、Cowork 利用者がいる場合は `hasan-kit package` で新しい配布zipを作成して
+再アップロードを案内する（plugin.json の version を上げてから）。
 
 ## A. 初回登録（この書式を初めて取り込む）
 

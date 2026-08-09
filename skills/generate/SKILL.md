@@ -15,6 +15,11 @@ description: >-
 
 - `cases/<事件ID>/case.yaml` が存在すること（なければ先に intake）。
   `cases/` は**現在の作業フォルダ**側（プラグインのインストール先には置かない）。
+- **環境準備**: `hasan-kit` が PATH に無い環境（Cowork 等）では、プラグインの
+  インストールディレクトリを探して絶対パスで使う
+  （例: `ls ~/.claude/plugins/*/*/bin/hasan-kit` や `find ~/.claude -name hasan-kit`）。
+  初回は `hasan-kit doctor` で環境診断（依存パッケージは初回実行時に自動導入される）。
+  PDF変換ツールが無い環境では preview が目視省略の劣化運転になる（crosscheck は動く）。
 - 通帳があるのに `bank_analysis` が空なら、先に nyushukkin-bunseki を促す
   （免責関係の記載が変わり得るため）。
 

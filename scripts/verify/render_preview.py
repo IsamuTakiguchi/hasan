@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 """生成した docx/xlsx を PDF 化し、ページ画像（PNG）に展開する目視検証ツール。
 
-この環境には pdftoppm が無いため、PDF→画像は PyMuPDF を使う。
+PDF変換は soffice（LibreOffice）→ unoconvert（unoserver。Cowork のVM構成）の順で
+試す。どちらも無い環境では PDF目視を省略する旨を表示して正常終了する（劣化運転。
+数値整合検査 crosscheck は別途動くため、パイプラインは止めない）。
+PDF→画像は PyMuPDF（pdftoppm が無い環境向け）。
 
 使い方:
   python3 scripts/verify/render_preview.py <file.docx|file.xlsx> [-d 出力ディレクトリ]
@@ -10,25 +13,42 @@
 既定の出力ディレクトリは入力ファイルと同じ場所。
 """
 import argparse
+import shutil
 import subprocess
 import sys
 from pathlib import Path
 
-import pymupdf
+try:
+    import pymupdf
+except ImportError:
+    pymupdf = None
+
+DEGRADED_MSG = ("PDF変換ツール（soffice/unoconvert）が無いため目視検証を省略します。"
+                "生成ファイルを Word/Excel で開いて確認してください"
+                "（数値整合は hasan-kit crosscheck で検査済みであること）")
 
 
-def to_pdf(src: Path, outdir: Path) -> Path:
-    subprocess.run(
-        ["soffice", "--headless", "--convert-to", "pdf", "--outdir", str(outdir), str(src)],
-        check=True, capture_output=True, timeout=120,
-    )
+def to_pdf(src: Path, outdir: Path) -> Path | None:
     pdf = outdir / (src.stem + ".pdf")
+    if shutil.which("soffice"):
+        subprocess.run(
+            ["soffice", "--headless", "--convert-to", "pdf", "--outdir", str(outdir), str(src)],
+            check=True, capture_output=True, timeout=120,
+        )
+    elif shutil.which("unoconvert"):
+        subprocess.run(["unoconvert", "--convert-to", "pdf", str(src), str(pdf)],
+                       check=True, capture_output=True, timeout=120)
+    else:
+        return None
     if not pdf.exists():
         raise RuntimeError(f"PDF変換に失敗: {src}")
     return pdf
 
 
 def to_images(pdf: Path, outdir: Path, dpi=110):
+    if pymupdf is None:
+        print(f"  PyMuPDF が無いためページ画像化を省略（PDFのみ生成: {pdf.name}）")
+        return []
     doc = pymupdf.open(pdf)
     pages = []
     for i, page in enumerate(doc):
@@ -45,6 +65,10 @@ def main():
     ap.add_argument("-d", "--outdir", help="出力ディレクトリ（既定: 入力と同じ場所）")
     ap.add_argument("--dpi", type=int, default=110)
     args = ap.parse_args()
+
+    if not shutil.which("soffice") and not shutil.which("unoconvert"):
+        print(DEGRADED_MSG)
+        sys.exit(0)
 
     for f in args.files:
         src = Path(f)
