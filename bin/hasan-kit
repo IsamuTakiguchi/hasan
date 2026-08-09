@@ -11,10 +11,10 @@ PY=python3
 # （Cowork 等のクリーンな実行環境向け。HASAN_KIT_NO_BOOTSTRAP=1 でスキップ）
 ensure_deps() {
   [ "${HASAN_KIT_NO_BOOTSTRAP:-}" = "1" ] && return 0
-  "$PY" -c "import lxml, openpyxl, yaml, jsonschema" 2>/dev/null && return 0
+  "$PY" -c "import lxml, openpyxl, yaml, jsonschema, docx" 2>/dev/null && return 0
   echo "hasan-kit: 依存パッケージを導入します（初回のみ）..." >&2
-  "$PY" -m pip install --user --quiet lxml openpyxl PyYAML jsonschema PyMuPDF 2>&1 | tail -1 >&2 || \
-    "$PY" -m pip install --quiet lxml openpyxl PyYAML jsonschema PyMuPDF 2>&1 | tail -1 >&2 || {
+  "$PY" -m pip install --user --quiet lxml openpyxl PyYAML jsonschema PyMuPDF python-docx 2>&1 | tail -1 >&2 || \
+    "$PY" -m pip install --quiet lxml openpyxl PyYAML jsonschema PyMuPDF python-docx 2>&1 | tail -1 >&2 || {
       echo "hasan-kit: pip での依存導入に失敗。'hasan-kit doctor' で環境を確認してください" >&2
       return 1
     }
@@ -26,7 +26,7 @@ doctor() {
   echo "  python3          : $(command -v "$PY" || echo '✗ 見つからない')"
   "$PY" --version 2>/dev/null | sed 's/^/  /'
   echo "  pip              : $("$PY" -m pip --version 2>/dev/null | cut -d' ' -f1-2 || echo '✗ 見つからない')"
-  for m in lxml openpyxl yaml jsonschema pymupdf; do
+  for m in lxml openpyxl yaml jsonschema pymupdf docx; do
     if "$PY" -c "import $m" 2>/dev/null; then echo "  $m : OK"; else echo "  $m : ✗ 未導入（初回実行時に自動導入）"; fi
   done
   for c in soffice unoconvert; do
@@ -59,6 +59,7 @@ usage() {
   validate-case <case.yaml>     事件モデルの検証（生成前ゲート）
   fill-docx --template .. --fillmap .. --values .. --output ..
                                 docx書式のfillmap駆動記入
+  memo-docx --spec .. --output ..  聴取シート・面談メモ等の事務所内docx生成
   saikensha --case .. --output .. [--kouso|--generic]
                                 債権者一覧表（--kouso で公租公課用）
   shisan    --case .. --output .. [--generic]   財産目録
@@ -88,6 +89,7 @@ case "$cmd" in
   package)       package "$@" ;;
   validate-case) exec "$PY" "$ROOT/scripts/casekit/validate_case.py" "$@" ;;
   fill-docx)     exec "$PY" "$ROOT/scripts/build/fill_docx.py" "$@" ;;
+  memo-docx)     exec "$PY" "$ROOT/scripts/build/build_memo_docx.py" "$@" ;;
   saikensha)     exec "$PY" "$ROOT/scripts/build/build_saikensha_ichiran.py" "$@" ;;
   shisan)        exec "$PY" "$ROOT/scripts/build/build_shisan_mokuroku.py" "$@" ;;
   kakei)         exec "$PY" "$ROOT/scripts/build/build_kakei_shushi.py" "$@" ;;

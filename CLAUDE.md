@@ -14,13 +14,16 @@
 ## 全体ワークフロー
 
 ```
-1. 書式登録   hasan-register-form  裁判所配布の新書式 → courts/<裁判所>/forms/<書式>/v<版>/
+0. 面談準備   hearing-sheet        聴取シート生成（2回目以降は questions.md の差分シート）
+   面談記録   menmemo              走り書き・書き起こし → 面談メモ docx（input/ の原資料に）
+1. 書式登録   register-form        裁判所配布の新書式 → courts/<裁判所>/forms/<書式>/v<版>/
                                    （template + fillmap.yaml + structure.md + anchors.txt）
-2. 事件取込   hasan-intake         cases/<事件>/input/ の原資料 → case.yaml + questions.md
-3. 入出金分析 hasan-nyushukkin-bunseki  通帳 → work/bank.csv → case.yaml の bank_analysis/menseki
-4. 一式生成   hasan-generate       case.yaml + fillmap → output/ の記入済み docx/xlsx
-                                   （個別書式は hasan-houkokusho 等の書式別スキル）
-5. 検証       scripts/verify/      PDF化・ページ画像目視 + 書類間数値突合
+2. 事件取込   intake               cases/<事件>/input/ の原資料 → case.yaml + questions.md
+3. 入出金分析 nyushukkin-bunseki   通帳 → work/bank.csv → case.yaml の bank_analysis/menseki
+4. 一式生成   generate             case.yaml + fillmap → output/ の記入済み docx/xlsx
+                                   （個別書式は houkokusho 等の書式別スキル）
+5. 検証       hasan-kit crosscheck/preview  書類間数値突合 + PDF目視
+6. 依頼連絡   line-message         questions.md → 依頼者向けLINE文面（手動送信）
 ```
 
 ## 登録済み書式（courts/osaka/ — 大阪地裁 本庁・堺支部・岸和田支部共通様式）

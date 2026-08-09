@@ -63,3 +63,5 @@ description: >-
 - 推測を含む記載・資料間の矛盾 → questions.md の確認事項（新規分を明示）
 - 裁判所書式が未登録で --generic（事務所内ドラフト様式）になった書類
   → 裁判所書式の入手と register-form での登録を案内
+- 依頼者への確認・資料依頼が必要な項目があるとき → line-message スキルで
+  LINE文面を作れる旨を案内（次回面談前の準備は hearing-sheet の差分シート）
