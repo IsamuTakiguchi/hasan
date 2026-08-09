@@ -77,43 +77,64 @@ class ParaIndex:
         self.by_id = {p.para_id: p for p in self.paras if p.para_id}
 
     def resolve(self, anchor: dict):
-        """anchor 辞書 {paraId, context, path} を (Para|None, status, note) で返す。"""
+        """anchor 辞書 {paraId, context, path, idx} を (Para|None, status, note) で返す。
+
+        解決の優先順:
+          1. paraId 一致（文言も矛盾しない）→ OK
+          2. 文言（完全一致を部分一致より優先）＋構造パスで一意 → REBOUND
+          3. 空欄アンカーはパス一致の空欄段落のうち文書順で最初のもの → REBOUND
+          4. なお複数残るときは idx（旧版での文書内位置）に最も近いもの → REBOUND
+        """
         pid = anchor.get("paraId", "")
         ctx = normalize(anchor.get("context", "") or "")
         path = anchor.get("path", "") or ""
+        old_idx = anchor.get("idx")
+
+        def pick_nearest(cands, how):
+            if not cands:
+                return None
+            if len(cands) == 1:
+                return cands[0], how
+            if old_idx is not None:
+                best = min(cands, key=lambda q: abs(q.idx - old_idx))
+                return best, f"{how},idx近接"
+            return None
 
         p = self.by_id.get(pid)
-        if p is not None:
-            if ctx and ctx not in p.text and p.text != ctx:
-                # paraId はあるが文言が違う → 書式が同IDのまま改訂された可能性。文言優先で照合し直す
-                pass
-            else:
-                return p, "OK", ""
+        if p is not None and (not ctx or ctx in p.text or p.text == ctx):
+            return p, "OK", ""
 
-        # 第2層: context（＋第3層: path）で候補を絞る
-        cands = [q for q in self.paras if ctx and (ctx == q.text or (ctx and ctx in q.text))]
-        if path:
-            path_cands = [q for q in cands if q.path == path]
-            if len(path_cands) == 1:
-                return path_cands[0], "REBOUND", f"paraId {pid} -> {path_cands[0].para_id} (context+path)"
-            # path 完全一致がなければ表位置だけ（見出し文言の微修正に強い）
-            tail = path.split(">")[-3:]
-            tail_cands = [q for q in cands if q.path.split(">")[-3:] == tail]
-            if len(tail_cands) == 1:
-                return tail_cands[0], "REBOUND", f"paraId {pid} -> {tail_cands[0].para_id} (context+path-tail)"
-        if len(cands) == 1:
-            return cands[0], "REBOUND", f"paraId {pid} -> {cands[0].para_id} (context)"
+        # 第2層: context で候補を集める（完全一致を優先）
+        subs = [q for q in self.paras if ctx and ctx in q.text]
+        exact = [q for q in subs if q.text == ctx]
+        for cands, label in ((exact, "context完全一致"), (subs, "context")):
+            if not cands:
+                continue
+            if path:
+                hit = pick_nearest([q for q in cands if q.path == path], f"{label}+path")
+                if hit:
+                    return hit[0], "REBOUND", f"paraId {pid} -> {hit[0].para_id} ({hit[1]})"
+                # path 完全一致がなければ表位置だけ（見出し文言の微修正に強い）
+                tail = path.split(">")[-2:]
+                hit = pick_nearest([q for q in cands if q.path.split(">")[-2:] == tail], f"{label}+path末尾")
+                if hit:
+                    return hit[0], "REBOUND", f"paraId {pid} -> {hit[0].para_id} ({hit[1]})"
+            hit = pick_nearest(cands, label)
+            if hit:
+                return hit[0], "REBOUND", f"paraId {pid} -> {hit[0].para_id} ({hit[1]})"
 
-        # context が空欄アンカー（空セル等）の場合は path のみで解決を試みる
+        # 空欄アンカー（空セル・空欄行）: パス一致の空欄段落のうち最初のもの
         if not ctx and path:
-            path_cands = [q for q in self.paras if q.path == path and q.text == ""]
-            if len(path_cands) == 1:
-                return path_cands[0], "REBOUND", f"paraId {pid} -> {path_cands[0].para_id} (path,empty)"
+            blanks = [q for q in self.paras if q.path == path and q.text == ""]
+            if blanks:
+                q = blanks[0]
+                note = "path,空欄先頭" if len(blanks) > 1 else "path,空欄"
+                return q, "REBOUND", f"paraId {pid} -> {q.para_id} ({note})"
 
         if p is not None:
             # paraId 一致を最後の拠り所として使う（文言不一致の警告付き）
             return p, "REBOUND", f"paraId一致だが文言不一致: 期待「{ctx}」実際「{p.text[:30]}」"
-        return None, "BROKEN", f"解決不能: paraId={pid} context「{ctx[:30]}」候補{len(cands)}件"
+        return None, "BROKEN", f"解決不能: paraId={pid} context「{ctx[:30]}」候補{len(subs)}件"
 
 
 def load_document(path_docx_xml):

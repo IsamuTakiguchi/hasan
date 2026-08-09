@@ -11,6 +11,7 @@ fields:
   anchor:
     paraId: 00E84AEE
     path: ''
+    idx: 0
     context: 令和　年　月　日
   binds: meta.filing_date
   notes: 提出日。正式表記（令和７年９月１日）。未定なら空欄のまま
@@ -19,6 +20,7 @@ fields:
   anchor:
     paraId: 7BF1CF8B
     path: ''
+    idx: 8
     context: 申立代理人　印
   binds: meta.attorneys[0].name
   notes: 「弁護士　乙　川　一　郎」形式。1字ずつ全角スペース
@@ -27,6 +29,7 @@ fields:
   anchor:
     paraId: 42507E84
     path: ''
+    idx: 10
     context: 申　立　人　印
   binds: meta.applicant.name
   notes: 「甲　野　太　郎」形式
@@ -35,6 +38,7 @@ fields:
   anchor:
     paraId: 64F69C68
     path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[2]>cell[0]
+    idx: 19
     context: 年　月～
   format:
     date_style: 短縮元号
@@ -45,6 +49,7 @@ fields:
   anchor:
     paraId: 63DB1D44
     path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[2]>cell[1]
+    idx: 20
     context: 現　在
   format:
     date_style: 短縮元号
@@ -56,26 +61,31 @@ fields:
     勤め:
       paraId: 67FEB196
       path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[2]>cell[2]
+      idx: 21
       context: □勤め　□パート等　□自営　□法人代表者
       literal: □勤め
     パート等:
       paraId: 67FEB196
       path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[2]>cell[2]
+      idx: 21
       context: □勤め　□パート等　□自営　□法人代表者
       literal: □パート等
     自営:
       paraId: 67FEB196
       path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[2]>cell[2]
+      idx: 21
       context: □勤め　□パート等　□自営　□法人代表者
       literal: □自営
     法人代表者:
       paraId: 67FEB196
       path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[2]>cell[2]
+      idx: 21
       context: □勤め　□パート等　□自営　□法人代表者
       literal: □法人代表者
     無職:
       paraId: 15590B39
       path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[3]>cell[1]
+      idx: 24
       context: □無職
       literal: □無職
   binds: career[].employment_type
@@ -84,6 +94,7 @@ fields:
   anchor:
     paraId: 30EFB94F
     path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[2]>cell[3]
+    idx: 22
   format:
     sz: 20
   binds: career[].monthly_income
@@ -93,6 +104,7 @@ fields:
   anchor:
     paraId: 0B8556A1
     path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[3]>cell[0]
+    idx: 23
   format:
     sz: 20
   binds: career[].employer
@@ -102,6 +114,7 @@ fields:
   anchor:
     paraId: 14104E0B
     path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[3]>cell[2]
+    idx: 25
     context: □　退職金有り
   options:
     有り: □　退職金有り
@@ -112,6 +125,7 @@ fields:
   anchor:
     paraId: 10B45B2E
     path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[4]>cell[0]
+    idx: 26
     context: 年　月～
   format:
     date_style: 短縮元号
@@ -122,6 +136,7 @@ fields:
   anchor:
     paraId: 721AA323
     path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[4]>cell[1]
+    idx: 27
     context: 年　月
   format:
     date_style: 短縮元号
@@ -133,26 +148,31 @@ fields:
     勤め:
       paraId: 02F17519
       path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[4]>cell[2]
+      idx: 28
       context: □勤め　□パート等　□自営　□法人代表者
       literal: □勤め
     パート等:
       paraId: 02F17519
       path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[4]>cell[2]
+      idx: 28
       context: □勤め　□パート等　□自営　□法人代表者
       literal: □パート等
     自営:
       paraId: 02F17519
       path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[4]>cell[2]
+      idx: 28
       context: □勤め　□パート等　□自営　□法人代表者
       literal: □自営
     法人代表者:
       paraId: 02F17519
       path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[4]>cell[2]
+      idx: 28
       context: □勤め　□パート等　□自営　□法人代表者
       literal: □法人代表者
     無職:
       paraId: 234FFBC8
       path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[5]>cell[1]
+      idx: 31
       context: □無職
       literal: □無職
   binds: career[].employment_type
@@ -161,6 +181,7 @@ fields:
   anchor:
     paraId: 0425EB78
     path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[4]>cell[3]
+    idx: 29
   format:
     sz: 20
   binds: career[].monthly_income
@@ -170,6 +191,7 @@ fields:
   anchor:
     paraId: 196DC5F5
     path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[5]>cell[0]
+    idx: 30
   format:
     sz: 20
   binds: career[].employer
@@ -179,6 +201,7 @@ fields:
   anchor:
     paraId: 4E7AEED6
     path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[5]>cell[2]
+    idx: 32
     context: □　退職金有り
   options:
     有り: □　退職金有り
@@ -189,6 +212,7 @@ fields:
   anchor:
     paraId: 1AC77DD1
     path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[6]>cell[0]
+    idx: 33
     context: 年　月～
   format:
     date_style: 短縮元号
@@ -199,6 +223,7 @@ fields:
   anchor:
     paraId: '72327897'
     path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[6]>cell[1]
+    idx: 34
     context: 年　月
   format:
     date_style: 短縮元号
@@ -210,26 +235,31 @@ fields:
     勤め:
       paraId: '15492581'
       path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[6]>cell[2]
+      idx: 35
       context: □勤め　□パート等　□自営　□法人代表者
       literal: □勤め
     パート等:
       paraId: '15492581'
       path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[6]>cell[2]
+      idx: 35
       context: □勤め　□パート等　□自営　□法人代表者
       literal: □パート等
     自営:
       paraId: '15492581'
       path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[6]>cell[2]
+      idx: 35
       context: □勤め　□パート等　□自営　□法人代表者
       literal: □自営
     法人代表者:
       paraId: '15492581'
       path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[6]>cell[2]
+      idx: 35
       context: □勤め　□パート等　□自営　□法人代表者
       literal: □法人代表者
     無職:
       paraId: 4D0DFA0B
       path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[7]>cell[1]
+      idx: 38
       context: □無職
       literal: □無職
   binds: career[].employment_type
@@ -238,6 +268,7 @@ fields:
   anchor:
     paraId: '32308807'
     path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[6]>cell[3]
+    idx: 36
   format:
     sz: 20
   binds: career[].monthly_income
@@ -247,6 +278,7 @@ fields:
   anchor:
     paraId: 304B1FC1
     path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[7]>cell[0]
+    idx: 37
   format:
     sz: 20
   binds: career[].employer
@@ -256,6 +288,7 @@ fields:
   anchor:
     paraId: 2C3E440D
     path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[7]>cell[2]
+    idx: 39
     context: □　退職金有り
   options:
     有り: □　退職金有り
@@ -266,6 +299,7 @@ fields:
   anchor:
     paraId: 0F3BB005
     path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[8]>cell[0]
+    idx: 40
     context: 年　月～
   format:
     date_style: 短縮元号
@@ -276,6 +310,7 @@ fields:
   anchor:
     paraId: 7FDC5F8B
     path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[8]>cell[1]
+    idx: 41
     context: 年　月
   format:
     date_style: 短縮元号
@@ -287,26 +322,31 @@ fields:
     勤め:
       paraId: 444A4C62
       path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[8]>cell[2]
+      idx: 42
       context: □勤め　□パート等　□自営　□法人代表者
       literal: □勤め
     パート等:
       paraId: 444A4C62
       path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[8]>cell[2]
+      idx: 42
       context: □勤め　□パート等　□自営　□法人代表者
       literal: □パート等
     自営:
       paraId: 444A4C62
       path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[8]>cell[2]
+      idx: 42
       context: □勤め　□パート等　□自営　□法人代表者
       literal: □自営
     法人代表者:
       paraId: 444A4C62
       path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[8]>cell[2]
+      idx: 42
       context: □勤め　□パート等　□自営　□法人代表者
       literal: □法人代表者
     無職:
       paraId: 7955A3DB
       path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[9]>cell[1]
+      idx: 45
       context: □無職
       literal: □無職
   binds: career[].employment_type
@@ -315,6 +355,7 @@ fields:
   anchor:
     paraId: 7161333A
     path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[8]>cell[3]
+    idx: 43
   format:
     sz: 20
   binds: career[].monthly_income
@@ -324,6 +365,7 @@ fields:
   anchor:
     paraId: 7AAA7BA0
     path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[9]>cell[0]
+    idx: 44
   format:
     sz: 20
   binds: career[].employer
@@ -333,6 +375,7 @@ fields:
   anchor:
     paraId: 657BF6C7
     path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[9]>cell[2]
+    idx: 46
     context: □　退職金有り
   options:
     有り: □　退職金有り
@@ -343,6 +386,7 @@ fields:
   anchor:
     paraId: 0D2BFF18
     path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[10]>cell[0]
+    idx: 47
     context: 年　月～
   format:
     date_style: 短縮元号
@@ -353,6 +397,7 @@ fields:
   anchor:
     paraId: 6BE5F8A2
     path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[10]>cell[1]
+    idx: 48
     context: 年　月
   format:
     date_style: 短縮元号
@@ -364,26 +409,31 @@ fields:
     勤め:
       paraId: 7080528A
       path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[10]>cell[2]
+      idx: 49
       context: □勤め　□パート等　□自営　□法人代表者
       literal: □勤め
     パート等:
       paraId: 7080528A
       path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[10]>cell[2]
+      idx: 49
       context: □勤め　□パート等　□自営　□法人代表者
       literal: □パート等
     自営:
       paraId: 7080528A
       path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[10]>cell[2]
+      idx: 49
       context: □勤め　□パート等　□自営　□法人代表者
       literal: □自営
     法人代表者:
       paraId: 7080528A
       path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[10]>cell[2]
+      idx: 49
       context: □勤め　□パート等　□自営　□法人代表者
       literal: □法人代表者
     無職:
       paraId: 737A7665
       path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[11]>cell[1]
+      idx: 52
       context: □無職
       literal: □無職
   binds: career[].employment_type
@@ -392,6 +442,7 @@ fields:
   anchor:
     paraId: 05EB635C
     path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[10]>cell[3]
+    idx: 50
   format:
     sz: 20
   binds: career[].monthly_income
@@ -401,6 +452,7 @@ fields:
   anchor:
     paraId: 2CB694E2
     path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[11]>cell[0]
+    idx: 51
   format:
     sz: 20
   binds: career[].employer
@@ -410,6 +462,7 @@ fields:
   anchor:
     paraId: 3C1CE7CB
     path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[11]>cell[2]
+    idx: 53
     context: □　退職金有り
   options:
     有り: □　退職金有り
@@ -420,6 +473,7 @@ fields:
   anchor:
     paraId: 47F9C04D
     path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[12]>cell[0]
+    idx: 54
     context: 年　月～
   format:
     date_style: 短縮元号
@@ -430,6 +484,7 @@ fields:
   anchor:
     paraId: '53533425'
     path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[12]>cell[1]
+    idx: 55
     context: 年　月
   format:
     date_style: 短縮元号
@@ -441,26 +496,31 @@ fields:
     勤め:
       paraId: 3A04580B
       path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[12]>cell[2]
+      idx: 56
       context: □勤め　□パート等　□自営　□法人代表者
       literal: □勤め
     パート等:
       paraId: 3A04580B
       path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[12]>cell[2]
+      idx: 56
       context: □勤め　□パート等　□自営　□法人代表者
       literal: □パート等
     自営:
       paraId: 3A04580B
       path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[12]>cell[2]
+      idx: 56
       context: □勤め　□パート等　□自営　□法人代表者
       literal: □自営
     法人代表者:
       paraId: 3A04580B
       path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[12]>cell[2]
+      idx: 56
       context: □勤め　□パート等　□自営　□法人代表者
       literal: □法人代表者
     無職:
       paraId: 5E15D63F
       path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[13]>cell[1]
+      idx: 59
       context: □無職
       literal: □無職
   binds: career[].employment_type
@@ -469,6 +529,7 @@ fields:
   anchor:
     paraId: 53B2675A
     path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[12]>cell[3]
+    idx: 57
   format:
     sz: 20
   binds: career[].monthly_income
@@ -478,6 +539,7 @@ fields:
   anchor:
     paraId: 2194A1F4
     path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[13]>cell[0]
+    idx: 58
   format:
     sz: 20
   binds: career[].employer
@@ -487,6 +549,7 @@ fields:
   anchor:
     paraId: 06C9091B
     path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[13]>cell[2]
+    idx: 60
     context: □　退職金有り
   options:
     有り: □　退職金有り
@@ -497,6 +560,7 @@ fields:
   anchor:
     paraId: 6143CA5D
     path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[14]>cell[0]
+    idx: 61
     context: 年　月～
   format:
     date_style: 短縮元号
@@ -507,6 +571,7 @@ fields:
   anchor:
     paraId: 00B74840
     path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[14]>cell[1]
+    idx: 62
     context: 年　月
   format:
     date_style: 短縮元号
@@ -518,26 +583,31 @@ fields:
     勤め:
       paraId: 125B7966
       path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[14]>cell[2]
+      idx: 63
       context: □勤め　□パート等　□自営　□法人代表者
       literal: □勤め
     パート等:
       paraId: 125B7966
       path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[14]>cell[2]
+      idx: 63
       context: □勤め　□パート等　□自営　□法人代表者
       literal: □パート等
     自営:
       paraId: 125B7966
       path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[14]>cell[2]
+      idx: 63
       context: □勤め　□パート等　□自営　□法人代表者
       literal: □自営
     法人代表者:
       paraId: 125B7966
       path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[14]>cell[2]
+      idx: 63
       context: □勤め　□パート等　□自営　□法人代表者
       literal: □法人代表者
     無職:
       paraId: 7987BCAB
       path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[15]>cell[1]
+      idx: 66
       context: □無職
       literal: □無職
   binds: career[].employment_type
@@ -546,6 +616,7 @@ fields:
   anchor:
     paraId: 5A4CEFBB
     path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[14]>cell[3]
+    idx: 64
   format:
     sz: 20
   binds: career[].monthly_income
@@ -555,6 +626,7 @@ fields:
   anchor:
     paraId: 1226E765
     path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[15]>cell[0]
+    idx: 65
   format:
     sz: 20
   binds: career[].employer
@@ -564,6 +636,7 @@ fields:
   anchor:
     paraId: 675DE80D
     path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[15]>cell[2]
+    idx: 67
     context: □　退職金有り
   options:
     有り: □　退職金有り
@@ -574,6 +647,7 @@ fields:
   anchor:
     paraId: 39518D04
     path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[16]>cell[0]
+    idx: 68
     context: 年　月～
   format:
     date_style: 短縮元号
@@ -584,6 +658,7 @@ fields:
   anchor:
     paraId: 089BA973
     path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[16]>cell[1]
+    idx: 69
     context: 年　月
   format:
     date_style: 短縮元号
@@ -595,26 +670,31 @@ fields:
     勤め:
       paraId: 56C04FD5
       path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[16]>cell[2]
+      idx: 70
       context: □勤め　□パート等　□自営　□法人代表者
       literal: □勤め
     パート等:
       paraId: 56C04FD5
       path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[16]>cell[2]
+      idx: 70
       context: □勤め　□パート等　□自営　□法人代表者
       literal: □パート等
     自営:
       paraId: 56C04FD5
       path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[16]>cell[2]
+      idx: 70
       context: □勤め　□パート等　□自営　□法人代表者
       literal: □自営
     法人代表者:
       paraId: 56C04FD5
       path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[16]>cell[2]
+      idx: 70
       context: □勤め　□パート等　□自営　□法人代表者
       literal: □法人代表者
     無職:
       paraId: 0ECD9BFF
       path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[17]>cell[1]
+      idx: 73
       context: □無職
       literal: □無職
   binds: career[].employment_type
@@ -623,6 +703,7 @@ fields:
   anchor:
     paraId: 2AC37AEB
     path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[16]>cell[3]
+    idx: 71
   format:
     sz: 20
   binds: career[].monthly_income
@@ -632,6 +713,7 @@ fields:
   anchor:
     paraId: 04BE2CE9
     path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[17]>cell[0]
+    idx: 72
   format:
     sz: 20
   binds: career[].employer
@@ -641,6 +723,7 @@ fields:
   anchor:
     paraId: 00E645B4
     path: 第１　申立人の経歴等>１　職歴（現在から申立ての７年前まで）>table[0]>row[17]>cell[2]
+    idx: 74
     context: □　退職金有り
   options:
     有り: □　退職金有り
@@ -651,6 +734,7 @@ fields:
   anchor:
     paraId: 45083BF0
     path: 第１　申立人の経歴等>２　婚姻，離婚歴等>table[1]>row[1]>cell[0]
+    idx: 80
     context: 年　月
   format:
     date_style: 短縮元号
@@ -660,6 +744,7 @@ fields:
   anchor:
     paraId: 67F04319
     path: 第１　申立人の経歴等>２　婚姻，離婚歴等>table[1]>row[1]>cell[1]
+    idx: 81
   format:
     sz: 20
   binds: family.marriages[].note
@@ -668,6 +753,7 @@ fields:
   anchor:
     paraId: 074AF8EB
     path: 第１　申立人の経歴等>２　婚姻，離婚歴等>table[1]>row[1]>cell[2]
+    idx: 82
     context: □婚姻　□離婚　□内縁　□内縁解消　□死別
   options:
     婚姻: □婚姻
@@ -681,6 +767,7 @@ fields:
   anchor:
     paraId: 30E1CC0D
     path: 第１　申立人の経歴等>２　婚姻，離婚歴等>table[1]>row[2]>cell[0]
+    idx: 83
     context: 年　月
   format:
     date_style: 短縮元号
@@ -690,6 +777,7 @@ fields:
   anchor:
     paraId: 615DE38A
     path: 第１　申立人の経歴等>２　婚姻，離婚歴等>table[1]>row[2]>cell[1]
+    idx: 84
   format:
     sz: 20
   binds: family.marriages[].note
@@ -698,6 +786,7 @@ fields:
   anchor:
     paraId: 69EF16A6
     path: 第１　申立人の経歴等>２　婚姻，離婚歴等>table[1]>row[2]>cell[2]
+    idx: 85
     context: □婚姻　□離婚　□内縁　□内縁解消　□死別
   options:
     婚姻: □婚姻
@@ -711,6 +800,7 @@ fields:
   anchor:
     paraId: 2C6A48D4
     path: 第１　申立人の経歴等>２　婚姻，離婚歴等>table[1]>row[3]>cell[0]
+    idx: 86
     context: 年　月
   format:
     date_style: 短縮元号
@@ -720,6 +810,7 @@ fields:
   anchor:
     paraId: 0478BE8B
     path: 第１　申立人の経歴等>２　婚姻，離婚歴等>table[1]>row[3]>cell[1]
+    idx: 87
   format:
     sz: 20
   binds: family.marriages[].note
@@ -728,6 +819,7 @@ fields:
   anchor:
     paraId: 27327F96
     path: 第１　申立人の経歴等>２　婚姻，離婚歴等>table[1]>row[3]>cell[2]
+    idx: 88
     context: □婚姻　□離婚　□内縁　□内縁解消　□死別
   options:
     婚姻: □婚姻
@@ -741,6 +833,7 @@ fields:
   anchor:
     paraId: 044E6F60
     path: 第１　申立人の経歴等>２　婚姻，離婚歴等>table[1]>row[4]>cell[0]
+    idx: 89
     context: 年　月
   format:
     date_style: 短縮元号
@@ -750,6 +843,7 @@ fields:
   anchor:
     paraId: '50136288'
     path: 第１　申立人の経歴等>２　婚姻，離婚歴等>table[1]>row[4]>cell[1]
+    idx: 90
   format:
     sz: 20
   binds: family.marriages[].note
@@ -758,6 +852,7 @@ fields:
   anchor:
     paraId: 12B7DF24
     path: 第１　申立人の経歴等>２　婚姻，離婚歴等>table[1]>row[4]>cell[2]
+    idx: 91
     context: □婚姻　□離婚　□内縁　□内縁解消　□死別
   options:
     婚姻: □婚姻
@@ -771,6 +866,7 @@ fields:
   anchor:
     paraId: 76E47280
     path: 第１　申立人の経歴等>３　配偶者，同居者並びに別居の父母及び子>table[2]>row[1]>cell[0]
+    idx: 99
   format:
     sz: 20
   binds: family.members[]
@@ -780,6 +876,7 @@ fields:
   anchor:
     paraId: 35098D64
     path: 第１　申立人の経歴等>３　配偶者，同居者並びに別居の父母及び子>table[2]>row[1]>cell[1]
+    idx: 100
   format:
     sz: 20
   binds: family.members[]
@@ -789,6 +886,7 @@ fields:
   anchor:
     paraId: 4A81F697
     path: 第１　申立人の経歴等>３　配偶者，同居者並びに別居の父母及び子>table[2]>row[1]>cell[2]
+    idx: 101
   format:
     sz: 20
   binds: family.members[]
@@ -798,6 +896,7 @@ fields:
   anchor:
     paraId: 76DDE0B5
     path: 第１　申立人の経歴等>３　配偶者，同居者並びに別居の父母及び子>table[2]>row[1]>cell[3]
+    idx: 102
   format:
     sz: 20
   binds: family.members[]
@@ -807,6 +906,7 @@ fields:
   anchor:
     paraId: '39028880'
     path: 第１　申立人の経歴等>３　配偶者，同居者並びに別居の父母及び子>table[2]>row[1]>cell[4]
+    idx: 103
     context: □同　□別
   options:
     同: □同
@@ -817,6 +917,7 @@ fields:
   anchor:
     paraId: 313B5D02
     path: 第１　申立人の経歴等>３　配偶者，同居者並びに別居の父母及び子>table[2]>row[1]>cell[5]
+    idx: 104
   format:
     sz: 20
   binds: family.members[].income
@@ -826,6 +927,7 @@ fields:
   anchor:
     paraId: '40624464'
     path: 第１　申立人の経歴等>３　配偶者，同居者並びに別居の父母及び子>table[2]>row[2]>cell[0]
+    idx: 105
   format:
     sz: 20
   binds: family.members[]
@@ -835,6 +937,7 @@ fields:
   anchor:
     paraId: 14E690FD
     path: 第１　申立人の経歴等>３　配偶者，同居者並びに別居の父母及び子>table[2]>row[2]>cell[1]
+    idx: 106
   format:
     sz: 20
   binds: family.members[]
@@ -844,6 +947,7 @@ fields:
   anchor:
     paraId: 6C54F986
     path: 第１　申立人の経歴等>３　配偶者，同居者並びに別居の父母及び子>table[2]>row[2]>cell[2]
+    idx: 107
   format:
     sz: 20
   binds: family.members[]
@@ -853,6 +957,7 @@ fields:
   anchor:
     paraId: 12F56BB0
     path: 第１　申立人の経歴等>３　配偶者，同居者並びに別居の父母及び子>table[2]>row[2]>cell[3]
+    idx: 108
   format:
     sz: 20
   binds: family.members[]
@@ -862,6 +967,7 @@ fields:
   anchor:
     paraId: 6C3108E4
     path: 第１　申立人の経歴等>３　配偶者，同居者並びに別居の父母及び子>table[2]>row[2]>cell[4]
+    idx: 109
     context: □同　□別
   options:
     同: □同
@@ -872,6 +978,7 @@ fields:
   anchor:
     paraId: 302EF762
     path: 第１　申立人の経歴等>３　配偶者，同居者並びに別居の父母及び子>table[2]>row[2]>cell[5]
+    idx: 110
   format:
     sz: 20
   binds: family.members[].income
@@ -881,6 +988,7 @@ fields:
   anchor:
     paraId: 5356843E
     path: 第１　申立人の経歴等>３　配偶者，同居者並びに別居の父母及び子>table[2]>row[3]>cell[0]
+    idx: 111
   format:
     sz: 20
   binds: family.members[]
@@ -890,6 +998,7 @@ fields:
   anchor:
     paraId: 391C13B8
     path: 第１　申立人の経歴等>３　配偶者，同居者並びに別居の父母及び子>table[2]>row[3]>cell[1]
+    idx: 112
   format:
     sz: 20
   binds: family.members[]
@@ -899,6 +1008,7 @@ fields:
   anchor:
     paraId: 052D417B
     path: 第１　申立人の経歴等>３　配偶者，同居者並びに別居の父母及び子>table[2]>row[3]>cell[2]
+    idx: 113
   format:
     sz: 20
   binds: family.members[]
@@ -908,6 +1018,7 @@ fields:
   anchor:
     paraId: 3435B1AC
     path: 第１　申立人の経歴等>３　配偶者，同居者並びに別居の父母及び子>table[2]>row[3]>cell[3]
+    idx: 114
   format:
     sz: 20
   binds: family.members[]
@@ -917,6 +1028,7 @@ fields:
   anchor:
     paraId: 0AEDF0D9
     path: 第１　申立人の経歴等>３　配偶者，同居者並びに別居の父母及び子>table[2]>row[3]>cell[4]
+    idx: 115
     context: □同　□別
   options:
     同: □同
@@ -927,6 +1039,7 @@ fields:
   anchor:
     paraId: 653D74BE
     path: 第１　申立人の経歴等>３　配偶者，同居者並びに別居の父母及び子>table[2]>row[3]>cell[5]
+    idx: 116
   format:
     sz: 20
   binds: family.members[].income
@@ -936,6 +1049,7 @@ fields:
   anchor:
     paraId: 08A76FC1
     path: 第１　申立人の経歴等>３　配偶者，同居者並びに別居の父母及び子>table[2]>row[4]>cell[0]
+    idx: 117
   format:
     sz: 20
   binds: family.members[]
@@ -945,6 +1059,7 @@ fields:
   anchor:
     paraId: 1A76FECF
     path: 第１　申立人の経歴等>３　配偶者，同居者並びに別居の父母及び子>table[2]>row[4]>cell[1]
+    idx: 118
   format:
     sz: 20
   binds: family.members[]
@@ -954,6 +1069,7 @@ fields:
   anchor:
     paraId: 6219FE70
     path: 第１　申立人の経歴等>３　配偶者，同居者並びに別居の父母及び子>table[2]>row[4]>cell[2]
+    idx: 119
   format:
     sz: 20
   binds: family.members[]
@@ -963,6 +1079,7 @@ fields:
   anchor:
     paraId: 1A4308F0
     path: 第１　申立人の経歴等>３　配偶者，同居者並びに別居の父母及び子>table[2]>row[4]>cell[3]
+    idx: 120
   format:
     sz: 20
   binds: family.members[]
@@ -972,6 +1089,7 @@ fields:
   anchor:
     paraId: 18BA8CBF
     path: 第１　申立人の経歴等>３　配偶者，同居者並びに別居の父母及び子>table[2]>row[4]>cell[4]
+    idx: 121
     context: □同　□別
   options:
     同: □同
@@ -982,6 +1100,7 @@ fields:
   anchor:
     paraId: 47B63FA5
     path: 第１　申立人の経歴等>３　配偶者，同居者並びに別居の父母及び子>table[2]>row[4]>cell[5]
+    idx: 122
   format:
     sz: 20
   binds: family.members[].income
@@ -991,6 +1110,7 @@ fields:
   anchor:
     paraId: 69F828E6
     path: 第１　申立人の経歴等>３　配偶者，同居者並びに別居の父母及び子>table[2]>row[5]>cell[0]
+    idx: 123
   format:
     sz: 20
   binds: family.members[]
@@ -1000,6 +1120,7 @@ fields:
   anchor:
     paraId: 7045FB55
     path: 第１　申立人の経歴等>３　配偶者，同居者並びに別居の父母及び子>table[2]>row[5]>cell[1]
+    idx: 124
   format:
     sz: 20
   binds: family.members[]
@@ -1009,6 +1130,7 @@ fields:
   anchor:
     paraId: 47C7EEC7
     path: 第１　申立人の経歴等>３　配偶者，同居者並びに別居の父母及び子>table[2]>row[5]>cell[2]
+    idx: 125
   format:
     sz: 20
   binds: family.members[]
@@ -1018,6 +1140,7 @@ fields:
   anchor:
     paraId: 5C202EB8
     path: 第１　申立人の経歴等>３　配偶者，同居者並びに別居の父母及び子>table[2]>row[5]>cell[3]
+    idx: 126
   format:
     sz: 20
   binds: family.members[]
@@ -1027,6 +1150,7 @@ fields:
   anchor:
     paraId: 59AD2E4C
     path: 第１　申立人の経歴等>３　配偶者，同居者並びに別居の父母及び子>table[2]>row[5]>cell[4]
+    idx: 127
     context: □同　□別
   options:
     同: □同
@@ -1037,6 +1161,7 @@ fields:
   anchor:
     paraId: 63D5F133
     path: 第１　申立人の経歴等>３　配偶者，同居者並びに別居の父母及び子>table[2]>row[5]>cell[5]
+    idx: 128
   format:
     sz: 20
   binds: family.members[].income
@@ -1046,6 +1171,7 @@ fields:
   anchor:
     paraId: '23193073'
     path: 第１　申立人の経歴等>３　配偶者，同居者並びに別居の父母及び子>table[2]>row[6]>cell[0]
+    idx: 129
   format:
     sz: 20
   binds: family.members[]
@@ -1055,6 +1181,7 @@ fields:
   anchor:
     paraId: 18646EC4
     path: 第１　申立人の経歴等>３　配偶者，同居者並びに別居の父母及び子>table[2]>row[6]>cell[1]
+    idx: 130
   format:
     sz: 20
   binds: family.members[]
@@ -1064,6 +1191,7 @@ fields:
   anchor:
     paraId: 5FFA1783
     path: 第１　申立人の経歴等>３　配偶者，同居者並びに別居の父母及び子>table[2]>row[6]>cell[2]
+    idx: 131
   format:
     sz: 20
   binds: family.members[]
@@ -1073,6 +1201,7 @@ fields:
   anchor:
     paraId: 1864F347
     path: 第１　申立人の経歴等>３　配偶者，同居者並びに別居の父母及び子>table[2]>row[6]>cell[3]
+    idx: 132
   format:
     sz: 20
   binds: family.members[]
@@ -1082,6 +1211,7 @@ fields:
   anchor:
     paraId: 73D5B9D7
     path: 第１　申立人の経歴等>３　配偶者，同居者並びに別居の父母及び子>table[2]>row[6]>cell[4]
+    idx: 133
     context: □同　□別
   options:
     同: □同
@@ -1092,6 +1222,7 @@ fields:
   anchor:
     paraId: 69475F25
     path: 第１　申立人の経歴等>３　配偶者，同居者並びに別居の父母及び子>table[2]>row[6]>cell[5]
+    idx: 134
   format:
     sz: 20
   binds: family.members[].income
@@ -1101,6 +1232,7 @@ fields:
   anchor:
     paraId: 6997454E
     path: 第１　申立人の経歴等>３　配偶者，同居者並びに別居の父母及び子>table[2]>row[7]>cell[0]
+    idx: 135
   format:
     sz: 20
   binds: family.members[]
@@ -1110,6 +1242,7 @@ fields:
   anchor:
     paraId: 6B4AB3C0
     path: 第１　申立人の経歴等>３　配偶者，同居者並びに別居の父母及び子>table[2]>row[7]>cell[1]
+    idx: 136
   format:
     sz: 20
   binds: family.members[]
@@ -1119,6 +1252,7 @@ fields:
   anchor:
     paraId: 2BDEB49A
     path: 第１　申立人の経歴等>３　配偶者，同居者並びに別居の父母及び子>table[2]>row[7]>cell[2]
+    idx: 137
   format:
     sz: 20
   binds: family.members[]
@@ -1128,6 +1262,7 @@ fields:
   anchor:
     paraId: 19C3487F
     path: 第１　申立人の経歴等>３　配偶者，同居者並びに別居の父母及び子>table[2]>row[7]>cell[3]
+    idx: 138
   format:
     sz: 20
   binds: family.members[]
@@ -1137,6 +1272,7 @@ fields:
   anchor:
     paraId: 73C0EDBA
     path: 第１　申立人の経歴等>３　配偶者，同居者並びに別居の父母及び子>table[2]>row[7]>cell[4]
+    idx: 139
     context: □同　□別
   options:
     同: □同
@@ -1147,6 +1283,7 @@ fields:
   anchor:
     paraId: 4B6CDE3F
     path: 第１　申立人の経歴等>３　配偶者，同居者並びに別居の父母及び子>table[2]>row[7]>cell[5]
+    idx: 140
   format:
     sz: 20
   binds: family.members[].income
@@ -1156,6 +1293,7 @@ fields:
   anchor:
     paraId: 7E6C80E8
     path: 第１　申立人の経歴等>３　配偶者，同居者並びに別居の父母及び子>table[2]>row[8]>cell[0]
+    idx: 141
   format:
     sz: 20
   binds: family.members[]
@@ -1165,6 +1303,7 @@ fields:
   anchor:
     paraId: 239A4995
     path: 第１　申立人の経歴等>３　配偶者，同居者並びに別居の父母及び子>table[2]>row[8]>cell[1]
+    idx: 142
   format:
     sz: 20
   binds: family.members[]
@@ -1174,6 +1313,7 @@ fields:
   anchor:
     paraId: 710591FF
     path: 第１　申立人の経歴等>３　配偶者，同居者並びに別居の父母及び子>table[2]>row[8]>cell[2]
+    idx: 143
   format:
     sz: 20
   binds: family.members[]
@@ -1183,6 +1323,7 @@ fields:
   anchor:
     paraId: 7DBEDEAA
     path: 第１　申立人の経歴等>３　配偶者，同居者並びに別居の父母及び子>table[2]>row[8]>cell[3]
+    idx: 144
   format:
     sz: 20
   binds: family.members[]
@@ -1192,6 +1333,7 @@ fields:
   anchor:
     paraId: 1E7129DA
     path: 第１　申立人の経歴等>３　配偶者，同居者並びに別居の父母及び子>table[2]>row[8]>cell[4]
+    idx: 145
     context: □同　□別
   options:
     同: □同
@@ -1202,6 +1344,7 @@ fields:
   anchor:
     paraId: 765F610A
     path: 第１　申立人の経歴等>３　配偶者，同居者並びに別居の父母及び子>table[2]>row[8]>cell[5]
+    idx: 146
   format:
     sz: 20
   binds: family.members[].income
@@ -1211,6 +1354,7 @@ fields:
   anchor:
     paraId: 50BCD036
     path: 第１　申立人の経歴等>３　配偶者，同居者並びに別居の父母及び子>table[2]>row[9]>cell[0]
+    idx: 147
   format:
     sz: 20
   binds: family.members[]
@@ -1220,6 +1364,7 @@ fields:
   anchor:
     paraId: 768C7D2F
     path: 第１　申立人の経歴等>３　配偶者，同居者並びに別居の父母及び子>table[2]>row[9]>cell[1]
+    idx: 148
   format:
     sz: 20
   binds: family.members[]
@@ -1229,6 +1374,7 @@ fields:
   anchor:
     paraId: 06AB5E8D
     path: 第１　申立人の経歴等>３　配偶者，同居者並びに別居の父母及び子>table[2]>row[9]>cell[2]
+    idx: 149
   format:
     sz: 20
   binds: family.members[]
@@ -1238,6 +1384,7 @@ fields:
   anchor:
     paraId: 7756FF0B
     path: 第１　申立人の経歴等>３　配偶者，同居者並びに別居の父母及び子>table[2]>row[9]>cell[3]
+    idx: 150
   format:
     sz: 20
   binds: family.members[]
@@ -1247,6 +1394,7 @@ fields:
   anchor:
     paraId: 5F832F32
     path: 第１　申立人の経歴等>３　配偶者，同居者並びに別居の父母及び子>table[2]>row[9]>cell[4]
+    idx: 151
     context: □同　□別
   options:
     同: □同
@@ -1257,6 +1405,7 @@ fields:
   anchor:
     paraId: 46B68813
     path: 第１　申立人の経歴等>３　配偶者，同居者並びに別居の父母及び子>table[2]>row[9]>cell[5]
+    idx: 152
   format:
     sz: 20
   binds: family.members[].income
@@ -1266,6 +1415,7 @@ fields:
   anchor:
     paraId: 78FEB834
     path: 第１　申立人の経歴等>４　死亡した父母等の相続の状況>table[3]>row[1]>cell[0]
+    idx: 159
   format:
     sz: 20
   binds: family.inheritance[].deceased
@@ -1274,6 +1424,7 @@ fields:
   anchor:
     paraId: 5EED93CE
     path: 第１　申立人の経歴等>４　死亡した父母等の相続の状況>table[3]>row[1]>cell[1]
+    idx: 160
   format:
     sz: 20
 - id: sozoku1_hasseibi
@@ -1281,6 +1432,7 @@ fields:
   anchor:
     paraId: 5B4C3BD9
     path: 第１　申立人の経歴等>４　死亡した父母等の相続の状況>table[3]>row[1]>cell[2]
+    idx: 161
     context: 年　月　日
   format:
     date_style: 短縮元号
@@ -1290,6 +1442,7 @@ fields:
   anchor:
     paraId: 16A0D0E5
     path: 第１　申立人の経歴等>４　死亡した父母等の相続の状況>table[3]>row[1]>cell[3]
+    idx: 162
     context: □遺産なし・□放棄・□分割済・□分割未了
   options:
     遺産なし: □遺産なし
@@ -1302,6 +1455,7 @@ fields:
   anchor:
     paraId: 2715CE39
     path: 第１　申立人の経歴等>４　死亡した父母等の相続の状況>table[3]>row[2]>cell[0]
+    idx: 163
   format:
     sz: 20
   binds: family.inheritance[].deceased
@@ -1310,6 +1464,7 @@ fields:
   anchor:
     paraId: 0A9518AF
     path: 第１　申立人の経歴等>４　死亡した父母等の相続の状況>table[3]>row[2]>cell[1]
+    idx: 164
   format:
     sz: 20
 - id: sozoku2_hasseibi
@@ -1317,6 +1472,7 @@ fields:
   anchor:
     paraId: 14E098FD
     path: 第１　申立人の経歴等>４　死亡した父母等の相続の状況>table[3]>row[2]>cell[2]
+    idx: 165
     context: 年　月　日
   format:
     date_style: 短縮元号
@@ -1326,6 +1482,7 @@ fields:
   anchor:
     paraId: 0759EA38
     path: 第１　申立人の経歴等>４　死亡した父母等の相続の状況>table[3]>row[2]>cell[3]
+    idx: 166
     context: □遺産なし・□放棄・□分割済・□分割未了
   options:
     遺産なし: □遺産なし
@@ -1338,6 +1495,7 @@ fields:
   anchor:
     paraId: 523B2C35
     path: 第１　申立人の経歴等>４　死亡した父母等の相続の状況>table[3]>row[3]>cell[0]
+    idx: 167
   format:
     sz: 20
   binds: family.inheritance[].deceased
@@ -1346,6 +1504,7 @@ fields:
   anchor:
     paraId: 431BD6E7
     path: 第１　申立人の経歴等>４　死亡した父母等の相続の状況>table[3]>row[3]>cell[1]
+    idx: 168
   format:
     sz: 20
 - id: sozoku3_hasseibi
@@ -1353,6 +1512,7 @@ fields:
   anchor:
     paraId: 1E103A1B
     path: 第１　申立人の経歴等>４　死亡した父母等の相続の状況>table[3]>row[3]>cell[2]
+    idx: 169
     context: 年　月　日
   format:
     date_style: 短縮元号
@@ -1362,6 +1522,7 @@ fields:
   anchor:
     paraId: 6F91DDA5
     path: 第１　申立人の経歴等>４　死亡した父母等の相続の状況>table[3]>row[3]>cell[3]
+    idx: 170
     context: □遺産なし・□放棄・□分割済・□分割未了
   options:
     遺産なし: □遺産なし
@@ -1374,6 +1535,7 @@ fields:
   anchor:
     paraId: 3CAE043A
     path: 第１　申立人の経歴等>４　死亡した父母等の相続の状況>table[3]>row[4]>cell[0]
+    idx: 171
   format:
     sz: 20
   binds: family.inheritance[].deceased
@@ -1382,6 +1544,7 @@ fields:
   anchor:
     paraId: 7AE4EB5A
     path: 第１　申立人の経歴等>４　死亡した父母等の相続の状況>table[3]>row[4]>cell[1]
+    idx: 172
   format:
     sz: 20
 - id: sozoku4_hasseibi
@@ -1389,6 +1552,7 @@ fields:
   anchor:
     paraId: 3B25C412
     path: 第１　申立人の経歴等>４　死亡した父母等の相続の状況>table[3]>row[4]>cell[2]
+    idx: 173
     context: 年　月　日
   format:
     date_style: 短縮元号
@@ -1398,6 +1562,7 @@ fields:
   anchor:
     paraId: 32DFC16E
     path: 第１　申立人の経歴等>４　死亡した父母等の相続の状況>table[3]>row[4]>cell[3]
+    idx: 174
     context: □遺産なし・□放棄・□分割済・□分割未了
   options:
     遺産なし: □遺産なし
@@ -1411,46 +1576,55 @@ fields:
     民間賃貸住宅:
       paraId: 60D32C34
       path: 第１　申立人の経歴等>５　現在の住居の状況（居住する家屋の形態
+      idx: 177
       context: □民間賃貸住宅（賃借人＝申立人）
       literal: □民間賃貸住宅（賃借人＝申立人）
     公営住宅:
       paraId: 2053B350
       path: 第１　申立人の経歴等>５　現在の住居の状況（居住する家屋の形態
+      idx: 178
       context: □公営住宅（賃借人＝申立人）
       literal: □公営住宅（賃借人＝申立人）
     持ち家:
       paraId: 4612D788
       path: 第１　申立人の経歴等>５　現在の住居の状況（居住する家屋の形態
+      idx: 179
       context: □持ち家（□一戸建・□マンション）（所有者＝申立人）
       literal: □持ち家
     持ち家_一戸建:
       paraId: 4612D788
       path: 第１　申立人の経歴等>５　現在の住居の状況（居住する家屋の形態
+      idx: 179
       context: □持ち家（□一戸建・□マンション）（所有者＝申立人）
       literal: □一戸建
     持ち家_マンション:
       paraId: 4612D788
       path: 第１　申立人の経歴等>５　現在の住居の状況（居住する家屋の形態
+      idx: 179
       context: □持ち家（□一戸建・□マンション）（所有者＝申立人）
       literal: □マンション
     他人所有:
       paraId: 5BE36395
       path: 第１　申立人の経歴等>５　現在の住居の状況（居住する家屋の形態
+      idx: 180
       context: □申立人以外の者（氏名，申立人との関係）
       literal: □申立人以外の者（氏名，申立人との関係）
     他人所有_所有:
       paraId: 3D70298A
       path: 第１　申立人の経歴等>５　現在の住居の状況（居住する家屋の形態
+      idx: 181
       context: の（□所有・□賃借）の家屋（無償で居住）
       literal: □所有
     他人所有_賃借:
       paraId: 3D70298A
       path: 第１　申立人の経歴等>５　現在の住居の状況（居住する家屋の形態
+      idx: 181
       context: の（□所有・□賃借）の家屋（無償で居住）
       literal: □賃借
     その他:
       paraId: 12F667E1
       path: 第１　申立人の経歴等>５　現在の住居の状況（居住する家屋の形態
+      idx: 182
       context: □その他
       literal: □その他
   binds: family.housing.kind
@@ -1460,6 +1634,7 @@ fields:
   anchor:
     paraId: 12F667E1
     path: 第１　申立人の経歴等>５　現在の住居の状況（居住する家屋の形態
+    idx: 182
     context: □その他
   notes: 「その他」選択時の説明
 - id: shakkin_riyu
@@ -1468,36 +1643,43 @@ fields:
     生活費不足:
       paraId: 346B0E6C
       path: 第２　破産申立てに至った事情（債務増大の>１　多額の借金（以下，特に断らない限り，
+      idx: 190
       context: □生活費不足
       literal: □生活費不足
     住宅ローン:
       paraId: 0A151C3B
       path: 第２　破産申立てに至った事情（債務増大の>１　多額の借金（以下，特に断らない限り，
+      idx: 191
       context: □住宅ローン
       literal: □住宅ローン
     教育費:
       paraId: 66E8B27D
       path: 第２　破産申立てに至った事情（債務増大の>１　多額の借金（以下，特に断らない限り，
+      idx: 192
       context: □教育費
       literal: □教育費
     浪費等:
       paraId: 081441F3
       path: 第２　破産申立てに至った事情（債務増大の>１　多額の借金（以下，特に断らない限り，
+      idx: 193
       context: □浪費等（飲食・飲酒，投資・投機，商品購入，ギャンブル等）
       literal: □浪費等
     事業経営破綻:
       paraId: 0C32C745
       path: 第２　破産申立てに至った事情（債務増大の>１　多額の借金（以下，特に断らない限り，
+      idx: 194
       context: □事業（店）の経営破綻（ネットワークビジネス・マルチ商法等の破綻も含む。）
       literal: □事業（店）の経営破綻
     債務保証:
       paraId: 13135A31
       path: 第２　破産申立てに至った事情（債務増大の>１　多額の借金（以下，特に断らない限り，
+      idx: 195
       context: □他人（会社，知人等）の債務保証
       literal: □他人（会社，知人等）の債務保証
     その他:
       paraId: 6877BF26
       path: 第２　破産申立てに至った事情（債務増大の>１　多額の借金（以下，特に断らない限り，
+      idx: 196
       context: □その他
       literal: □その他
   notes: 複数選択可
@@ -1506,6 +1688,7 @@ fields:
   anchor:
     paraId: 6877BF26
     path: 第２　破産申立てに至った事情（債務増大の>１　多額の借金（以下，特に断らない限り，
+    idx: 196
     context: □その他
 - id: kikkake
   kind: checkbox
@@ -1513,26 +1696,31 @@ fields:
     収入以上の返済金額:
       paraId: 145C3B0F
       path: 第２　破産申立てに至った事情（債務増大の>２　借金を返済できなくなったきっかけは，
+      idx: 199
       context: □収入以上の返済金額
       literal: □収入以上の返済金額
     解雇:
       paraId: 31526EE4
       path: 第２　破産申立てに至った事情（債務増大の>２　借金を返済できなくなったきっかけは，
+      idx: 200
       context: □解雇
       literal: □解雇
     給料の減額:
       paraId: 4274DC65
       path: 第２　破産申立てに至った事情（債務増大の>２　借金を返済できなくなったきっかけは，
+      idx: 201
       context: □給料の減額
       literal: □給料の減額
     病気等による入院:
       paraId: 1837F80B
       path: 第２　破産申立てに至った事情（債務増大の>２　借金を返済できなくなったきっかけは，
+      idx: 202
       context: □病気等による入院
       literal: □病気等による入院
     その他:
       paraId: 3633804F
       path: 第２　破産申立てに至った事情（債務増大の>２　借金を返済できなくなったきっかけは，
+      idx: 203
       context: □その他
       literal: □その他
   notes: 複数選択可
@@ -1541,12 +1729,14 @@ fields:
   anchor:
     paraId: 3633804F
     path: 第２　破産申立てに至った事情（債務増大の>２　借金を返済できなくなったきっかけは，
+    idx: 203
     context: □その他
 - id: shiharai_funo
   kind: underline_slots
   anchor:
     paraId: 2FBBE03B
     path: 第２　破産申立てに至った事情（債務増大の>３　支払不能になった時期は，令和　年　月
+    idx: 205
     context: ３　支払不能になった時期は，令和　年　月ころであり，そのころの月々の約定返済額は，計円である。
   slots:
   - 年（全角数字）
@@ -1558,6 +1748,7 @@ fields:
   anchor:
     paraId: 18ED0765
     path: 第２　破産申立てに至った事情（債務増大の>４　受任通知発送日
+    idx: 208
     context: 令和　年　月　日
   slots:
   - 年（全角数字）
@@ -1569,6 +1760,7 @@ fields:
   anchor:
     paraId: 14BAA24B
     path: 第２　破産申立てに至った事情（債務増大の>５　具体的事情（生活費不足の場合には，当
+    idx: 211
   extra_paraIds:
   - 56F0CB3F
   - 6EB20BF9
@@ -1580,6 +1772,7 @@ fields:
   anchor:
     paraId: 2E714B08
     path: 第３　免責不許可事由に関する報告>１　浪費等（当時の資産・収入に見合わない>table[4]>row[1]>cell[0]
+    idx: 223
     context: □
   options:
     有: □
@@ -1589,6 +1782,7 @@ fields:
   anchor:
     paraId: 47CA0423
     path: 第３　免責不許可事由に関する報告>１　浪費等（当時の資産・収入に見合わない>table[4]>row[2]>cell[0]
+    idx: 238
     context: □
   options:
     有: □
@@ -1598,6 +1792,7 @@ fields:
   anchor:
     paraId: 3D31CB08
     path: 第３　免責不許可事由に関する報告>１　浪費等（当時の資産・収入に見合わない>table[4]>row[4]>cell[0]
+    idx: 255
     context: □
   options:
     有: □
@@ -1607,6 +1802,7 @@ fields:
   anchor:
     paraId: 114073BF
     path: 第３　免責不許可事由に関する報告>１　浪費等（当時の資産・収入に見合わない>table[4]>row[8]>cell[0]
+    idx: 291
     context: □
   options:
     有: □
@@ -1616,6 +1812,7 @@ fields:
   anchor:
     paraId: 4B4C5EED
     path: 第３　免責不許可事由に関する報告>１　浪費等（当時の資産・収入に見合わない>table[4]>row[12]>cell[0]
+    idx: 328
     context: □
   options:
     有: □
@@ -1626,26 +1823,31 @@ fields:
     パチンコ:
       paraId: 548AB2A5
       path: 第３　免責不許可事由に関する報告>１　浪費等（当時の資産・収入に見合わない>table[4]>row[9]>cell[1]
+      idx: 297
       context: □パチンコ
       literal: □パチンコ
     競馬:
       paraId: 245A54DA
       path: 第３　免責不許可事由に関する報告>１　浪費等（当時の資産・収入に見合わない>table[4]>row[10]>cell[1]
+      idx: 307
       context: □競馬
       literal: □競馬
     競輪:
       paraId: 3875FD32
       path: 第３　免責不許可事由に関する報告>１　浪費等（当時の資産・収入に見合わない>table[4]>row[10]>cell[1]
+      idx: 308
       context: □競輪
       literal: □競輪
     競艇:
       paraId: 217F4461
       path: 第３　免責不許可事由に関する報告>１　浪費等（当時の資産・収入に見合わない>table[4]>row[10]>cell[1]
+      idx: 309
       context: □競艇
       literal: □競艇
     麻雀宝くじ等:
       paraId: 04CF06C6
       path: 第３　免責不許可事由に関する報告>１　浪費等（当時の資産・収入に見合わない>table[4]>row[11]>cell[1]
+      idx: 318
       context: □その他
       literal: □その他
 - id: shohin1_jiki
@@ -1653,6 +1855,7 @@ fields:
   anchor:
     paraId: 3BC6FED9
     path: 第３　免責不許可事由に関する報告>１　浪費等（当時の資産・収入に見合わない>table[4]>row[4]>cell[2]
+    idx: 261
     context: 年　月
   format:
     date_style: 短縮元号
@@ -1662,6 +1865,7 @@ fields:
   anchor:
     paraId: 121123E2
     path: 第３　免責不許可事由に関する報告>１　浪費等（当時の資産・収入に見合わない>table[4]>row[4]>cell[3]
+    idx: 263
   format:
     sz: 20
   binds: menseki.rouhi.商品購入.detail
@@ -1671,6 +1875,7 @@ fields:
   anchor:
     paraId: 369A4CED
     path: 第３　免責不許可事由に関する報告>１　浪費等（当時の資産・収入に見合わない>table[4]>row[4]>cell[4]
+    idx: 264
     context: 円
   binds: menseki.rouhi.商品購入.amount
   notes: 例 120,000円（「円」ごと置換）
@@ -1679,6 +1884,7 @@ fields:
   anchor:
     paraId: 22ECCABD
     path: 第３　免責不許可事由に関する報告>１　浪費等（当時の資産・収入に見合わない>table[4]>row[4]>cell[4]
+    idx: 266
   format:
     sz: 20
   notes: 現在ある場所
@@ -1687,6 +1893,7 @@ fields:
   anchor:
     paraId: 6376C787
     path: 第３　免責不許可事由に関する報告>１　浪費等（当時の資産・収入に見合わない>table[4]>row[5]>cell[2]
+    idx: 269
     context: 年　月
   format:
     date_style: 短縮元号
@@ -1696,6 +1903,7 @@ fields:
   anchor:
     paraId: 221BA9FB
     path: 第３　免責不許可事由に関する報告>１　浪費等（当時の資産・収入に見合わない>table[4]>row[5]>cell[3]
+    idx: 271
   format:
     sz: 20
   binds: menseki.rouhi.商品購入.detail
@@ -1705,6 +1913,7 @@ fields:
   anchor:
     paraId: 1A54CFE3
     path: 第３　免責不許可事由に関する報告>１　浪費等（当時の資産・収入に見合わない>table[4]>row[5]>cell[4]
+    idx: 272
     context: 円
   binds: menseki.rouhi.商品購入.amount
   notes: 例 120,000円（「円」ごと置換）
@@ -1713,6 +1922,7 @@ fields:
   anchor:
     paraId: 26D0B94D
     path: 第３　免責不許可事由に関する報告>１　浪費等（当時の資産・収入に見合わない>table[4]>row[5]>cell[4]
+    idx: 274
   format:
     sz: 20
   notes: 現在ある場所
@@ -1721,6 +1931,7 @@ fields:
   anchor:
     paraId: 64DDCBCF
     path: 第３　免責不許可事由に関する報告>１　浪費等（当時の資産・収入に見合わない>table[4]>row[6]>cell[2]
+    idx: 277
     context: 年　月
   format:
     date_style: 短縮元号
@@ -1730,6 +1941,7 @@ fields:
   anchor:
     paraId: 645AC8F3
     path: 第３　免責不許可事由に関する報告>１　浪費等（当時の資産・収入に見合わない>table[4]>row[6]>cell[3]
+    idx: 279
   format:
     sz: 20
   binds: menseki.rouhi.商品購入.detail
@@ -1739,6 +1951,7 @@ fields:
   anchor:
     paraId: 09DBEE98
     path: 第３　免責不許可事由に関する報告>１　浪費等（当時の資産・収入に見合わない>table[4]>row[6]>cell[4]
+    idx: 280
     context: 円
   binds: menseki.rouhi.商品購入.amount
   notes: 例 120,000円（「円」ごと置換）
@@ -1747,6 +1960,7 @@ fields:
   anchor:
     paraId: 6848BCD1
     path: 第３　免責不許可事由に関する報告>１　浪費等（当時の資産・収入に見合わない>table[4]>row[6]>cell[4]
+    idx: 282
   format:
     sz: 20
   notes: 現在ある場所
@@ -1755,6 +1969,7 @@ fields:
   anchor:
     paraId: 43683C46
     path: 第３　免責不許可事由に関する報告>１　浪費等（当時の資産・収入に見合わない>table[4]>row[7]>cell[2]
+    idx: 285
     context: 年　月
   format:
     date_style: 短縮元号
@@ -1764,6 +1979,7 @@ fields:
   anchor:
     paraId: 0D00F25D
     path: 第３　免責不許可事由に関する報告>１　浪費等（当時の資産・収入に見合わない>table[4]>row[7]>cell[3]
+    idx: 287
   format:
     sz: 20
   binds: menseki.rouhi.商品購入.detail
@@ -1773,6 +1989,7 @@ fields:
   anchor:
     paraId: 785E9ECA
     path: 第３　免責不許可事由に関する報告>１　浪費等（当時の資産・収入に見合わない>table[4]>row[7]>cell[4]
+    idx: 288
     context: 円
   binds: menseki.rouhi.商品購入.amount
   notes: 例 120,000円（「円」ごと置換）
@@ -1781,6 +1998,7 @@ fields:
   anchor:
     paraId: 26B5B7E5
     path: 第３　免責不許可事由に関する報告>１　浪費等（当時の資産・収入に見合わない>table[4]>row[7]>cell[4]
+    idx: 290
   format:
     sz: 20
   notes: 現在ある場所
@@ -1789,6 +2007,7 @@ fields:
   anchor:
     paraId: 388E072D
     path: 第３　免責不許可事由に関する報告>２　廉価処分（信用取引によって商品を購入
+    idx: 337
     context: ２　廉価処分（信用取引によって商品を購入し著しく不利益な条件で処分したことの有無　破産法２５２条１項２号関係）【□有　□無】
   options:
     有: □有
@@ -1800,6 +2019,7 @@ fields:
   anchor:
     paraId: 461AA32F
     path: 第３　免責不許可事由に関する報告>３　偏頗行為（支払不能になっていることを
+    idx: 358
     context: ３　偏頗行為（支払不能になっていることを知りながら，一部の債権者に偏頗的な行為(非本旨弁済等)をしたことの有無　破産法２５２条１項３号関係）【□有　□無】
   options:
     有: □有
@@ -1811,6 +2031,7 @@ fields:
   anchor:
     paraId: 773B204D
     path: 第３　免責不許可事由に関する報告>４　詐術（破産申立て前１年以内に他人の名
+    idx: 369
     context: 負債額又は信用状態等について誤信させて，借金をしたり信用取引をしたことの有無　破産法２５２条１項５号関係）　【□有　□無】
   options:
     有: □有
@@ -1822,6 +2043,7 @@ fields:
   anchor:
     paraId: 0CD7753B
     path: 第３　免責不許可事由に関する報告>５　過去の免責等に関する状況（破産法２５
+    idx: 391
     context: 【□有　□無】
   options:
     有: □有
@@ -1833,6 +2055,7 @@ fields:
   anchor:
     paraId: 7AED6234
     path: 第３　免責不許可事由に関する報告>５　過去の免責等に関する状況（破産法２５
+    idx: 396
     context: ②ア　申立て前７年以内に給与所得者等再生手続を利用して，再生計画に定められた弁済を終了したこと【□有　□無】
   options:
     有: □有
@@ -1844,6 +2067,7 @@ fields:
   anchor:
     paraId: 7FDD5FD8
     path: 第３　免責不許可事由に関する報告>５　過去の免責等に関する状況（破産法２５
+    idx: 397
     context: イ　申立て前７年以内に個人再生手続を利用したが，再生計画の遂行が極めて困難となり，免責の決定を受けたこと【□有　□無】
   options:
     有: □有
@@ -1855,6 +2079,7 @@ fields:
   anchor:
     paraId: 2858558F
     path: 第３　免責不許可事由に関する報告>６　その他破産法所定の免責不許可事由に該
+    idx: 401
     context: ６　その他破産法所定の免責不許可事由に該当する行為の有無【□有　□無】
   options:
     有: □有
@@ -1866,6 +2091,7 @@ fields:
   anchor:
     paraId: 4FA92FBF
     path: 第３　免責不許可事由に関する報告>７　上記１から６に記載した場合であっても
+    idx: 405
     context: ７　上記１から６に記載した場合であっても，免責不許可事由に該当しない，又は裁量により免責され得る事情の有無【□有　□無】
   options:
     有: □有
@@ -1877,6 +2103,7 @@ fields:
   anchor:
     paraId: 5767F70D
     path: 第３　免責不許可事由に関する報告>６　その他破産法所定の免責不許可事由に該
+    idx: 403
   absorb_paraIds:
   - 4A7D9AD1
   binds: null
@@ -1886,6 +2113,7 @@ fields:
   anchor:
     paraId: 27D5E587
     path: 第３　免責不許可事由に関する報告>７　上記１から６に記載した場合であっても
+    idx: 407
   absorb_paraIds:
   - 53D32117
   - 65A96045
@@ -1898,6 +2126,7 @@ fields:
   anchor:
     paraId: 24BF4C2C
     path: 第３　免責不許可事由に関する報告>８　債権調査票に具体的事実を指摘した意見
+    idx: 413
   absorb_paraIds:
   - 59D9EF7A
   - 18C4FDB4
