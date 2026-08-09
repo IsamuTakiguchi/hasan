@@ -88,6 +88,8 @@ creditors:
     name: 辛島市（固定資産税）
     address: 大阪府堺市辛区辛町４番４号
     kind: 公租公課
+    tax_kind: 固定資産税
+    tax_year: R5年度
     origin_date: R5年度
     use: 固定資産税（旧店舗設備）
     principal: null

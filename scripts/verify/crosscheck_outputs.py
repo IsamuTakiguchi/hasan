@@ -71,14 +71,28 @@ def main():
         (ok if cond else ng).append(f"{label}{' — ' + detail if detail and not cond else ''}")
 
     # meta.json ベースの突合
+    metas = {}
     for mj in sorted(outdir.glob("*.meta.json")):
         m = json.loads(mj.read_text(encoding="utf-8"))
-        if m.get("doc") == "saikensha-ichiran":
-            check(m.get("total_debt") == total_debt, "債権者一覧表: 負債総額一致",
-                  f"一覧表 {m.get('total_debt'):,} ≠ case {total_debt:,}")
-            check(m.get("creditor_count") == n_cred, "債権者一覧表: 債権者数一致",
-                  f"一覧表 {m.get('creditor_count')} ≠ case {n_cred}")
-        elif m.get("doc") == "shisan-mokuroku":
+        metas[m.get("doc")] = m
+
+    # 債権者一覧表: 一般用（B1105）＋公租公課用（B1106）の合算で case と突合
+    if "saikensha-ichiran" in metas:
+        g = metas["saikensha-ichiran"]
+        k = metas.get("saikensha-ichiran-kouso", {})
+        got_total = g.get("total_debt", 0) + k.get("total_debt", 0)
+        got_count = g.get("creditor_count", 0) + k.get("creditor_count", 0)
+        label = "債権者一覧表（一般＋公租公課）" if k else "債権者一覧表"
+        check(got_total == total_debt, f"{label}: 負債総額一致",
+              f"一覧表計 {got_total:,} ≠ case {total_debt:,}")
+        check(got_count == n_cred, f"{label}: 債権者数一致",
+              f"一覧表計 {got_count} ≠ case {n_cred}")
+        n_kouso = sum(1 for c in case.get("creditors", []) if c.get("kind") == "公租公課")
+        if n_kouso and not k and not g.get("kouso_excluded") is None:
+            check(False, "公租公課用一覧表の生成", f"公租公課 {n_kouso} 件があるのに B1106 が未生成")
+
+    for m in metas.values():
+        if m.get("doc") == "shisan-mokuroku":
             check(m.get("total_assets") == total_assets, "資産目録: 資産総額一致",
                   f"目録 {m.get('total_assets'):,} ≠ case {total_assets:,}")
         elif m.get("doc") == "kakei-shushi":

@@ -1,0 +1,9 @@
+# この書式の現行版。生成スキルは必ずここを経由して版を解決する。
+form: saikensha-ichiran-kouso
+name: 債権者一覧表（公租公課用）（B1106）
+doc_type: xlsx
+current: "v202508"
+versions:
+  v202508:
+    received: "2026-08-09（利用者アップロード B1106）"
+    note: 大阪地裁 破産同時廃止申立て用。税目固定行＋自由行。B16合計は数式。版表記なし

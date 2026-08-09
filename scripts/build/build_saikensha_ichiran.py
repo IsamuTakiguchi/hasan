@@ -185,23 +185,71 @@ def build_from_template(case, vdir, out):
             "kouso_excluded": kouso_count}
 
 
+def build_kouso(case, vdir, out):
+    """B1106（公租公課用）: kind=公租公課 の債権者を税目固定行に振り分けて記入。"""
+    fillmap = yaml.safe_load((vdir / "fillmap.yaml").read_text(encoding="utf-8"))
+    tax_rows = fillmap["tax_rows"]
+    free_rows = list(fillmap["free_rows"])
+    sheet = "債権者一覧表（公租公課用）"
+    kouso = [c for c in case.get("creditors", []) if c.get("kind") == "公租公課"]
+
+    filler = xlsxlib.XlsxFiller(vdir / "template.xlsx")
+    total = 0
+    unmapped = []
+    used = {}
+    for c in kouso:
+        kind = c.get("tax_kind") or "その他"
+        if kind in tax_rows and kind not in used:
+            row = used[kind] = tax_rows[kind]
+        elif free_rows:
+            row = free_rows.pop(0)
+            label = kind if kind != "その他" else (c.get("use", "") or c.get("name", ""))[:12]
+            filler.write(sheet, f"A{row}", f"　{label}", "kouso:label")
+            if kind not in tax_rows:
+                unmapped.append(c.get("name", ""))
+        else:
+            print(f"警告: 自由行が満杯のため {c.get('name')} を記入できない")
+            continue
+        filler.write(sheet, f"B{row}", c.get("balance"), "kouso:amount")
+        filler.write(sheet, f"C{row}", c.get("tax_year") or c.get("origin_date", ""), "kouso:year")
+        filler.write(sheet, f"D{row}", c.get("name", ""), "kouso:payee")
+        if isinstance(c.get("balance"), int):
+            total += c["balance"]
+    filler.save(out)
+    for w in filler.warnings:
+        print(f"警告: {w}")
+    if unmapped:
+        print(f"注記: 税目不明のため自由行に記入: {', '.join(unmapped)} → questions.md で税目を確認")
+    return {"total_debt": total, "creditor_count": len(kouso),
+            "unknown_balance": sum(1 for c in kouso if c.get("balance") is None)}
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--case", required=True)
     ap.add_argument("--output", required=True)
     ap.add_argument("--court", default="osaka")
     ap.add_argument("--generic", action="store_true", help="裁判所書式を使わず事務所内ドラフト様式で出力")
+    ap.add_argument("--kouso", action="store_true", help="公租公課用一覧表（B1106）を出力")
     args = ap.parse_args()
 
     case = yaml.safe_load(open(args.case, encoding="utf-8"))
-    vdir = None if args.generic else xlsxlib.resolve_form(args.court, "saikensha-ichiran")
-    if vdir is None and not args.generic:
-        print(xlsxlib.registration_guidance(args.court, "saikensha-ichiran", "債権者一覧表"))
-        sys.exit(3)
-
-    stats = build_from_template(case, vdir, args.output) if vdir else build_generic(case, args.output)
+    form = "saikensha-ichiran-kouso" if args.kouso else "saikensha-ichiran"
+    vdir = None if args.generic else xlsxlib.resolve_form(args.court, form)
+    if args.kouso:
+        if vdir is None:
+            print(xlsxlib.registration_guidance(args.court, form, "債権者一覧表（公租公課用）"))
+            sys.exit(3)
+        stats = build_kouso(case, vdir, args.output)
+        doc = "saikensha-ichiran-kouso"
+    else:
+        if vdir is None and not args.generic:
+            print(xlsxlib.registration_guidance(args.court, form, "債権者一覧表"))
+            sys.exit(3)
+        stats = build_from_template(case, vdir, args.output) if vdir else build_generic(case, args.output)
+        doc = "saikensha-ichiran"
     meta_path = Path(args.output + ".meta.json")
-    meta_path.write_text(json.dumps({"doc": "saikensha-ichiran", **stats}, ensure_ascii=False, indent=1),
+    meta_path.write_text(json.dumps({"doc": doc, **stats}, ensure_ascii=False, indent=1),
                          encoding="utf-8")
     print(f"出力: {args.output}")
     print(f"債権者 {stats['creditor_count']} 名 / 負債総額 {stats['total_debt']:,} 円"

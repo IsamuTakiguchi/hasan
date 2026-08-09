@@ -141,6 +141,11 @@ properties:
         last_payment: { type: string, description: "最終弁済日" }
         guarantor: { type: [boolean, "null"], description: "保証人の有無。不明は null" }
         secured: { type: boolean, description: "別除権（担保）付きか" }
+        tax_kind:
+          type: string
+          description: "kind=公租公課 のときの税目（公租公課用一覧表 B1106 の行に対応）"
+          enum: [所得税, 住民税, 固定資産税, 事業税, 国民健康保険料, 年金保険料, 自動車税・軽自動車税, 相続税, その他]
+        tax_year: { type: string, description: "kind=公租公課 のときの年度（例 R5年度）" }
         note: { type: string }
 
   assets:

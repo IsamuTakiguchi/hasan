@@ -1,0 +1,22 @@
+form: saikensha-ichiran-kouso
+court: osaka
+version: "202508"
+doc_type: xlsx
+notes:
+  - シート「債権者一覧表（公租公課用）」。税目固定行（2〜10）＋自由行（11〜15）。
+  - B16（合計）は数式のため書き込み禁止（エンジンが防御）。
+  - 列: B=滞納額(円) / C=年度 / D=納付先。自動車税はD9に登録番号欄あり。
+# 税目 → 行番号（builder が参照）
+tax_rows:
+  所得税: 2
+  住民税: 3
+  固定資産税: 4
+  事業税: 5
+  国民健康保険料: 6
+  年金保険料: 7
+  自動車税・軽自動車税: 8
+  相続税: 10
+free_rows: [11, 12, 13, 14, 15]
+# 行が税目固定のため fields は使わず、builder（build_saikensha_ichiran.py --kouso）が
+# tax_rows / free_rows を参照して B/C/D 列へ直接書く（数式防御は共通の write() 経由）。
+fields: []
