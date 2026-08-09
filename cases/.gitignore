@@ -1,0 +1,5 @@
+# 事件ワークスペースは依頼者情報を含むため全体を git 管理外とする。
+# README.md（規約説明）とこの .gitignore だけを追跡する。
+*
+!.gitignore
+!README.md

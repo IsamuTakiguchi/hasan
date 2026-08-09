@@ -1,0 +1,8 @@
+# 裁判所メタ情報
+id: osaka-sakai
+name: 大阪地方裁判所堺支部
+formal_name: 大阪地方裁判所堺支部
+section: 破産係
+notes: |
+  - 報告書（自然人用）は様式 ver4.0（2026-08 時点の手持ち版）。
+  - 書式は裁判所から配布される非公開ファイル。改訂を受領したら hasan-register-form で登録する。

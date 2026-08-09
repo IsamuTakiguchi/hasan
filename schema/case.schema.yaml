@@ -1,0 +1,289 @@
+# case.yaml（事件モデル）の JSON Schema（YAML表記, draft 2020-12）
+# 検証: python3 scripts/casekit/validate_case.py cases/<事件ID>/case.yaml
+#
+# 方針:
+# - intake は段階的に埋めるため、必須は meta の最小限のみ。
+# - 日付は裁判所書式の実態に合わせて文字列（"R7.2" "R4後半ころ" "2025-02-15" いずれも可）。
+# - 金額は整数（円）。不明は null または省略（0 と不明を区別する）。
+# - 各値の根拠資料は sources に「ドットパス: 出所」で記録する（例 "creditors[2].balance": "債権調査票p3"）。
+#   出所のない値は生成時に空欄扱いとなり questions.md に回る。
+$schema: "https://json-schema.org/draft/2020-12/schema"
+title: hasan case model
+type: object
+required: [meta]
+additionalProperties: false
+properties:
+  meta:
+    type: object
+    required: [case_id, applicant]
+    additionalProperties: true
+    properties:
+      case_id: { type: string, description: "cases/ のフォルダ名と一致させる" }
+      court: { type: string, description: "courts/ の裁判所ID（例 osaka-sakai）" }
+      applicant:
+        type: object
+        required: [name]
+        additionalProperties: true
+        properties:
+          name: { type: string }
+          kana: { type: string }
+          birth: { type: string, description: "生年月日（例 S63.3.1）" }
+          address: { type: string }
+      attorneys:
+        type: array
+        description: "申立代理人。筆頭を先頭に"
+        items:
+          type: object
+          properties:
+            name: { type: string }
+            office: { type: string }
+          required: [name]
+      junin_tsuchi_date: { type: string, description: "受任通知発送日" }
+      filing_date: { type: string, description: "申立（予定）日。未定なら省略" }
+
+  career:
+    type: array
+    description: "職歴。新しい順でなく時系列順。申立ての7年前以降をカバーする範囲"
+    items:
+      type: object
+      additionalProperties: true
+      properties:
+        period:
+          type: object
+          properties:
+            start: { type: string, description: "短縮元号可（H22.6）" }
+            end: { type: string, description: "在職中は '現在'" }
+        employment_type:
+          type: string
+          enum: [勤め, パート等, 自営, 法人代表者, 無職]
+        employer: { type: string, description: "就業先。1セル1行に収まる短い表記" }
+        position: { type: string, description: "地位・業務内容" }
+        monthly_income: { type: [integer, "null"], description: "平均月収（円）" }
+        retirement_pay: { type: boolean, description: "退職金有り（資料で確認できた場合のみ true）" }
+
+  family:
+    type: object
+    additionalProperties: true
+    properties:
+      marriages:
+        type: array
+        items:
+          type: object
+          properties:
+            kind: { type: string, enum: [婚姻, 離婚, 死別] }
+            date: { type: string }
+            note: { type: string }
+      members:
+        type: array
+        description: "配偶者・同居者等"
+        items:
+          type: object
+          properties:
+            relation: { type: string }
+            name: { type: string }
+            age: { type: [integer, "null"] }
+            occupation: { type: string }
+            income: { type: [integer, "null"] }
+      inheritance:
+        type: array
+        description: "相続の状況"
+        items:
+          type: object
+          properties:
+            deceased: { type: string, description: "被相続人と続柄" }
+            date: { type: string }
+            disposition: { type: string, description: "相続放棄・遺産分割等の処理" }
+      housing:
+        type: object
+        properties:
+          kind: { type: string, enum: [賃貸, 持家, 社宅・寮, 家族所有, その他] }
+          rent: { type: [integer, "null"], description: "月額家賃（円）" }
+          note: { type: string }
+
+  creditors:
+    type: array
+    description: "債権者。債権者一覧表の並び順（公租公課は末尾等、書式ルールは生成側が処理）"
+    items:
+      type: object
+      required: [name]
+      additionalProperties: true
+      properties:
+        no: { type: integer }
+        name: { type: string }
+        address: { type: string }
+        kind:
+          type: string
+          description: "債権の種類"
+          enum: [貸金, クレジット, 立替金, 保証, 求償, 公租公課, 家賃, 養育費, その他]
+        origin_date: { type: string, description: "借入開始・発生時期" }
+        use: { type: string, description: "使途（生活費・事業資金等）" }
+        principal: { type: [integer, "null"], description: "当初借入額（円）" }
+        balance: { type: [integer, "null"], description: "現在残高（円）" }
+        last_payment: { type: string, description: "最終弁済日" }
+        guarantor: { type: [boolean, "null"], description: "保証人の有無。不明は null" }
+        secured: { type: boolean, description: "別除権（担保）付きか" }
+        note: { type: string }
+
+  assets:
+    type: object
+    additionalProperties: true
+    properties:
+      cash: { type: [integer, "null"], description: "手持ち現金（円）" }
+      deposits:
+        type: array
+        items:
+          type: object
+          properties:
+            bank: { type: string }
+            branch: { type: string }
+            account_type: { type: string }
+            account_no: { type: string }
+            balance: { type: [integer, "null"] }
+            as_of: { type: string, description: "残高基準日" }
+      insurance:
+        type: array
+        items:
+          type: object
+          properties:
+            company: { type: string }
+            kind: { type: string }
+            surrender_value: { type: [integer, "null"], description: "解約返戻金見込（円）" }
+      vehicles:
+        type: array
+        items:
+          type: object
+          properties:
+            name: { type: string, description: "車名・年式" }
+            first_registration: { type: string, description: "初度登録年" }
+            value: { type: [integer, "null"], description: "査定額（円）" }
+            loan_balance: { type: [integer, "null"], description: "所有権留保ローン残（円）" }
+      real_estate:
+        type: array
+        items:
+          type: object
+          properties:
+            address: { type: string }
+            kind: { type: string }
+            value: { type: [integer, "null"] }
+            mortgage: { type: [integer, "null"], description: "被担保債権残（円）" }
+      retirement_expectation: { type: [integer, "null"], description: "退職金見込額（円）" }
+      overpayment:
+        type: array
+        description: "過払金等の債権"
+        items:
+          type: object
+          properties:
+            against: { type: string }
+            amount: { type: [integer, "null"] }
+      other:
+        type: array
+        items:
+          type: object
+          properties:
+            name: { type: string }
+            value: { type: [integer, "null"] }
+            note: { type: string }
+
+  household:
+    type: array
+    description: "家計収支（月次）。家計収支表の対象月（通常直近2か月）分"
+    items:
+      type: object
+      required: [month]
+      properties:
+        month: { type: string, description: "対象月（例 R8.6）" }
+        income:
+          type: object
+          description: "収入内訳（円）。キーは書式の費目名（給与, 配偶者の給与, 年金, 援助 等）"
+          additionalProperties: { type: [integer, "null"] }
+        expense:
+          type: object
+          description: "支出内訳（円）。キーは書式の費目名（家賃, 食費, 水道光熱費, 通信費 等）"
+          additionalProperties: { type: [integer, "null"] }
+        note: { type: string }
+
+  timeline:
+    type: array
+    description: "破産申立てに至った事情の時系列（報告書第２の５に対応）"
+    items:
+      type: object
+      required: [date, event]
+      properties:
+        date: { type: string, description: "短縮表記可（H1.11 / R4後半ころ）" }
+        event: { type: string, description: "見出し的な一文" }
+        detail: { type: string, description: "補足（本文に使う詳しい記述）" }
+
+  menseki:
+    type: object
+    description: "免責不許可事由に関する報告（報告書第３に対応）。有無が資料で確認できた項目のみ書く"
+    additionalProperties: true
+    properties:
+      rouhi:
+        type: object
+        description: "浪費・射幸行為（飲食飲酒/投資投機/商品購入/ギャンブル/その他）"
+        additionalProperties:
+          type: object
+          properties:
+            exists: { type: boolean }
+            period: { type: string }
+            frequency: { type: string }
+            amount: { type: [integer, "null"], description: "合計額（円）" }
+            detail: { type: string }
+      asset_disposal:
+        type: array
+        description: "財産の処分（不利益処分）"
+        items:
+          type: object
+          properties:
+            item: { type: string }
+            bought: { type: string }
+            bought_price: { type: [integer, "null"] }
+            sold: { type: string }
+            sold_price: { type: [integer, "null"] }
+      henpa: { $ref: "#/$defs/umu_setsumei", description: "偏頗行為（破産法252条1項3号）" }
+      sajutsu: { $ref: "#/$defs/umu_setsumei", description: "詐術による信用取引（同5号）" }
+      past_menseki: { $ref: "#/$defs/umu_setsumei", description: "7年以内の免責決定等（同10号）" }
+      sairyo_jijo: { type: string, description: "裁量免責され得る事情（第３の７）の本文" }
+      saiken_chosa_hanron: { type: string, description: "債権調査票の意見への反論（第３の８）" }
+
+  bank_analysis:
+    type: array
+    description: "入出金分析の所見。hasan-nyushukkin-bunseki が記入"
+    items:
+      type: object
+      required: [date, amount, flag]
+      properties:
+        date: { type: string }
+        account: { type: string, description: "口座（銀行・支店）" }
+        amount: { type: integer, description: "円。出金は正の値で direction で区別" }
+        direction: { type: string, enum: [入金, 出金] }
+        flag:
+          type: string
+          enum: [大口出金, 大口入金, 偏頗弁済疑い, 受任通知後弁済, 使途不明, ギャンブル疑い, 現金化疑い, 資産処分, その他要確認]
+        note: { type: string }
+        resolved: { type: boolean, description: "弁護士確認で説明がついたら true" }
+
+  sources:
+    type: object
+    description: "出所管理: 値のドットパス → 根拠資料。例 'creditors[2].balance': '債権調査票p3'"
+    additionalProperties: { type: string }
+
+  open_questions:
+    type: array
+    description: "未充足・矛盾項目。questions.md に整形出力される"
+    items:
+      type: object
+      required: [question]
+      properties:
+        field: { type: string, description: "関係するドットパス" }
+        question: { type: string }
+        reason: { type: string, description: "不足・矛盾の理由" }
+        affects: { type: array, items: { type: string }, description: "影響する書式ID" }
+        answered: { type: string, description: "回答が得られたら記入し、値を反映後は消してよい" }
+
+$defs:
+  umu_setsumei:
+    type: object
+    properties:
+      exists: { type: [boolean, "null"], description: "有無。未確認は null" }
+      detail: { type: string }

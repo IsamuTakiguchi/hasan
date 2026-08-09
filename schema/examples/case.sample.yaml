@@ -1,0 +1,184 @@
+# 架空事例（テスト・スモークフィル・evals 用）。実在の人物・法人とは関係ありません。
+# 既存スキルの記入例（乙山ストア事例）を拡張したもの。
+meta:
+  case_id: sample-otsuyama
+  court: osaka-sakai
+  applicant:
+    name: 甲野太郎
+    kana: コウノタロウ
+    birth: S63.3.10
+    address: 大阪府堺市堺区甲町１丁２番３号
+  attorneys:
+    - name: 乙川一郎
+      office: 丙山法律事務所
+  junin_tsuchi_date: R7.3.10
+  filing_date: R7.9.1
+
+career:
+  - period: { start: H22.6, end: R7.2 }
+    employment_type: 法人代表者
+    employer: 株式会社乙山ストア
+    position: 代表取締役（食品スーパー経営）
+    monthly_income: 350000
+    retirement_pay: false
+  - period: { start: R7.2, end: 現在 }
+    employment_type: 勤め
+    employer: 株式会社丁原食品（配送員）
+    position: 配送員
+    monthly_income: 200000
+    retirement_pay: false
+
+family:
+  marriages:
+    - { kind: 婚姻, date: H24.11, note: 妻・甲野花子と婚姻 }
+  members:
+    - { relation: 妻, name: 甲野花子, age: 36, occupation: パート, income: 80000 }
+    - { relation: 長女, name: 甲野一美, age: 10, occupation: 小学生, income: null }
+  inheritance: []
+  housing:
+    kind: 賃貸
+    rent: 65000
+    note: 賃借人は申立人本人
+
+creditors:
+  - no: 1
+    name: 株式会社戊田銀行
+    address: 大阪府堺市堺区戊町１番１号
+    kind: 保証
+    origin_date: H28.4
+    use: 法人（乙山ストア）の運転資金借入の連帯保証
+    principal: 20000000
+    balance: 14800000
+    last_payment: R7.1
+    guarantor: false
+    secured: false
+  - no: 2
+    name: 己川信用保証協会
+    address: 大阪府堺市中区己町２番２号
+    kind: 求償
+    origin_date: H30.10
+    use: 法人の保証付き融資の代位弁済による求償
+    principal: 8000000
+    balance: 6200000
+    last_payment: R7.1
+    guarantor: false
+    secured: false
+  - no: 3
+    name: 庚山カード株式会社
+    address: 東京都千代田区庚町３番３号
+    kind: クレジット
+    origin_date: R3.5
+    use: 生活費の立替払い
+    principal: null
+    balance: 850000
+    last_payment: R7.2
+    guarantor: false
+    secured: false
+  - no: 4
+    name: 辛島市（固定資産税）
+    address: 大阪府堺市辛区辛町４番４号
+    kind: 公租公課
+    origin_date: R5年度
+    use: 固定資産税（旧店舗設備）
+    principal: null
+    balance: 320000
+    last_payment: R6.5
+    guarantor: null
+    secured: false
+
+assets:
+  cash: 35000
+  deposits:
+    - { bank: 戊田銀行, branch: 堺支店, account_type: 普通, account_no: "1234567", balance: 128000, as_of: R7.7.31 }
+    - { bank: 壬水信用金庫, branch: 中央支店, account_type: 普通, account_no: "7654321", balance: 4200, as_of: R7.7.31 }
+  insurance:
+    - { company: 癸空生命, kind: 終身保険, surrender_value: 180000 }
+  vehicles:
+    - { name: 軽自動車（子丑号・H29年式）, first_registration: H29, value: 150000, loan_balance: 0 }
+  real_estate: []
+  retirement_expectation: 0
+  overpayment: []
+  other: []
+
+household:
+  - month: R7.6
+    income: { 給与: 200000, 配偶者の給与: 80000 }
+    expense: { 家賃: 65000, 食費: 60000, 水道光熱費: 18000, 通信費: 12000, 保険料: 8000, 教育費: 15000, 交通費: 10000, 医療費: 5000, 被服費: 5000, 雑費: 20000 }
+    note: ""
+  - month: R7.7
+    income: { 給与: 200000, 配偶者の給与: 80000 }
+    expense: { 家賃: 65000, 食費: 62000, 水道光熱費: 16000, 通信費: 12000, 保険料: 8000, 教育費: 15000, 交通費: 10000, 医療費: 3000, 被服費: 8000, 雑費: 19000 }
+    note: ""
+
+timeline:
+  - date: H22.6
+    event: 株式会社乙山ストア設立
+    detail: 申立人が代表取締役に就任し、堺市内で食品スーパー１店舗を経営した。
+  - date: R4後半ころ
+    event: 競合出店と物価高騰で売上減少
+    detail: 近隣に大型スーパーが出店し客足が減少。仕入価格・光熱費の高騰も重なり、法人の資金繰りが悪化した。
+  - date: R6.4
+    event: 借入のリスケジュール
+    detail: 戊田銀行に対する法人借入の返済条件変更（リスケジュール）を受けたが、売上は回復しなかった。
+  - date: R7.1
+    event: 法人の支払停止・営業終了
+    detail: 資金繰りが尽き、法人は営業を終了。店舗設備は取引先へ事業譲渡し、従業員の再就職先を確保した。
+  - date: R7.2
+    event: 法人代表者退任・再就職
+    detail: 申立人は代表取締役を退任し、株式会社丁原食品に配送員として就職した。
+  - date: R7.3
+    event: 弁護士に破産申立てを委任
+    detail: 連帯保証債務等の支払が不能となり、代理人弁護士に破産申立てを委任し受任通知を発送した。
+
+menseki:
+  rouhi:
+    ギャンブル: { exists: false }
+    飲食飲酒: { exists: false }
+    投資投機: { exists: false }
+    商品購入:
+      exists: true
+      period: R6.12
+      frequency: 1回
+      amount: 120000
+      detail: 通勤用軽自動車のタイヤ交換・家電（冷蔵庫）の買替え。生活・通勤に必要な範囲の支出。
+  asset_disposal: []
+  henpa: { exists: false, detail: "" }
+  sajutsu: { exists: false, detail: "" }
+  past_menseki: { exists: false, detail: "" }
+  sairyo_jijo: >-
+    本件の負債は、申立人が代表を務めた株式会社乙山ストアの事業が競合出店・物価高騰という
+    外部要因により破綻し、その連帯保証債務を負担したことによるものであり、浪費や射幸行為に
+    よるものではない。第３の１で申告した支出も、通勤に必要な自動車の整備と生活に必要な範囲の
+    家電買替えにとどまる。廃業に際しては事業譲渡により取引先・従業員への影響を最小限にとどめ、
+    受任後は家計を見直して同時廃止基準内の生活を続けており、破産手続にも誠実に協力する所存である。
+  saiken_chosa_hanron: ""
+
+bank_analysis: []
+
+sources:
+  "meta.junin_tsuchi_date": 受任通知控え
+  "career[0]": 法人登記事項証明書・面談メモp1
+  "career[1]": 給与明細（R7.3〜R7.7）
+  "family.members[0]": 面談メモp1
+  "family.members[1]": 面談メモp1
+  "family.housing": 賃貸借契約書
+  "creditors[0]": 債権調査票（戊田銀行）p1
+  "creditors[1]": 債権調査票（己川信用保証協会）p1
+  "creditors[2]": 債権調査票（庚山カード）p1
+  "creditors[3]": 納税通知書（辛島市）
+  "assets.cash": 面談メモp2
+  "assets.deposits[0]": 通帳（戊田銀行）
+  "assets.deposits[1]": 通帳（壬水信用金庫）
+  "assets.insurance[0]": 解約返戻金証明書
+  "assets.vehicles[0]": 車検証・査定書
+  "household[0]": 家計簿メモ・領収書（R7.6）
+  "household[1]": 家計簿メモ・領収書（R7.7）
+  "timeline": 面談メモp2-3・法人用報告書
+  "menseki.rouhi.商品購入": 面談メモp3・領収書
+  "menseki.sairyo_jijo": 面談メモp3
+
+open_questions:
+  - field: creditors[0].guarantor
+    question: 戊田銀行の連帯保証債務について、申立人以外の保証人はいないか。
+    reason: 債権調査票に他の保証人欄の記載がない（未確認）。
+    affects: [saikensha-ichiran, houkokusho]
