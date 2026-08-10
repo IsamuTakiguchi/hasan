@@ -47,8 +47,12 @@ def case_totals(case):
 
 
 def docx_text(path):
-    with zipfile.ZipFile(path) as z:
-        xml = z.read("word/document.xml").decode("utf-8")
+    """docx の本文テキスト。壊れた・偽の docx は None（呼び出し側で NG 扱い）。"""
+    try:
+        with zipfile.ZipFile(path) as z:
+            xml = z.read("word/document.xml").decode("utf-8")
+    except Exception:
+        return None
     return "".join(re.findall(r"<w:t[^>]*>([^<]*)</w:t>", xml))
 
 
@@ -69,6 +73,29 @@ def main():
 
     def check(cond, label, detail=""):
         (ok if cond else ng).append(f"{label}{' — ' + detail if detail and not cond else ''}")
+
+    # 出力形式の監査: 書式名を含むファイルの拡張子が本来の形式（registry の doc_type）と
+    # 一致しているか。Excel 書式が Word で「自作」された事故（Cowork 等でビルダーを
+    # 経由しなかった場合）を検出する。キーワードは前方一致優先（財産目録 vs 添付目録等）。
+    FORM_EXT = [
+        ("資産及び負債一覧表", ".xlsx"), ("債権者一覧表", ".xlsx"),
+        ("添付目録", ".docx"), ("疎明資料目録", ".docx"), ("引継資料一覧表", ".docx"),
+        ("財産目録", ".xlsx"), ("資産目録", ".xlsx"), ("家計収支表", ".xlsx"),
+        ("リース物件", ".xlsx"), ("訴訟", ".xlsx"), ("処分行為", ".xlsx"),
+        ("公租公課チェック表", ".xlsx"), ("チェック表", ".xlsx"),
+        ("標準資料一覧表", ".xlsx"),
+        ("自由財産拡張", ".docx"), ("申立書", ".docx"), ("報告書", ".docx"),
+    ]
+    for f in sorted(outdir.iterdir()):
+        if f.suffix not in (".docx", ".xlsx"):
+            continue
+        for kw, ext in FORM_EXT:
+            if kw in f.name:
+                check(f.suffix == ext, f"{f.name}: 出力形式が書式どおり（{ext}）",
+                      f"この書式の正本は {ext}（裁判所配布テンプレート）なのに {f.suffix} で"
+                      f"出力されている。builder/fill-docx を経由せず自作された可能性 — "
+                      f"正規の生成手順で作り直すこと")
+                break
 
     # meta.json ベースの突合
     metas = {}
@@ -136,7 +163,11 @@ def main():
                         if isinstance(c.get("balance"), int)
                         and c.get("kind") in ("労働債権", "公租公課"))
     for docx in sorted(outdir.glob("*申立書*.docx")):
-        text = docx_text(docx).translate(str.maketrans("０１２３４５６７８９，", "0123456789,"))
+        text = docx_text(docx)
+        if text is None:
+            check(False, f"{docx.name}: docx として読める", "壊れているか docx 形式でない")
+            continue
+        text = text.translate(str.maketrans("０１２３４５６７８９，", "0123456789,"))
         m = re.search(r"債権者(\d+)人に対し[,，]金([\d,]+)円", text)
         km = re.search(r"一般破産債権総額([\d,万]+)円（債権者\s*(\d+)\s*人）", text)
         if m:  # 同時廃止（B1102）
@@ -170,6 +201,9 @@ def main():
     proc_type = (case.get("meta", {}) or {}).get("proc_type", "")
     for docx in sorted(outdir.glob("報告書*.docx")) if proc_type != "管財（法人）" else []:
         text = docx_text(docx)
+        if text is None:
+            check(False, f"{docx.name}: docx として読める", "壊れているか docx 形式でない")
+            continue
         name = (case.get("meta", {}).get("applicant", {}) or {}).get("name", "")
         name_spaced = "　".join(name)
         check(name in text or name_spaced in text or name.replace("　", "") in text.replace("　", ""),

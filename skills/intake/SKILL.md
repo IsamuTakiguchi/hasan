@@ -19,8 +19,7 @@ description: >-
 に作る。プラグインのインストールディレクトリ（`hasan-kit root` の場所）には絶対に
 置かない — プラグイン更新で消える上、依頼者情報を配布物に混ぜることになる。
 作業フォルダの `cases/` は必ず git 管理外にする（.gitignore に `cases/`）。
-`hasan-kit` が PATH に無い環境（Cowork 等）では
-`ls ~/.claude/plugins/*/*/scripts/hasan-kit` 等でプラグイン内の実体を探し絶対パスで使う。
+`hasan-kit` が PATH に無い環境では、**この SKILL.md の2階層上**の `scripts/hasan-kit` を絶対パスで呼ぶ（SKILL.md はプラグインルート直下の skills/ 配下にある）。
 
 ## 手順
 

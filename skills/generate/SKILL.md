@@ -11,6 +11,20 @@ description: >-
 
 # 破産申立資料 一括生成スキル（オーケストレータ）
 
+## 出力形式の鉄則（必ず守る）
+
+- この書式の出力は**必ずテンプレートと同じ形式**にする（Excel書式→.xlsx／Word書式→.docx）。
+- 生成は hasan-kit（builder / fill-docx）経由のみ。**Word や Excel の文書を新規作成して
+  代替することは禁止**（裁判所書式のレイアウト・数式・チェック欄が失われ、提出できない
+  書面になる）。case.yaml の値をチャット上で整形して文書化するのも同様に禁止。
+- hasan-kit の実体は**この SKILL.md の2階層上**にある `scripts/hasan-kit`
+  （SKILL.md はプラグインルート直下の skills/ 配下にある。PATH に hasan-kit が無い環境では
+  必ずこの絶対パスで呼ぶ。例: SKILL.md が /path/to/hasan/skills/generate/SKILL.md なら
+  実体は /path/to/hasan/scripts/hasan-kit）。
+- hasan-kit が見つからない・実行に失敗した場合は**そこで停止**し、エラー全文と
+  `hasan-kit doctor` の結果を利用者に報告する（書類の自作でしのがない）。
+
+
 ## 前提
 
 - `cases/<事件ID>/case.yaml` が存在すること（なければ先に intake）。
@@ -27,9 +41,7 @@ description: >-
     「リース債権あり」= creditors に kind=リース／「lawsuits または
     pre_bankruptcy_disposals あり」= 各配列が非空／「自由財産拡張の申立てをする場合」=
     assets に jiyuzaisan: true の項目がある（無ければ弁護士に確認）
-- **環境準備**: `hasan-kit` が PATH に無い環境（Cowork 等）では、プラグインの
-  インストールディレクトリを探して絶対パスで使う
-  （例: `ls ~/.claude/plugins/*/*/scripts/hasan-kit` や `find ~/.claude -name hasan-kit`）。
+- **環境準備**: `hasan-kit` が PATH に無い環境では、**この SKILL.md の2階層上**の `scripts/hasan-kit` を絶対パスで呼ぶ（SKILL.md はプラグインルート直下の skills/ 配下にある）。
   初回は `hasan-kit doctor` で環境診断（依存パッケージは初回実行時に自動導入される）。
   PDF変換ツールが無い環境では preview が目視省略の劣化運転になる（crosscheck は動く）。
 - 通帳があるのに `bank_analysis` が空なら、先に nyushukkin-bunseki を促す
@@ -57,6 +69,8 @@ description: >-
    `hasan-kit crosscheck --case ... --dir cases/<事件ID>/output`
    が全 OK になること。NG が出たら原因（case.yaml と生成物のどちらが古いか）を
    特定して作り直す。生成物を手で直して辻褄を合わせてはならない。
+   crosscheck は**出力形式の監査**も行う（Excel 書式が .docx で出力されていたら NG —
+   その書類は builder を経由していないので、正規の手順で必ず作り直す）。
 9. **目視検証**: `hasan-kit preview cases/<事件ID>/output/*.docx
    cases/<事件ID>/output/*.xlsx` で全書類をPDF・画像化し、各スキルのチェックリストで
    目視する。

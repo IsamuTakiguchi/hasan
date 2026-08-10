@@ -13,6 +13,20 @@ description: >-
 
 # 個人破産申立て「報告書」作成スキル
 
+## 出力形式の鉄則（必ず守る）
+
+- この書式の出力は**必ずテンプレートと同じ形式**にする（Excel書式→.xlsx／Word書式→.docx）。
+- 生成は hasan-kit（builder / fill-docx）経由のみ。**Word や Excel の文書を新規作成して
+  代替することは禁止**（裁判所書式のレイアウト・数式・チェック欄が失われ、提出できない
+  書面になる）。case.yaml の値をチャット上で整形して文書化するのも同様に禁止。
+- hasan-kit の実体は**この SKILL.md の2階層上**にある `scripts/hasan-kit`
+  （SKILL.md はプラグインルート直下の skills/ 配下にある。PATH に hasan-kit が無い環境では
+  必ずこの絶対パスで呼ぶ。例: SKILL.md が /path/to/hasan/skills/generate/SKILL.md なら
+  実体は /path/to/hasan/scripts/hasan-kit）。
+- hasan-kit が見つからない・実行に失敗した場合は**そこで停止**し、エラー全文と
+  `hasan-kit doctor` の結果を利用者に報告する（書類の自作でしのがない）。
+
+
 **適用範囲**: 自然人用（B1110/0205）。同時廃止・管財（自然人）の両方で使用。
 法人事件では使わない（法人は houkokusho-hojin／skills/houkokusho-hojin）。
 

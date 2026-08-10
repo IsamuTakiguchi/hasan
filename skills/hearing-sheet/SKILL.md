@@ -78,5 +78,4 @@ description: >-
 - 聴取シートは**事務所内資料**（footer にその旨を入れる。裁判所提出物ではない）
 - 依頼者に見せる資料になり得るため、断定的・非難的な表現を避ける
   （例:「浪費の有無」→「趣味や娯楽に使った金額」）
-- `hasan-kit` が PATH に無い環境では `ls ~/.claude/plugins/*/*/scripts/hasan-kit` 等で
-  実体を探して絶対パスで使う
+- `hasan-kit` が PATH に無い環境では、**この SKILL.md の2階層上**の `scripts/hasan-kit` を絶対パスで呼ぶ（SKILL.md はプラグインルート直下の skills/ 配下にある）。
