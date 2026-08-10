@@ -71,12 +71,22 @@ PDF検証に LibreOffice（writer/calc）。
 Cowork の既知の不具合でスキルが実行環境に読み込まれないことがあるため
 （claude-code Issue #31542）、スキル読込に依存しないこの方式を推奨します。
 
-1. 作業フォルダ一式を作る（このリポジトリのクローンで）: `scripts/hasan-kit workdir-zip`
-   → `hasan-work-v<版>.zip` ができる（CLAUDE.md＝スキルへの誘導＋cases/＋hasan/ 一式）
-2. 解凍してできる **hasan-work フォルダを Cowork の「フォルダを接続」で渡す**
-3. cases/<事件ID>/input/ に原資料を置き、「破産申立書類一式を作成して」等と依頼する
-   （フォルダ直下の CLAUDE.md が hasan/skills/ の該当スキルに誘導する）
-4. 書式改訂時はリポジトリ側で登録後、zip を作り直してフォルダを差し替える
+接続したフォルダの中身しか Cowork からは見えないため、接続するフォルダ自体に
+「CLAUDE.md（スキルへの誘導）＋hasan/ 一式」が入っている必要がある。2通りの構成を用意:
+
+**(a) 事件ごとの個別フォルダ方式**（事件フォルダを直接接続する）
+1. テンプレを作る: `scripts/hasan-kit case-zip` → `hasan-case-v<版>.zip`
+2. 解凍した hasan-case フォルダを**事件名にリネーム**（例 `2026-008-山田`）。
+   事件ごとにこのテンプレをコピーして使い回す
+3. input/ に原資料を置き、そのフォルダを「フォルダを接続」で渡して依頼する
+   （事件データはフォルダ直下: case.yaml・input/・work/・output/。
+   CLAUDE.md がスキル内の cases/ 表記の読み替えとスキル誘導を行う）
+
+**(b) 全事件を1フォルダで管理する方式**
+1. `scripts/hasan-kit workdir-zip` → `hasan-work-v<版>.zip`
+2. 解凍した hasan-work フォルダを接続し、cases/<事件ID>/ に事件を置く
+
+いずれも書式改訂時はリポジトリ側で登録後、zip を作り直して hasan/ を差し替える。
 
 **プラグイン方式（Customize → Install → zip）** も併用可: `scripts/hasan-kit package`
 で配布zipを作成。個人プランは private GitHub マーケットプレイスから直接
