@@ -79,11 +79,32 @@ case_zip() {
 EOM
   ( cd "$ROOT" && tar cf - --exclude=.git --exclude=cases --exclude='__pycache__' \
       --exclude='*.pyc' --exclude=.claude . ) | ( cd "$tmp/$dirname/hasan" && tar xf - )
-  rm -f "$out"  # zip -r は既存アーカイブへ追記するため必ず作り直す
-  ( cd "$tmp" && zip -qr "$out" "$dirname" )
+  rm -f "$out"  # 既存アーカイブへの追記を防ぐため必ず作り直す
+  # 日本語フォルダ名の文字化け対策: Windows の標準解凍は CP932、Mac は UTF-8 を想定する。
+  # --win 指定時はファイル名を CP932 で格納した zip を作る（既定は UTF-8）。
+  "$PY" - "$tmp" "$dirname" "$out" "${2:-utf-8}" <<'PYZIP'
+import os, sys, zipfile
+src_root, top, out, enc = sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]
+codec = "cp932" if enc == "--win" else "utf-8"
+if codec == "cp932":
+    # zipfile は非ASCII名を常に UTF-8+フラグで書くため、CP932 で書く場合は
+    # 内部エンコーダを差し替える（Windows 標準解凍が ANSI(CP932) で読む前提）
+    zipfile.ZipInfo._encodeFilenameFlags = lambda self: (self.filename.encode("cp932"), 0)
+with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED) as z:
+    base = os.path.join(src_root, top)
+    for root, dirs, files in os.walk(base):
+        dirs.sort()
+        rel = os.path.relpath(root, src_root)
+        if not files and not dirs:
+            z.writestr(rel.replace(os.sep, "/") + "/", b"")
+        for f in sorted(files):
+            full = os.path.join(root, f)
+            z.write(full, os.path.join(rel, f).replace(os.sep, "/"))
+PYZIP
   rm -rf "$tmp"
-  echo "事件フォルダテンプレ: $out"
+  echo "事件フォルダテンプレ: $out（ファイル名エンコーディング: ${2:---utf-8 既定}）"
   echo "使い方: 解凍 →「100.破産申立」フォルダを事件ごとにコピー → Cowork の「フォルダを接続」で渡す"
+  echo "※ Windows で解凍して文字化けする場合は case-zip <出力zip> --win で作り直す"
 }
 
 package() {
