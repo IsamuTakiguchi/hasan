@@ -67,15 +67,22 @@ PDF検証に LibreOffice（writer/calc）。
 
 ## Claude Cowork で使う
 
-Cowork（デスクトップアプリ）でも同じプラグインが使えます。
+**推奨: 作業フォルダ方式（「フォルダを接続」）**。プラグインとしてインストールしても
+Cowork の既知の不具合でスキルが実行環境に読み込まれないことがあるため
+（claude-code Issue #31542）、スキル読込に依存しないこの方式を推奨します。
 
-1. 配布zipを作る（このリポジトリのクローンで）: `scripts/hasan-kit package`
-   → `hasan-plugin-v1.0.0.zip` ができる
-2. Cowork タブ → **Customize** → **Install** → zipを**アップロード**
-   （個人プランは private GitHub マーケットプレイスから直接インストールできないため、
-   zipアップロードが正規ルート。Team/Enterprise は管理画面の Private Marketplace 連携で
-   private リポジトリから配布可能）
-3. 事件フォルダは Cowork の「フォルダを接続」で作業フォルダ（cases/ を含む）を渡す
+1. 作業フォルダ一式を作る（このリポジトリのクローンで）: `scripts/hasan-kit workdir-zip`
+   → `hasan-work-v<版>.zip` ができる（CLAUDE.md＝スキルへの誘導＋cases/＋hasan/ 一式）
+2. 解凍してできる **hasan-work フォルダを Cowork の「フォルダを接続」で渡す**
+3. cases/<事件ID>/input/ に原資料を置き、「破産申立書類一式を作成して」等と依頼する
+   （フォルダ直下の CLAUDE.md が hasan/skills/ の該当スキルに誘導する）
+4. 書式改訂時はリポジトリ側で登録後、zip を作り直してフォルダを差し替える
+
+**プラグイン方式（Customize → Install → zip）** も併用可: `scripts/hasan-kit package`
+で配布zipを作成。個人プランは private GitHub マーケットプレイスから直接
+インストールできないため zip アップロードが正規ルート（Team/Enterprise は
+管理画面の Private Marketplace 連携で配布可能）。スキルが発動しない場合は
+新しい会話の開始・アプリ再起動を試し、それでも駄目なら作業フォルダ方式を使う。
 
 Cowork の実行環境（Linux VM）には Python・LibreOffice が入っており、不足する
 pip パッケージは hasan-kit が初回実行時に自動導入します（診断は `hasan-kit doctor`）。

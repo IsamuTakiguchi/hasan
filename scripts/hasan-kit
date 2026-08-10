@@ -37,6 +37,29 @@ doctor() {
   fi
 }
 
+workdir_zip() {
+  # Cowork「フォルダを接続」用の作業フォルダ一式（プラグインのスキルマウント不具合の回避策）。
+  # 構成: hasan-work/ ├ CLAUDE.md（スキルへの誘導） ├ cases/ └ hasan/（プラグイン一式）
+  local version
+  version=$("$PY" -c "import json; print(json.load(open('$ROOT/.claude-plugin/plugin.json'))['version'])")
+  local out="${1:-$PWD/hasan-work-v${version}.zip}"
+  local tmp
+  tmp=$(mktemp -d)
+  mkdir -p "$tmp/hasan-work/cases" "$tmp/hasan-work/hasan"
+  cp "$ROOT/templates/workdir-CLAUDE.md" "$tmp/hasan-work/CLAUDE.md"
+  cat > "$tmp/hasan-work/cases/README.md" <<'EOM'
+事件フォルダの置き場所。cases/<事件ID>/input/ に原資料（調査票・通帳PDF・面談メモ等）を
+置いて「資料を読み込んで」と依頼する。依頼者情報を含むため git 管理・共有はしないこと。
+EOM
+  printf '*\n!README.md\n!.gitignore\n' > "$tmp/hasan-work/cases/.gitignore"
+  ( cd "$ROOT" && tar cf - --exclude=.git --exclude=cases --exclude='__pycache__' \
+      --exclude='*.pyc' --exclude=.claude . ) | ( cd "$tmp/hasan-work/hasan" && tar xf - )
+  ( cd "$tmp" && zip -qr "$out" hasan-work )
+  rm -rf "$tmp"
+  echo "作業フォルダ一式: $out"
+  echo "使い方: 解凍してできる hasan-work フォルダを Cowork の「フォルダを接続」で渡す"
+}
+
 package() {
   local version
   version=$("$PY" -c "import json; print(json.load(open('$ROOT/.claude-plugin/plugin.json'))['version'])")
@@ -56,6 +79,8 @@ usage() {
   schema                        schema/ のパスを表示
   doctor                        環境診断（Python/pip/依存/LibreOffice の有無）
   package [出力zip]             Cowork等へ配布するプラグインzipを生成
+  workdir-zip [出力zip]         Cowork「フォルダを接続」用の作業フォルダ一式を生成
+                                （プラグインのスキルが読み込まれない環境向けの推奨ルート）
   validate-case <case.yaml>     事件モデルの検証（生成前ゲート）
   fill-docx --template .. --fillmap .. --values .. --output ..
                                 docx書式のfillmap駆動記入
@@ -90,6 +115,7 @@ case "$cmd" in
   schema)        echo "$ROOT/schema" ;;
   doctor)        doctor ;;
   package)       package "$@" ;;
+  workdir-zip)   workdir_zip "$@" ;;
   validate-case) exec "$PY" "$ROOT/scripts/casekit/validate_case.py" "$@" ;;
   fill-docx)     exec "$PY" "$ROOT/scripts/build/fill_docx.py" "$@" ;;
   memo-docx)     exec "$PY" "$ROOT/scripts/build/build_memo_docx.py" "$@" ;;
