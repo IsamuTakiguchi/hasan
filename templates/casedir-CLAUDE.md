@@ -1,4 +1,4 @@
-# 破産事件フォルダ（hasan・1事件用）
+# 破産申立 事件フォルダ（hasan・1事件用）
 
 このフォルダは **1つの破産事件の作業フォルダ**。破産事件に関する依頼を受けたら、
 **必ず `hasan/skills/` の該当スキル（SKILL.md）を読み、その手順に厳密に従うこと**。
@@ -11,11 +11,11 @@
 
 | スキル内の表記 | このフォルダでの実体 |
 |---|---|
-| cases/<事件ID>/input/ | ./input/（原資料: 調査票・通帳PDF・面談メモ等） |
+| cases/<事件ID>/input/ | ./受領資料/（原資料: 調査票・通帳PDF・面談メモ等） |
 | cases/<事件ID>/case.yaml | ./case.yaml（事件モデル＝唯一の真実） |
 | cases/<事件ID>/questions.md | ./questions.md（弁護士への確認事項） |
 | cases/<事件ID>/work/ | ./work/（中間物） |
-| cases/<事件ID>/output/ | ./output/（記入済み書面＋検証用PDF/画像） |
+| cases/<事件ID>/output/ | ./申立書類/（記入済み書面＋検証用PDF/画像） |
 
 ## 依頼 → 使うスキル（hasan/skills/<名前>/SKILL.md）
 
@@ -45,7 +45,7 @@
 3. hasan-kit が失敗したら**書類を自作せず停止**し、エラー全文と
    `hasan/scripts/hasan-kit doctor` の結果を利用者に報告する。
 4. 手続種別（同時廃止／管財（自然人）／管財（法人））を最初に確認する（intake 参照）。
-5. 生成後は `hasan-kit crosscheck --case case.yaml --dir output`（数値・出力形式の監査）と
+5. 生成後は `hasan-kit crosscheck --case case.yaml --dir 申立書類`（数値・出力形式の監査）と
    `hasan-kit preview`（PDF目視）まで必ず実施する。
 6. このフォルダは依頼者情報を含む。フォルダの外へ複製しない・共有しない。
 

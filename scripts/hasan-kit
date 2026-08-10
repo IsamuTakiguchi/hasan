@@ -54,6 +54,7 @@ EOM
   printf '*\n!README.md\n!.gitignore\n' > "$tmp/hasan-work/cases/.gitignore"
   ( cd "$ROOT" && tar cf - --exclude=.git --exclude=cases --exclude='__pycache__' \
       --exclude='*.pyc' --exclude=.claude . ) | ( cd "$tmp/hasan-work/hasan" && tar xf - )
+  rm -f "$out"  # zip -r は既存アーカイブへ追記するため必ず作り直す
   ( cd "$tmp" && zip -qr "$out" hasan-work )
   rm -rf "$tmp"
   echo "作業フォルダ一式: $out"
@@ -62,31 +63,34 @@ EOM
 
 case_zip() {
   # 事件ごとの個別フォルダを Cowork「フォルダを接続」で使うためのテンプレ一式。
-  # 解凍後、フォルダ名を事件名（例 2026-008-山田）に変えて事件ごとにコピーして使う。
-  # 構成: hasan-case/ ├ CLAUDE.md（スキル誘導・パス読み替え表） ├ input|work|output/ └ hasan/
+  # 解凍すると「100.破産申立」フォルダができる。事件ごとにコピーして使う。
+  # 構成: 100.破産申立/ ├ CLAUDE.md（スキル誘導・パス読み替え表） ├ 受領資料|work|申立書類/ └ hasan/
   local version
   version=$("$PY" -c "import json; print(json.load(open('$ROOT/.claude-plugin/plugin.json'))['version'])")
   local out="${1:-$PWD/hasan-case-v${version}.zip}"
   local tmp
   tmp=$(mktemp -d)
-  mkdir -p "$tmp/hasan-case/input" "$tmp/hasan-case/work" "$tmp/hasan-case/output" "$tmp/hasan-case/hasan"
-  cp "$ROOT/templates/casedir-CLAUDE.md" "$tmp/hasan-case/CLAUDE.md"
-  cat > "$tmp/hasan-case/input/README.md" <<'EOM'
+  local dirname="100.破産申立"
+  mkdir -p "$tmp/$dirname/受領資料" "$tmp/$dirname/work" "$tmp/$dirname/申立書類" "$tmp/$dirname/hasan"
+  cp "$ROOT/templates/casedir-CLAUDE.md" "$tmp/$dirname/CLAUDE.md"
+  cat > "$tmp/$dirname/受領資料/README.md" <<'EOM'
 原資料の置き場所（調査票・通帳PDF・面談メモ・債権調査票等）。ここに置いて
 「資料を読み込んで」と依頼すると case.yaml が作られる。
 EOM
   ( cd "$ROOT" && tar cf - --exclude=.git --exclude=cases --exclude='__pycache__' \
-      --exclude='*.pyc' --exclude=.claude . ) | ( cd "$tmp/hasan-case/hasan" && tar xf - )
-  ( cd "$tmp" && zip -qr "$out" hasan-case )
+      --exclude='*.pyc' --exclude=.claude . ) | ( cd "$tmp/$dirname/hasan" && tar xf - )
+  rm -f "$out"  # zip -r は既存アーカイブへ追記するため必ず作り直す
+  ( cd "$tmp" && zip -qr "$out" "$dirname" )
   rm -rf "$tmp"
   echo "事件フォルダテンプレ: $out"
-  echo "使い方: 解凍 → フォルダ名を事件名に変更（事件ごとにコピー）→ Cowork の「フォルダを接続」で渡す"
+  echo "使い方: 解凍 →「100.破産申立」フォルダを事件ごとにコピー → Cowork の「フォルダを接続」で渡す"
 }
 
 package() {
   local version
   version=$("$PY" -c "import json; print(json.load(open('$ROOT/.claude-plugin/plugin.json'))['version'])")
   local out="${1:-$PWD/hasan-plugin-v${version}.zip}"
+  rm -f "$out"  # zip -r は既存アーカイブへ追記するため必ず作り直す
   ( cd "$ROOT" && zip -qr "$out" . \
       -x ".git/*" -x "cases/*" -x "*__pycache__*" -x "*.pyc" -x ".claude/*" )
   echo "配布用パッケージ: $out"
