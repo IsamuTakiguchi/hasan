@@ -48,5 +48,5 @@ description: >-
 ## 注意
 
 - 面談メモは依頼者情報そのもの。cases/ の外に複製しない・コミットしない。
-- `hasan-kit` が PATH に無い環境では `ls ~/.claude/plugins/*/*/bin/hasan-kit` 等で
+- `hasan-kit` が PATH に無い環境では `ls ~/.claude/plugins/*/*/scripts/hasan-kit` 等で
   実体を探して絶対パスで使う。

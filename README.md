@@ -62,13 +62,14 @@ PDF検証に LibreOffice（writer/calc）。
    依頼者向けの平易な文面に（送信は手動）
 
 個別書式のみの依頼も可: 「報告書を作って」「債権者一覧表を作って」等。
-スクリプトを直接使う場合は `hasan-kit --help`（プラグインの bin/ が PATH に入ります）。
+スクリプトを直接使う場合は `scripts/hasan-kit --help`（インストール先の
+`scripts/hasan-kit` を絶対パスで呼ぶ。スキルは自動で実体を探します）。
 
 ## Claude Cowork で使う
 
 Cowork（デスクトップアプリ）でも同じプラグインが使えます。
 
-1. 配布zipを作る（このリポジトリのクローンで）: `bin/hasan-kit package`
+1. 配布zipを作る（このリポジトリのクローンで）: `scripts/hasan-kit package`
    → `hasan-plugin-v1.0.0.zip` ができる
 2. Cowork タブ → **Customize** → **Install** → zipを**アップロード**
    （個人プランは private GitHub マーケットプレイスから直接インストールできないため、
@@ -81,8 +82,9 @@ pip パッケージは hasan-kit が初回実行時に自動導入します（�
 
 既知の注意:
 - タブ間（Chat/Cowork/Code）のスキル同期は遅延あり。反映されないときはアプリ再起動
-- プラグイン `bin/` の PATH 追加が効かない環境では、スキルが
-  `~/.claude/plugins/.../bin/hasan-kit` を絶対パスで探すフォールバックを内蔵
+- `hasan-kit` が PATH に無い環境では、スキルが
+  `~/.claude/plugins/.../scripts/hasan-kit` を絶対パスで探すフォールバックを内蔵
+  （claude.ai ホスト型プラグインは bin/ 同梱不可のため scripts/ に配置している）
 - 書式改訂時は plugin.json の version を上げて zip を再アップロード
 
 ## 書式が改訂されたら

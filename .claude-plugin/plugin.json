@@ -1,7 +1,7 @@
 {
   "name": "hasan",
   "description": "破産申立資料AI自動作成システム — 事件資料から裁判所書式（Word/Excel）の申立書・報告書・債権者一覧表・財産目録・家計収支表等を自動作成。書式の版管理と改訂追従（fillmap自動再束縛）付き。非公開の裁判所書式を同梱するため private 配布限定",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "author": {
     "name": "Isamu Takiguchi",
     "email": "isamu.lawyer@gmail.com"

@@ -20,7 +20,7 @@ description: >-
 置かない — プラグイン更新で消える上、依頼者情報を配布物に混ぜることになる。
 作業フォルダの `cases/` は必ず git 管理外にする（.gitignore に `cases/`）。
 `hasan-kit` が PATH に無い環境（Cowork 等）では
-`ls ~/.claude/plugins/*/*/bin/hasan-kit` 等でプラグイン内の実体を探し絶対パスで使う。
+`ls ~/.claude/plugins/*/*/scripts/hasan-kit` 等でプラグイン内の実体を探し絶対パスで使う。
 
 ## 手順
 
