@@ -20,6 +20,10 @@ spec.yaml の形式:
           done: true        # 先頭に ■（確認済み表示）
         - text: 自由記入欄
           lines: 3          # 記入用下線行を n 行追加
+        - text: 医療費の内容（4月395,000円）
+          check: true
+          blank: true
+          source: B1111 家計収支表.xlsx「3月4月」シートD34セル   # 〔出典〕行を項目の下に小さく表示
   footer: ※ 本シートは事務所内資料（提出書類ではない）   # 任意
 
 使い方:
@@ -82,7 +86,10 @@ def build(spec, out):
             line = f"{prefix}{text}"
             if it.get("blank"):
                 line += f"　{BLANK}"
-            add_para(doc, line, size=10.5, indent_mm=5, space_after=3)
+            add_para(doc, line, size=10.5, indent_mm=5,
+                     space_after=(1 if it.get("source") else 3))
+            if it.get("source"):
+                add_para(doc, f"〔出典〕{it['source']}", size=9, indent_mm=9, space_after=3)
             for _ in range(int(it.get("lines", 0))):
                 add_para(doc, "＿" * 40, size=10.5, indent_mm=9, space_after=3)
         add_para(doc, "", space_after=3)
