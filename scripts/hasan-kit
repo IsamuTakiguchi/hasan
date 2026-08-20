@@ -131,6 +131,8 @@ usage() {
                                 （全事件を1フォルダで管理する方式）
   case-zip [出力zip]            事件ごとの個別フォルダ用テンプレ一式を生成
                                 （事件フォルダを直接「フォルダを接続」する方式）
+  scan --dir <事件フォルダ> [--write]
+                                前回処理後の差分検知（update スキルの入口。--write で状態保存）
   validate-case <case.yaml>     事件モデルの検証（生成前ゲート）
   fill-docx --template .. --fillmap .. --values .. --output ..
                                 docx書式のfillmap駆動記入
@@ -167,6 +169,7 @@ case "$cmd" in
   package)       package "$@" ;;
   workdir-zip)   workdir_zip "$@" ;;
   case-zip)      case_zip "$@" ;;
+  scan)          exec "$PY" "$ROOT/scripts/casekit/scan_changes.py" "$@" ;;
   validate-case) exec "$PY" "$ROOT/scripts/casekit/validate_case.py" "$@" ;;
   fill-docx)     exec "$PY" "$ROOT/scripts/build/fill_docx.py" "$@" ;;
   memo-docx)     exec "$PY" "$ROOT/scripts/build/build_memo_docx.py" "$@" ;;

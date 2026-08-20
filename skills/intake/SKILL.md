@@ -47,7 +47,9 @@ description: >-
    記入例は `schema/examples/case.sample.yaml`（架空事例）。
 5. **検証**: `hasan-kit validate-case cases/<事件ID>/case.yaml` を通す。
 6. **questions.md の出力**（後述の書式）。
-7. 利用者へ報告: 読み取った資料一覧・埋まった区分・確認事項の件数。
+7. `hasan-kit scan --dir <事件フォルダ> --write` で処理済み状態を保存する
+   （以後、update スキルが「どの資料が新しいか」をこの記録で判定する）。
+8. 利用者へ報告: 読み取った資料一覧・埋まった区分・確認事項の件数。
 
 ## 記入の鉄則
 
