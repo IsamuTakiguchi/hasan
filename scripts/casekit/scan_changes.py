@@ -1,7 +1,8 @@
 """事件フォルダの変更検知。前回処理時からの差分（新規・変更・削除）を報告する。
 
-update スキル（事件更新オーケストレータ）の入口。状態は work/state.json に
-ファイルごとの SHA1 で記録し、--write で現在の状態を保存する。
+update スキル（事件更新オーケストレータ）の入口。状態は作業フォルダ
+（作業ファイル/ または work/）の state.json にファイルごとの SHA1 で記録し、
+--write で現在の状態を保存する。
 
 使い方:
   python3 scan_changes.py --dir <事件フォルダ> [--write]
@@ -9,7 +10,7 @@ update スキル（事件更新オーケストレータ）の入口。状態は 
 対象:
   - 原資料: 受領資料/ または input/（再帰）
   - 事件モデル: case.yaml・questions.md
-  - 聴取シート・面談メモ等: work/*.docx
+  - 聴取シート・面談メモ等: 作業ファイル/*.docx または work/*.docx
   - 申立書類: 申立書類/ または output/
 """
 import argparse
@@ -18,10 +19,19 @@ import json
 import sys
 from pathlib import Path
 
-STATE_REL = "work/state.json"
 INPUT_DIRS = ["受領資料", "input"]
+WORK_DIRS = ["作業ファイル", "work"]
 OUTPUT_DIRS = ["申立書類", "output"]
 SKIP_NAMES = {".DS_Store", "Thumbs.db", "state.json"}
+
+
+def work_dir(base: Path) -> Path:
+    """作業フォルダ（中間物置き場）。既存のものを優先し、無ければ
+    フォルダの流儀（受領資料=日本語構成）に合わせて選ぶ。"""
+    for name in WORK_DIRS:
+        if (base / name).is_dir():
+            return base / name
+    return base / ("作業ファイル" if (base / "受領資料").is_dir() else "work")
 
 
 def sha1(path: Path) -> str:
@@ -59,7 +69,8 @@ def collect(base: Path) -> dict:
             model[name] = sha1(p)
     areas["事件モデル"] = model
 
-    add("聴取シート・面談メモ等（work）", base / "work", recursive=False, pattern="*.docx")
+    wd = work_dir(base)
+    add(f"聴取シート・面談メモ等（{wd.name}）", wd, recursive=False, pattern="*.docx")
 
     for name in OUTPUT_DIRS:
         if (base / name).is_dir():
@@ -73,11 +84,12 @@ def collect(base: Path) -> dict:
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--dir", default=".", help="事件フォルダ（既定: カレント）")
-    ap.add_argument("--write", action="store_true", help="現在の状態を work/state.json に保存")
+    ap.add_argument("--write", action="store_true",
+                    help="現在の状態を作業フォルダの state.json に保存")
     args = ap.parse_args()
 
     base = Path(args.dir).resolve()
-    state_path = base / STATE_REL
+    state_path = work_dir(base) / "state.json"
     current = collect(base)
 
     previous = None

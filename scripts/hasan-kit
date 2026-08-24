@@ -64,21 +64,31 @@ EOM
 case_zip() {
   # 事件ごとの個別フォルダを Cowork「フォルダを接続」で使うためのテンプレ一式。
   # 解凍すると「100.破産申立」フォルダができる。事件ごとにコピーして使う。
-  # 構成: 100.破産申立/ ├ CLAUDE.md（スキル誘導・パス読み替え表） ├ 受領資料|work|申立書類/ └ hasan/
+  # 構成: 100.破産申立/ ├ CLAUDE.md（スキル誘導・パス読み替え表）
+  #       ├ 受領資料|作業ファイル|申立書類/ └ システム/（エンジン・書式一式）
   local version
   version=$("$PY" -c "import json; print(json.load(open('$ROOT/.claude-plugin/plugin.json'))['version'])")
   local out="${1:-$PWD/hasan-case-v${version}.zip}"
   local tmp
   tmp=$(mktemp -d)
   local dirname="100.破産申立"
-  mkdir -p "$tmp/$dirname/受領資料" "$tmp/$dirname/work" "$tmp/$dirname/申立書類" "$tmp/$dirname/hasan"
+  mkdir -p "$tmp/$dirname/受領資料" "$tmp/$dirname/作業ファイル" "$tmp/$dirname/申立書類" "$tmp/$dirname/システム"
   cp "$ROOT/templates/casedir-CLAUDE.md" "$tmp/$dirname/CLAUDE.md"
   cat > "$tmp/$dirname/受領資料/README.md" <<'EOM'
 原資料の置き場所（調査票・通帳PDF・面談メモ・債権調査票等）。ここに置いて
 「資料を読み込んで」と依頼すると case.yaml が作られる。
 EOM
+  cat > "$tmp/$dirname/作業ファイル/README.md" <<'EOM'
+Claude が使う中間ファイルの置き場所（聴取シート・面談メモの docx、通帳CSV、
+生成用の values ファイル、処理済み状態の記録 state.json 等）。
+聴取シートはここに作られる。state.json は削除しないこと（差分検知の基準）。
+EOM
+  cat > "$tmp/$dirname/申立書類/README.md" <<'EOM'
+生成された裁判所提出書類（Word/Excel）と検証用PDF・画像の置き場所。
+手で修正した場合は、次回の更新時に Claude が上書き前に確認する。
+EOM
   ( cd "$ROOT" && tar cf - --exclude=.git --exclude=cases --exclude='__pycache__' \
-      --exclude='*.pyc' --exclude=.claude . ) | ( cd "$tmp/$dirname/hasan" && tar xf - )
+      --exclude='*.pyc' --exclude=.claude . ) | ( cd "$tmp/$dirname/システム" && tar xf - )
   rm -f "$out"  # 既存アーカイブへの追記を防ぐため必ず作り直す
   # 日本語フォルダ名の文字化け対策: Windows の標準解凍は CP932、Mac は UTF-8 を想定する。
   # --win 指定時はファイル名を CP932 で格納した zip を作る（既定は UTF-8）。
