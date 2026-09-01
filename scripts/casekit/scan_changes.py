@@ -12,11 +12,18 @@ update スキル（事件更新オーケストレータ）の入口。状態は�
   - 事件モデル: case.yaml・questions.md
   - 聴取シート・面談メモ等: 作業ファイル/*.docx または work/*.docx
   - 申立書類: 申立書類/ または output/
+
+申立書類の docx/xlsx は --write 時に内容スナップショット（段落・セル値）を
+<作業フォルダ>/snapshots/ に保存し、次回スキャンで変更ファイルの
+**どの記載がどう変わったか**（段落・セル単位の diff）まで表示する。
 """
 import argparse
+import difflib
 import hashlib
 import json
+import re
 import sys
+import zipfile
 from pathlib import Path
 
 INPUT_DIRS = ["受領資料", "input"]
@@ -32,6 +39,127 @@ def work_dir(base: Path) -> Path:
         if (base / name).is_dir():
             return base / name
     return base / ("作業ファイル" if (base / "受領資料").is_dir() else "work")
+
+
+SNAP_DIRNAME = "snapshots"
+MAX_DIFF_LINES = 40  # 1ファイルあたりの内容diff表示上限
+
+
+def docx_paragraphs(path: Path):
+    """docx の本文を段落テキストのリストで返す。壊れたファイルは None。"""
+    try:
+        with zipfile.ZipFile(path) as z:
+            xml = z.read("word/document.xml").decode("utf-8")
+    except Exception:
+        return None
+    paras = []
+    for chunk in re.split(r"</w:p>", xml):
+        text = "".join(re.findall(r"<w:t[^>]*>([^<]*)</w:t>", chunk))
+        if text.strip():
+            paras.append(text)
+    return paras
+
+
+def xlsx_cells(path: Path):
+    """xlsx を {シート名: {セル番地: 値}} で返す（数式は数式文字列）。壊れたら None。"""
+    try:
+        import openpyxl
+        wb = openpyxl.load_workbook(path, read_only=True, data_only=False)
+    except Exception:
+        return None
+    sheets = {}
+    try:
+        for ws in wb.worksheets:
+            cells = {}
+            for row in ws.iter_rows():
+                for c in row:
+                    if c.value is not None:
+                        cells[c.coordinate] = str(c.value)
+            sheets[ws.title] = cells
+    finally:
+        wb.close()
+    return sheets
+
+
+def snapshot_of(path: Path):
+    if path.suffix == ".docx":
+        paras = docx_paragraphs(path)
+        return None if paras is None else {"type": "docx", "paras": paras}
+    if path.suffix == ".xlsx":
+        sheets = xlsx_cells(path)
+        return None if sheets is None else {"type": "xlsx", "sheets": sheets}
+    return None
+
+
+def snap_path(wd: Path, rel_in_output: str) -> Path:
+    return wd / SNAP_DIRNAME / (rel_in_output.replace("/", "__") + ".json")
+
+
+def print_content_diff(out_dir: Path, wd: Path, rel_in_output: str):
+    """変更された申立書類の内容diff（段落・セル単位）を表示する。"""
+    sp = snap_path(wd, rel_in_output)
+    cur_path = out_dir / rel_in_output
+    if cur_path.suffix not in (".docx", ".xlsx"):
+        return
+    if not sp.is_file():
+        print("        （内容diffなし — 前回のスナップショット未保存）")
+        return
+    try:
+        old = json.loads(sp.read_text(encoding="utf-8"))
+    except Exception:
+        return
+    new = snapshot_of(cur_path)
+    if new is None or new.get("type") != old.get("type"):
+        print("        （内容を読み取れないため diff 省略 — ファイルが壊れている可能性）")
+        return
+
+    lines = []
+    if new["type"] == "docx":
+        for d in difflib.unified_diff(old.get("paras", []), new["paras"],
+                                      lineterm="", n=0):
+            if d.startswith("+++") or d.startswith("---") or d.startswith("@@"):
+                continue
+            mark = "＋" if d.startswith("+") else "－"
+            lines.append(f"        {mark} {d[1:].strip()}")
+    else:
+        old_sheets, new_sheets = old.get("sheets", {}), new["sheets"]
+        for sheet in sorted(set(old_sheets) | set(new_sheets)):
+            o, n = old_sheets.get(sheet, {}), new_sheets.get(sheet, {})
+            for addr in sorted(set(o) | set(n), key=lambda a: (len(a), a)):
+                ov, nv = o.get(addr), n.get(addr)
+                if ov != nv:
+                    lines.append(f"        {sheet}!{addr}: "
+                                 f"{ov if ov is not None else '（空欄）'} → "
+                                 f"{nv if nv is not None else '（空欄）'}")
+    if not lines:
+        print("        （本文・セル値の変更なし — 書式設定のみの変更）")
+        return
+    for ln in lines[:MAX_DIFF_LINES]:
+        print(ln)
+    if len(lines) > MAX_DIFF_LINES:
+        print(f"        …ほか {len(lines) - MAX_DIFF_LINES} 件の変更")
+
+
+def write_snapshots(out_dir: Path, wd: Path, output_files: dict, base: Path):
+    """申立書類の docx/xlsx の内容スナップショットを保存し、消えた分を掃除する。"""
+    snap_dir = wd / SNAP_DIRNAME
+    keep = set()
+    for rel_from_base in output_files:
+        p = base / rel_from_base
+        if p.suffix not in (".docx", ".xlsx"):
+            continue
+        rel_in_output = str(p.relative_to(out_dir))
+        snap = snapshot_of(p)
+        if snap is None:
+            continue
+        sp = snap_path(wd, rel_in_output)
+        sp.parent.mkdir(parents=True, exist_ok=True)
+        sp.write_text(json.dumps(snap, ensure_ascii=False), encoding="utf-8")
+        keep.add(sp.name)
+    if snap_dir.is_dir():
+        for f in snap_dir.glob("*.json"):
+            if f.name not in keep:
+                f.unlink()
 
 
 def sha1(path: Path) -> str:
@@ -89,7 +217,13 @@ def main():
     args = ap.parse_args()
 
     base = Path(args.dir).resolve()
-    state_path = work_dir(base) / "state.json"
+    wd = work_dir(base)
+    state_path = wd / "state.json"
+    out_dir = None
+    for name in OUTPUT_DIRS:
+        if (base / name).is_dir():
+            out_dir = base / name
+            break
     current = collect(base)
 
     previous = None
@@ -121,6 +255,9 @@ def main():
                     print(f"  新規  {f}")
                 for f in changed:
                     print(f"  変更  {f}")
+                    if area == "申立書類" and out_dir is not None:
+                        print_content_diff(out_dir, wd,
+                                           str((base / f).relative_to(out_dir)))
                 for f in removed:
                     print(f"  削除  {f}")
         if not any_change:
@@ -130,6 +267,8 @@ def main():
         state_path.parent.mkdir(parents=True, exist_ok=True)
         state_path.write_text(json.dumps(current, ensure_ascii=False, indent=1),
                               encoding="utf-8")
+        if out_dir is not None:
+            write_snapshots(out_dir, wd, current.get("申立書類", {}), base)
         print(f"状態を保存: {state_path.relative_to(base)}")
 
     sys.exit(0 if not any_change else 2)  # 2=差分あり（エラーではない）
