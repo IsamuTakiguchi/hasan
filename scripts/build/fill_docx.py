@@ -33,6 +33,7 @@ fillmap の kind:
 import argparse
 import copy
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -82,11 +83,20 @@ def underlined_runs(p):
     return out
 
 
-def set_run_text(run, text):
+def set_run_text(run, text, drop_tabs=False):
     """run 内のテキストを差し替える（tab 等の他要素は維持）。
 
     run が複数の <w:t> を持つ場合（merge_runs 後もあり得る）は、先頭に全文を
     入れて残りは削除する（置換残りを防ぐ）。
+
+    drop_tabs=True のときは run 内の <w:tab/> も削除する。merge_runs 後の
+    段落では空欄用タブが値 run に混在しており、全文置換でテキストだけ
+    差し替えるとタブが値の後ろに連続残留してレイアウトが崩れる（B1102 で実例）。
+
+    drop_tabs=False（下線記入等）では、値の w:t を**タブより前**に移す。
+    統合後の下線 run は [tab, tab, 値] の並びになりがちで、そのままでは
+    値がタブ位置（右端）へ飛んで折り返す。値を先頭に置けば値は下線の起点
+    （ラベル直後）に印字され、残るタブが罫線をタブ位置まで伸ばす。
     """
     ts = run.findall(f"{W}t")
     if not ts:
@@ -95,8 +105,40 @@ def set_run_text(run, text):
         t = ts[0]
         for extra in ts[1:]:
             run.remove(extra)
+    if drop_tabs:
+        for tab in run.findall(f"{W}tab"):
+            run.remove(tab)
+    else:
+        tabs = run.findall(f"{W}tab")
+        if tabs and run.index(t) > run.index(tabs[0]):
+            run.remove(t)
+            run.insert(run.index(tabs[0]), t)
     t.text = text
     t.set("{http://www.w3.org/XML/1998/namespace}space", "preserve")
+
+
+_CJK_SPACE = re.compile(r"(?<=[^\x00-\x7f]) +(?=[^\x00-\x7f])")
+
+
+def clean_fill_value(value):
+    """記入値の清浄化。(清浄化後の値, 実施内容リスト) を返す。
+
+    YAML の折返し（>- 等）で組み立てた値には改行や和文中の半角スペースが
+    混入しやすく、裁判所書式の字面を崩す。改行は除去して連結し、
+    全角文字に挟まれた半角スペースも除去する（意図的な半角空白は
+    英数字の前後にしか現れない前提）。
+    """
+    notes = []
+    if not isinstance(value, str):
+        return value, notes
+    if "\n" in value or "\r" in value:
+        value = value.replace("\r", "").replace("\n", "")
+        notes.append("改行を除去")
+    cleaned = _CJK_SPACE.sub("", value)
+    if cleaned != value:
+        notes.append("和文中の半角スペースを除去")
+        value = cleaned
+    return value, notes
 
 
 class Filler:
@@ -130,13 +172,17 @@ class Filler:
             r for r in rs
             if r.find(f"{W}fldChar") is None and r.find(f"{W}instrText") is None
         ]
+        # 段落全文置換では空欄用タブも不要（値が行全体を構成する）。残すと
+        # タブが値の後ろに連続残留してレイアウトが崩れる。format.keep_tabs で温存可
+        keep_tabs = (field.get("format") or {}).get("keep_tabs", False)
         if rs:
-            set_run_text(rs[0], str(value))
+            set_run_text(rs[0], str(value), drop_tabs=not keep_tabs)
             for r in rs[1:]:
                 p.elem.remove(r)
         else:
             sz = (field.get("format") or {}).get("sz")
             p.elem.append(make_run(str(value), sz=sz))
+        self._warn_orphan_tabs(field["id"], p.elem)
         return True
 
     def fill_insert_cell_text(self, field, value):
@@ -218,11 +264,15 @@ class Filler:
         if p is None:
             return False
         urs = underlined_runs(p.elem)
-        slot = (field.get("format") or {}).get("slot", 0)
+        fmt = field.get("format") or {}
+        slot = fmt.get("slot", 0)
         if slot >= len(urs):
             self.warn(field["id"], f"下線runが{len(urs)}個しかない (slot={slot})")
             return False
-        set_run_text(urs[slot], str(value))
+        # 下線 run のタブはタブ位置まで罫線を伸ばす役割があるため既定で温存。
+        # 値が長くタブで溢れる書式だけ fillmap の format.drop_tabs: true で除去する
+        set_run_text(urs[slot], str(value), drop_tabs=fmt.get("drop_tabs", False))
+        self._warn_orphan_tabs(field["id"], p.elem)
         return True
 
     def fill_underline_slots(self, field, value):
@@ -233,13 +283,37 @@ class Filler:
         vals = value if isinstance(value, list) else [value]
         if len(vals) > len(urs):
             self.warn(field["id"], f"値{len(vals)}個に対し下線runが{len(urs)}個")
+        drop = (field.get("format") or {}).get("drop_tabs", False)
         ok = False
         for r, v in zip(urs, vals):
             if v is None or v == "":
                 continue
-            set_run_text(r, str(v))
+            set_run_text(r, str(v), drop_tabs=drop)
             ok = True
+        if ok:
+            self._warn_orphan_tabs(field["id"], p.elem)
         return ok
+
+    def _warn_orphan_tabs(self, fid, p_elem):
+        """記入後の段落で、最後のテキストの後に下線なしの連続タブが残っていたら警告。
+
+        下線 run の末尾タブは罫線をタブ位置まで伸ばす正当な用法なので対象外。
+        下線のない残留タブはタブ位置まで行を伸ばすだけでレイアウトを崩す
+        （B1102 の実崩れの原因）。将来の同種事故の検知網。
+        """
+        underlined = set(underlined_runs(p_elem))
+        seq = []  # 段落内の run 子要素を文書順に (種別, 下線か) で並べる
+        for r in runs_of(p_elem):
+            for e in r:
+                if e.tag == f"{W}t" and (e.text or "").strip():
+                    seq.append(("t", r in underlined))
+                elif e.tag == f"{W}tab":
+                    seq.append(("tab", r in underlined))
+        last_t = max((i for i, (k, _) in enumerate(seq) if k == "t"), default=-1)
+        plain_tabs = sum(1 for k, u in seq[last_t + 1:] if k == "tab" and not u)
+        if plain_tabs >= 2:
+            self.warn(fid, f"記入後の段落末尾に下線なしタブが{plain_tabs}個残っている"
+                           "（レイアウト崩れの恐れ。fillmap の kind/keep_tabs を見直す）")
 
     def fill_underline_longtext(self, field, value):
         p = self.resolve(field["id"], field["anchor"])
@@ -331,11 +405,24 @@ class Filler:
             if fn is None:
                 self.warn(fid, f"未知の kind: {field['kind']}")
                 continue
-            if fn(self, field, vals[fid]):
+            if fn(self, field, self._clean(fid, vals[fid])):
                 self.filled.append(fid)
         unknown = set(vals) - {f["id"] for f in fillmap["fields"]}
         for fid in sorted(unknown):
             self.warn(fid, "fillmap に存在しない field_id（値は無視された）")
+
+    def _clean(self, fid, value):
+        """文字列値の清浄化（リスト・dict は要素ごと）。実施したら警告で報告する。"""
+        if isinstance(value, str):
+            cleaned, notes = clean_fill_value(value)
+            if notes:
+                self.warn(fid, f"値を清浄化した: {'・'.join(notes)}")
+            return cleaned
+        if isinstance(value, list):
+            return [self._clean(fid, v) for v in value]
+        if isinstance(value, dict):
+            return {k: self._clean(fid, v) for k, v in value.items()}
+        return value
 
 
 def merge_runs(unpacked: Path):
