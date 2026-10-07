@@ -4,8 +4,9 @@ fields:
   filing_date: 令和７年９月１日
   atesaki_shibu: 支部          # 堺支部の事件の例（本庁なら値を渡さない）
   dairinin: 　乙　川　一　郎　　印
-  soutatsu_basho: 〒５９０－００００　大阪府堺市堺区大通り１－２－３　丙山法律事務所
-  tel_fax: ＴＥＬ（０７２）０００－００００　　ＦＡＸ（０７２）０００－０００１
+  soutatsu_basho: 〒590-0000　大阪府堺市堺区大通り1-2-3
+  soutatsu_basho2: 丙山法律事務所
+  tel_fax: TEL（072）000－0000　　FAX（072）000－0001
   shimei:
     - 甲　野　太　郎
     - 乙山ストア

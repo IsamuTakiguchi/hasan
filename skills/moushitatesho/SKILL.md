@@ -83,7 +83,11 @@ skills/houkokusho-hojin と同様 corporation セクションから（下記は�
 
 ## values 組み立てルール（0203・管財（自然人）固有）
 
-共通欄（dairinin / soutatsu_basho / tel_fax / honseki）は B1102 と同じ要領。相違点:
+共通欄（dairinin / tel_fax / honseki）は B1102 と同じ要領。
+**送達場所は2行に分ける**: `soutatsu_basho` に「〒590-0000　住所」、`soutatsu_basho2`
+（下線だけの2行目）に事務所名（0203/0103 は1行目の余白が狭く、1行に全部書くと折り返す）。
+**〒・丁目番地、TEL/FAX の数字・英字は半角**（全角だと行幅を越える。見本
+values.sample.yaml の形に合わせる）。相違点:
 
 - `atesaki_shibu`: **支部事件のみ**「支部」を渡す（☑のみ入る。支部名は提出時に
   手書き — 完了報告で必ず案内）。本庁（第６民事部）は値を渡さない。

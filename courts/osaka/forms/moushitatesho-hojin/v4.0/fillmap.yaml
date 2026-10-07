@@ -27,12 +27,17 @@ fields:
     kind: underline_fill
     anchor: { paraId: "", idx: 7, path: "", context: 送達場所（事務所）〒 }
     binds: meta.attorneys[0].address + office
-    notes: 「〒590-0000　住所　事務所名」（元の〒を含めて置換）
+    notes: 1行目「〒590-0000　住所」（元の〒を含めて置換。郵便番号・丁目番地の数字は半角 — 全角だと行幅を越えて折り返す）。事務所名は2行目 soutatsu_basho2 へ
+  - id: soutatsu_basho2
+    kind: underline_fill
+    anchor: { paraId: "", idx: 8, path: "", context: "" }
+    binds: meta.attorneys[0].office
+    notes: 送達場所の2行目（下線のみの空欄行）。事務所名を入れる。1行目に収まらない住所の続きがあればその後ろに続けてもよい
   - id: tel_fax
     kind: set_text
     anchor: { paraId: "", idx: 9, path: "", context: TEL（　）　－　FAX（　）　－ }
     binds: meta.attorneys[0].phone/fax
-    notes: 「ＴＥＬ（０６）０００－００００　ＦＡＸ（０６）０００－０００１」形式で全文置換
+    notes: 「TEL（06）000－0000　　FAX（06）000－0001」形式で全文置換（数字・英字は半角。全角だと行幅を越えて折り返す）
   - id: shogo
     kind: underline_fill
     anchor: { paraId: "", idx: 11, path: "", context: ふり債務者(が　な商号) }

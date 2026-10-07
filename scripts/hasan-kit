@@ -161,6 +161,9 @@ usage() {
   diff-fillmap --old-fillmap .. --new-template .. [--write ..] [--report ..]
                                 書式改訂の照合・自動再束縛
   preview <files...> [-d dir]                   PDF・ページ画像化（目視検証）
+  layout-check --dir .. --case .. | <docx> --template <白紙docx>
+                                                記入済み docx のレイアウト検査
+                                                （白紙テンプレとの描画パリティ・タブ残留）
   crosscheck --case .. --dir ..                 書類間の数値整合検査
 EOF
 }
@@ -193,6 +196,7 @@ case "$cmd" in
   check-anchors) exec "$PY" "$ROOT/scripts/formkit/check_anchors.py" "$@" ;;
   diff-fillmap)  exec "$PY" "$ROOT/scripts/formkit/diff_fillmap.py" "$@" ;;
   preview)       exec "$PY" "$ROOT/scripts/verify/render_preview.py" "$@" ;;
+  layout-check)  exec "$PY" "$ROOT/scripts/verify/layout_check.py" "$@" ;;
   crosscheck)    exec "$PY" "$ROOT/scripts/verify/crosscheck_outputs.py" "$@" ;;
   ""|-h|--help|help) usage ;;
   *) echo "hasan-kit: 未知のサブコマンド '$cmd'" >&2; usage >&2; exit 64 ;;

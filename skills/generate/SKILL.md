@@ -71,6 +71,10 @@ description: >-
    特定して作り直す。生成物を手で直して辻褄を合わせてはならない。
    crosscheck は**出力形式の監査**も行う（Excel 書式が .docx で出力されていたら NG —
    その書類は builder を経由していないので、正規の手順で必ず作り直す）。
+   docx については**レイアウト検査**も自動で行う（白紙テンプレと同じ環境で描画して
+   頁数・最下行位置を相対比較、空欄タブの残留・和文中の半角スペースを検出。単独実行は
+   `hasan-kit layout-check --dir ... --case ...`）。NG が出た書類は values の組み立て
+   （1行・半角スペース無し）か fillmap を見直して作り直す。
 9. **目視検証**: `hasan-kit preview cases/<事件ID>/output/*.docx
    cases/<事件ID>/output/*.xlsx` で全書類をPDF・画像化し、各スキルのチェックリストで
    目視する。

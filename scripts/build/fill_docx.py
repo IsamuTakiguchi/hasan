@@ -142,8 +142,9 @@ def clean_fill_value(value):
 
 
 class Filler:
-    def __init__(self, root):
+    def __init__(self, root, default_sz=21):
         self.index = ParaIndex(root)
+        self.default_sz = default_sz  # 文書既定の文字サイズ（半ポイント単位）。タブ予算の幅推定に使う
         self.filled = []
         self.skipped = []
         self.warnings = []
@@ -174,16 +175,72 @@ class Filler:
         ]
         # 段落全文置換では空欄用タブも不要（値が行全体を構成する）。残すと
         # タブが値の後ろに連続残留してレイアウトが崩れる。format.keep_tabs で温存可
-        keep_tabs = (field.get("format") or {}).get("keep_tabs", False)
+        fmt = field.get("format") or {}
+        keep_tabs = fmt.get("keep_tabs", False)
         if rs:
-            set_run_text(rs[0], str(value), drop_tabs=not keep_tabs)
-            for r in rs[1:]:
-                p.elem.remove(r)
+            value = str(value)
+            tail = [] if fmt.get("keep_tail", True) is False else self._match_tail(rs, value)
+            if tail:
+                head_len = len(value) - sum(len(t) for _, t in tail)
+                keep = {r for r, _ in tail}
+                set_run_text(rs[0], value[:head_len], drop_tabs=not keep_tabs)
+                for r, t in tail:
+                    set_run_text(r, t, drop_tabs=not keep_tabs)
+                for r in rs[1:]:
+                    if r not in keep:
+                        p.elem.remove(r)
+            else:
+                set_run_text(rs[0], value, drop_tabs=not keep_tabs)
+                for r in rs[1:]:
+                    p.elem.remove(r)
         else:
-            sz = (field.get("format") or {}).get("sz")
+            sz = fmt.get("sz")
             p.elem.append(make_run(str(value), sz=sz))
         self._warn_orphan_tabs(field["id"], p.elem)
         return True
+
+    _NORM_MARKS = str.maketrans({"☑": "□", "◆": "◇", "●": "○"})
+
+    @classmethod
+    def _norm_tail(cls, s):
+        return re.sub(r"[\s　]+", "", s).translate(cls._NORM_MARKS)
+
+    def _match_tail(self, rs, value):
+        """全文置換で温存できる末尾 run 列を見つけ、[(run, 割り当てる値の断片)] を返す。
+
+        テンプレ段落の末尾側から run を辿り、その文言（空白と記号差を無視）が値の
+        末尾と一致する限り温存対象にする。文字サイズの違う小ラベル（「住民票記載の
+        とおり」= 10pt 等）が全文置換で標準サイズに化けるのを防ぐ。空白だけの run は
+        空欄なので読み飛ばす（削除される）。先頭 run は常に値の前半を受け持つ。
+        """
+        tail = []
+        vnorm = self._norm_tail(value)
+        pos = len(value)  # 値の未割当末尾位置
+        for r in reversed(rs[1:]):
+            if any(e.tag not in (f"{W}rPr", f"{W}t", f"{W}tab") for e in r):
+                break
+            tnorm = self._norm_tail("".join(t.text or "" for t in r.findall(f"{W}t")))
+            if not tnorm:
+                continue  # 空欄 run（空白のみ）は温存しない
+            # 値の末尾（pos まで）から、正規化して tnorm に一致する最短の断片を切り出す
+            cut = None
+            for i in range(pos - 1, -1, -1):
+                seg = self._norm_tail(value[i:pos])
+                if seg == tnorm:
+                    cut = i
+                    break
+                if len(seg) > len(tnorm) or not tnorm.endswith(seg):
+                    break
+            if cut is None:
+                break
+            tail.append((r, value[cut:pos]))
+            pos = cut
+        tail.reverse()
+        # 先頭 run と同じ書式しか無いなら温存する意味がない（従来どおり全文を先頭 run へ）
+        def rpr_bytes(r):
+            x = r.find(f"{W}rPr")
+            return etree.tostring(x) if x is not None else b""
+        return tail if any(rpr_bytes(r) != rpr_bytes(rs[0]) for r, _ in tail) else []
 
     def fill_insert_cell_text(self, field, value):
         p = self.resolve(field["id"], field["anchor"])
@@ -271,9 +328,72 @@ class Filler:
             return False
         # 下線 run のタブはタブ位置まで罫線を伸ばす役割があるため既定で温存。
         # 値が長くタブで溢れる書式だけ fillmap の format.drop_tabs: true で除去する
-        set_run_text(urs[slot], str(value), drop_tabs=fmt.get("drop_tabs", False))
+        drop = fmt.get("drop_tabs", False)
+        set_run_text(urs[slot], str(value), drop_tabs=drop)
+        if not drop:
+            self._trim_tabs(p.elem, urs[slot])
         self._warn_orphan_tabs(field["id"], p.elem)
         return True
+
+    # ---- タブ予算 -------------------------------------------------------------
+    TAB_WIDTH_SAFETY = 1.08  # 幅推定の安全係数（過小評価で折返すより、やや短い下線を選ぶ）
+
+    def _text_width(self, run, text):
+        """run の文字サイズから text の幅（twips）を推定する。全角＝サイズ相当、半角＝半分。"""
+        rpr = run.find(f"{W}rPr")
+        sz = self.default_sz
+        if rpr is not None and rpr.find(f"{W}sz") is not None:
+            try:
+                sz = int(rpr.find(f"{W}sz").get(f"{W}val"))
+            except (TypeError, ValueError):
+                pass
+        full = sz * 10  # 半ポイント→twips（pt*20）
+        return sum(full if ord(ch) > 0x7f else full / 2 for ch in text) * self.TAB_WIDTH_SAFETY
+
+    def _trim_tabs(self, p_elem, run):
+        """値を入れた下線 run の残タブを「次のタブ位置に届く分」だけ残す。
+
+        統合後の下線 run は [値, tab, tab] の並びになる。値がタブ位置を越えると、
+        余ったタブが次のタブ位置（＝行末やその先）へ飛んで行が折り返し、後続の
+        「印」等が次行に落ちる（B1112 で実例）。段落のタブ位置と推定文字幅から
+        値の終端を見積もり、その先にタブ位置が残っている数だけタブを残す。
+        """
+        ppr = p_elem.find(f"{W}pPr")
+        stops = []
+        x = 0.0
+        if ppr is not None:
+            tabs = ppr.find(f"{W}tabs")
+            if tabs is not None:
+                for t in tabs.findall(f"{W}tab"):
+                    if t.get(f"{W}val") != "clear" and t.get(f"{W}pos"):
+                        stops.append(int(t.get(f"{W}pos")))
+            ind = ppr.find(f"{W}ind")
+            if ind is not None:
+                x = float(ind.get(f"{W}left") or 0) + float(ind.get(f"{W}firstLine") or 0) \
+                    - float(ind.get(f"{W}hanging") or 0)
+        stops.sort()
+
+        def advance_to_stop(x):
+            nxt = [s for s in stops if s > x]
+            return nxt[0] if nxt else None
+
+        for r in runs_of(p_elem):
+            if r is run:
+                break
+            for e in r:
+                if e.tag == f"{W}t":
+                    x += self._text_width(r, e.text or "")
+                elif e.tag == f"{W}tab":
+                    x = advance_to_stop(x) or (x + 720)
+        for e in list(run):
+            if e.tag == f"{W}t":
+                x += self._text_width(run, e.text or "")
+            elif e.tag == f"{W}tab":
+                s = advance_to_stop(x)
+                if s is None:
+                    run.remove(e)  # 届くタブ位置が無い＝行末へ飛んで折り返す原因
+                else:
+                    x = s
 
     def fill_underline_slots(self, field, value):
         p = self.resolve(field["id"], field["anchor"])
@@ -289,6 +409,8 @@ class Filler:
             if v is None or v == "":
                 continue
             set_run_text(r, str(v), drop_tabs=drop)
+            if not drop:
+                self._trim_tabs(p.elem, r)
             ok = True
         if ok:
             self._warn_orphan_tabs(field["id"], p.elem)
@@ -425,6 +547,27 @@ class Filler:
         return value
 
 
+def default_font_size(unpacked: Path) -> int:
+    """styles.xml から文書既定の文字サイズ（半ポイント）を得る。docDefaults → 既定段落
+    スタイル → 21（10.5pt）の順。タブ予算の幅推定に使う。"""
+    styles = unpacked / "word" / "styles.xml"
+    if not styles.exists():
+        return 21
+    try:
+        root = etree.parse(str(styles)).getroot()
+    except Exception:
+        return 21
+    dd = root.find(f"{W}docDefaults/{W}rPrDefault/{W}rPr/{W}sz")
+    if dd is not None and dd.get(f"{W}val"):
+        return int(dd.get(f"{W}val"))
+    for st in root.findall(f"{W}style"):
+        if st.get(f"{W}type") == "paragraph" and st.get(f"{W}default") == "1":
+            sz = st.find(f"{W}rPr/{W}sz")
+            if sz is not None and sz.get(f"{W}val"):
+                return int(sz.get(f"{W}val"))
+    return 21
+
+
 def merge_runs(unpacked: Path):
     script = Path(DOCX_SKILL_SCRIPTS) / "merge_runs.py"
     if not script.exists():
@@ -477,7 +620,7 @@ def main():
 
         doc_xml = unpacked / "word" / "document.xml"
         tree, root = load_document(doc_xml)
-        filler = Filler(root)
+        filler = Filler(root, default_sz=default_font_size(unpacked))
         filler.apply(fillmap, values)
         tree.write(str(doc_xml), xml_declaration=True, encoding="UTF-8", standalone=True)
 

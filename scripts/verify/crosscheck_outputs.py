@@ -64,6 +64,8 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--case", required=True)
     ap.add_argument("--dir", required=True)
+    ap.add_argument("--no-layout", action="store_true",
+                    help="docx のレイアウト検査（白紙テンプレとの描画パリティ）を省略")
     args = ap.parse_args()
 
     case = yaml.safe_load(open(args.case, encoding="utf-8"))
@@ -73,6 +75,19 @@ def main():
 
     def check(cond, label, detail=""):
         (ok if cond else ng).append(f"{label}{' — ' + detail if detail and not cond else ''}")
+
+    # レイアウト検査: 記入が引き起こした折返し・頁あふれ・空欄タブの残留
+    # （白紙テンプレと同じ環境で描画して相対比較。soffice が無ければ XML リントのみ）
+    if not args.no_layout:
+        from verify.layout_check import check_file, template_for
+        from build.xlsxlib import proc_of_case
+        proc = proc_of_case(case)
+        for f in sorted(outdir.glob("*.docx")):
+            if f.name.startswith("~$"):
+                continue
+            tpl = template_for(f.name, proc)
+            summary, issues = check_file(f, tpl)
+            check(not issues, f"{f.name}: レイアウト（{summary}）", "／".join(issues))
 
     # 出力形式の監査: 書式名を含むファイルの拡張子が本来の形式（registry の doc_type）と
     # 一致しているか。Excel 書式が Word で「自作」された事故（Cowork 等でビルダーを
