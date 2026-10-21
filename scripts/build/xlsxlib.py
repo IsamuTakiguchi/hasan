@@ -32,6 +32,15 @@ import openpyxl
 REPO = Path(__file__).resolve().parent.parent.parent
 
 
+def hasan_version() -> str:
+    """plugin.json の version（生成物の報告に表示し、古いシステムでの実行を見分ける）。"""
+    try:
+        import json
+        return json.loads((REPO / ".claude-plugin" / "plugin.json").read_text(encoding="utf-8")).get("version", "?")
+    except Exception:
+        return "?"
+
+
 def resolve_form(court: str, form: str, proc: str = None):
     """registry.yaml から現行版のディレクトリを返す。未登録なら None。
 

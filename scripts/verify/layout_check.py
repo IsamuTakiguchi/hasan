@@ -29,7 +29,7 @@ from pathlib import Path
 import yaml
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from build.xlsxlib import resolve_form, proc_of_case  # noqa: E402
+from build.xlsxlib import resolve_form, proc_of_case, hasan_version  # noqa: E402
 from verify.render_preview import to_pdf  # noqa: E402
 
 try:
@@ -247,7 +247,7 @@ def main():
         sys.exit(4)
 
     any_ng = False
-    print("レイアウト検査（白紙テンプレとの描画パリティ）")
+    print(f"レイアウト検査（白紙テンプレとの描画パリティ・hasan v{hasan_version()}）")
     for out, tpl in targets:
         summary, issues = check_file(out, tpl, render=not args.no_render)
         if tpl is None:

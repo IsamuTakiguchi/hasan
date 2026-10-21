@@ -46,6 +46,7 @@ from lxml import etree
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from formkit.anchorlib import W, W14, ParaIndex, load_document, normalize  # noqa: E402
+from build.xlsxlib import hasan_version  # noqa: E402
 
 DOCX_SKILL_SCRIPTS = os.environ.get("DOCX_SKILL_SCRIPTS", "/root/.claude/skills/docx/scripts")
 
@@ -100,7 +101,11 @@ def set_run_text(run, text, drop_tabs=False):
     """
     ts = run.findall(f"{W}t")
     if not ts:
-        t = etree.SubElement(run, f"{W}t")
+        # タブだけの下線 run（報告書「☑その他＿」等）。末尾に足すとタブの後ろ＝
+        # 行末に値が飛ぶので、rPr 直後（タブより前）に新設する
+        t = etree.Element(f"{W}t")
+        rpr = run.find(f"{W}rPr")
+        run.insert(run.index(rpr) + 1 if rpr is not None else 0, t)
     else:
         t = ts[0]
         for extra in ts[1:]:
@@ -377,23 +382,29 @@ class Filler:
             nxt = [s for s in stops if s > x]
             return nxt[0] if nxt else None
 
-        for r in runs_of(p_elem):
-            if r is run:
-                break
+        runs = runs_of(p_elem)
+        at = runs.index(run) if run in runs else len(runs)
+        for r in runs[:at]:
             for e in r:
                 if e.tag == f"{W}t":
                     x += self._text_width(r, e.text or "")
                 elif e.tag == f"{W}tab":
                     x = advance_to_stop(x) or (x + 720)
-        for e in list(run):
-            if e.tag == f"{W}t":
-                x += self._text_width(run, e.text or "")
-            elif e.tag == f"{W}tab":
-                s = advance_to_stop(x)
-                if s is None:
-                    run.remove(e)  # 届くタブ位置が無い＝行末へ飛んで折り返す原因
-                else:
-                    x = s
+        # 値 run と、その後ろに続く「文字を持たない下線 run」（merge_runs が走らない
+        # 環境では [U値⇥][U⇥] と分かれたまま）を同じ予算で処理する。文字を持つ run
+        # （「印」等）に当たったら打ち切る
+        for r in runs[at:]:
+            if r is not run and any((e.text or "").strip("\u3000 ") for e in r.findall(f"{W}t")):
+                break
+            for e in list(r):
+                if e.tag == f"{W}t":
+                    x += self._text_width(r, e.text or "")
+                elif e.tag == f"{W}tab":
+                    s = advance_to_stop(x)
+                    if s is None:
+                        r.remove(e)  # 届くタブ位置が無い＝行末へ飛んで折り返す原因
+                    else:
+                        x = s
 
     def fill_underline_slots(self, field, value):
         p = self.resolve(field["id"], field["anchor"])
@@ -626,6 +637,7 @@ def main():
 
         rezip(unpacked, Path(args.output))
 
+    print(f"fill_docx (hasan v{hasan_version()})")
     print(f"出力: {args.output}")
     print(f"記入済み: {len(filler.filled)} 項目")
     if filler.skipped:

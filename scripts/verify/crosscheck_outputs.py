@@ -231,7 +231,8 @@ def main():
             check(seq in text.replace("　", "").replace(" ", ""),
                   f"{docx.name}: 受任通知発送日の記載", f"{seq} が見つからない")
 
-    print("書類間整合チェック")
+    from build.xlsxlib import hasan_version
+    print(f"書類間整合チェック（hasan v{hasan_version()}）")
     for x in ok:
         print(f"  OK  {x}")
     for x in ng:

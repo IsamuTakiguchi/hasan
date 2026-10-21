@@ -39,8 +39,10 @@ fields:
 
   jukyo: 民間賃貸住宅
 
-  shakkin_riyu: [事業経営破綻, 債務保証]
-  kikkake: [収入以上の返済金額]
+  shakkin_riyu: [事業経営破綻, 債務保証, その他]
+  shakkin_riyu_sonota_text: 親族の医療費・介護費用の立替え
+  kikkake: [収入以上の返済金額, その他]
+  kikkake_sonota_text: 無職・生活保護受給中で，返済に充てられる収入がなかった
   shiharai_funo: ["７", "１", ""]        # 令和7年1月。約定返済額は資料なし→空欄
   junin_tsuchi_date: ["７", "３", "１０"]
 
