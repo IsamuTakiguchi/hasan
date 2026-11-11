@@ -124,6 +124,11 @@ properties:
           kind: { type: string, enum: [賃貸, 持家, 社宅・寮, 家族所有, その他] }
           rent: { type: [integer, "null"], description: "月額家賃（円）" }
           note: { type: string }
+          lease_doc:
+            type: string
+            description: >-
+              住居の疎明資料（賃貸借契約書の有無・代替資料と取付けの段取り。
+              例: 賃貸借契約書はないため所有者の居住証明書で代替）
 
   creditors:
     type: array

@@ -25,6 +25,9 @@
                                    （個別書式は houkokusho 等の書式別スキル）
 5. 検証       hasan-kit crosscheck/preview  書類間数値突合 + PDF目視
 6. 依頼連絡   line-message         questions.md → 依頼者向けLINE文面（手動送信）
+7. 提出準備   teishutsu-folder     提出用資料_YYYYMMDD/（申立書類・添付資料・要判断）＋一覧＋結合PDF
+   補助       kyoju-shomeisho      賃貸借契約書がないときの所有者の居住証明書（事務所書式）
+              pdf-layout-fix       PDF でのレイアウト崩れ（フォント代替）を直して PDF を作り直す
 ```
 
 ## 手続種別（最初に選択）
