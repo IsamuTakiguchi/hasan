@@ -59,6 +59,9 @@
 | 事業に関する報告書 | jigyou-houkokusho |
 | 債権者一覧表・財産目録・家計収支表（個別） | saikensha-ichiran / shisan-mokuroku / kakei-shushi |
 | LINEで送る文面を作って | line-message |
+| 居住証明書を作って（親族・知人所有の家に無償で住み賃貸借契約書がない） | kyoju-shomeisho |
+| PDFのレイアウトが崩れる（Wordでは収まっているのにPDFで頁がはみ出す等） | pdf-layout-fix |
+| 提出用フォルダを作って／提出資料をまとめて（書類がそろった最終段階） | teishutsu-folder |
 
 ## 鉄則（スキルより先に必ず把握する）
 
